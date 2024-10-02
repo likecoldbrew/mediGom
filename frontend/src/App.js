@@ -1,20 +1,20 @@
-import React, {useEffect, useState} from 'react';
+// App.js
+import React, { useEffect, useState } from 'react';
+import MainPage from "./userMain/components/HeaderFooter";
 import axios from 'axios';
+import "./userMain/style/index.css";
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 function App() {
-  const [hello, setHello] = useState('')
 
-  useEffect(() => {
-    axios.get('/api/hello')
-        .then(response => setHello(response.data))
-        .catch(error => console.log(error))
-  }, []);
-
-  return (
-      <div>
-        백엔드에서 가져온 데이터 : {hello}
-      </div>
-  );
+    return (
+        <Router>
+            <Routes>
+                <Route path="/" element={<MainPage />} />
+                {/* 추가적인 Route를 여기에 작성 */}
+            </Routes>
+        </Router>
+    );
 }
 
 export default App;
