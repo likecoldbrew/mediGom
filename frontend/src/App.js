@@ -1,15 +1,20 @@
-import React, {useEffect, useState} from 'react';
+// App.js
+import React, { useEffect, useState } from 'react';
+import MainPage from "./userMain/components/HeaderFooter";
 import axios from 'axios';
-import UsersList from "./components/UserList";
+import "./userMain/style/index.css";
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 function App() {
 
-  return (
-      <div>
-        기본 화면
-          <UsersList />
-      </div>
-  );
+    return (
+        <Router>
+            <Routes>
+                <Route path="/" element={<MainPage />} />
+                {/* 추가적인 Route를 여기에 작성 */}
+            </Routes>
+        </Router>
+    );
 }
 
 export default App;
