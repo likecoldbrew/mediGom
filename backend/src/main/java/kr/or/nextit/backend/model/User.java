@@ -22,7 +22,6 @@ public class User {
     private String gender;
     private String email;
     private String phone;
-    private String age;
     private String userAdd;
     private String userAdd2;
     private Timestamp createAt;

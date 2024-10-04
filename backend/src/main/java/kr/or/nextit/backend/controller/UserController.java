@@ -23,7 +23,7 @@ public class UserController {
         return userService.getUserById(userNo);
     }
 
-    @PostMapping
+    @PostMapping("/register")
     public void insertUser(@RequestBody User user) {
         userService.insertUser(user);
     }
