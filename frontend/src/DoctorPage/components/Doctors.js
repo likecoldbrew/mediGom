@@ -7,16 +7,22 @@ import {
     Mail,
     Map,
     PieChart,
-    Settings,
+    Settings as FeatherSettings,
     File,
     Anchor,
-    User
+    User,
+    Aperture,
+    FolderPlus,
+    MinusCircle,
+    LogIn,
+    LogOut,
+    UserCheck,
+    Smile,
+    UserX
 } from 'react-feather';
+import { Settings, MessageSquare, Bell, Menu } from 'lucide-react';
 
-
-
-
-const Sidebar = () => {
+const SidebarAndNavbar = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [activeDropdown, setActiveDropdown] = useState(null);
 
@@ -37,40 +43,36 @@ const Sidebar = () => {
 
     const toggleSidebar = () => setIsOpen(!isOpen);
 
-    const toggleDropdown = (key: string) => {
+    const toggleDropdown = (key) => {
         setActiveDropdown(activeDropdown === key ? null : key);
     };
 
     const menuItems = [
         { key: 'dashboard', icon: <User size={20} />, label: '환자관리', dropdown: ['Lorem ipsum', 'ipsum dolor', 'dolor ipsum', 'amet consectetur', 'ipsum dolor sit'] },
-        { key: 'fileManager', icon: <Folder size={20} />, label: '예약확인' },
-        { key: 'calendar', icon: <Calendar size={20} />, label: '증명서 발급', dropdown: ['Lorem ipsum', 'ipsum dolor', 'dolor ipsum', 'amet consectetur', 'ipsum dolor sit'] },
-        { key: 'mailbox', icon: <Mail size={20} />, label: '입원 신청', dropdown: ['Lorem ipsum', 'ipsum dolor', 'dolor ipsum', 'amet consectetur', 'ipsum dolor sit'] },
+        { key: 'fileManager', icon: <Folder size={20} />, label: '예약확인', dropdown: ['Lorem ipsum', 'ipsum dolor', 'dolor ipsum', 'amet consectetur', 'ipsum dolor sit'] },
+        { key: 'calendar', icon: <FileText size={20} />, label: '증명서 발급', dropdown: ['Lorem ipsum', 'ipsum dolor', 'dolor ipsum', 'amet consectetur', 'ipsum dolor sit'] },
+        { key: 'mailbox', icon: <FolderPlus size={20} />, label: '입원 신청', dropdown: ['Lorem ipsum', 'ipsum dolor', 'dolor ipsum', 'amet consectetur', 'ipsum dolor sit'] },
         { key: 'ecommerce', icon: <Calendar size={20} />, label: '휴무 신청', dropdown: ['Lorem ipsum', 'ipsum dolor', 'dolor ipsum', 'amet consectetur', 'ipsum dolor sit'] },
-        { key: 'projects', icon: <Anchor size={20} />, label: '마이페이지', dropdown: ['Lorem ipsum', 'ipsum dolor', 'dolor ipsum', 'amet consectetur', 'ipsum dolor sit'] },
-        { key: 'settings', icon: <Settings size={20} />, label: 'Settings' },
-        { key: 'components', icon: <Anchor size={20} />, label: 'Components', dropdown: ['Lorem ipsum', 'ipsum dolor', 'dolor ipsum', 'amet consectetur', 'ipsum dolor sit'] },
-        { key: 'charts', icon: <Anchor size={20} />, label: 'Charts', dropdown: ['Lorem ipsum', 'ipsum dolor', 'dolor ipsum', 'amet consectetur', 'ipsum dolor sit'] },
-        { key: 'maps', icon: <Map size={20} />, label: 'Maps' },
+        { key: 'projects', icon: <FeatherSettings size={20} />, label: '마이페이지', dropdown: ['Lorem ipsum', 'ipsum dolor', 'dolor ipsum', 'amet consectetur', 'ipsum dolor sit'] }
     ];
 
     return (
         <div className="flex h-screen bg-gray-100">
-            <aside className={`bg-white  text-black w-64 min-h-screen p-4 ${isOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out fixed left-0 top-0 z-50`}>
+            {/* Sidebar */}
+            <aside className={`bg-white text-black w-64 min-h-screen p-4 ${isOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out fixed left-0 top-0 z-50`}>
                 <div className="flex items-center justify-between mb-6">
                     <div className="flex items-center">
-                        <img
-                            className="w-10 h-10 rounded-full mr-3"
-                            src="https://uniim1.shutterfly.com/ng/services/mediarender/THISLIFE/021036514417/media/23148907008/medium/1501685726/enhance"
-                            alt="User avatar"
-                        />
+                        <Smile size={24} className="w-10 h-10 rounded-full mr-3 "/>
                         <div>
-                            <h2 className="text-lg font-semibold">Jone Doe</h2>
-                            <p className="text-xs text-gray-500">Administrator</p>
+                            <h2 className="text-lg font-semibold text-gray-800">김의사</h2>
+                            <p className="text-xs text-gray-500">마취과 치프</p>
                         </div>
                     </div>
+                    <button className="relative hover:text-blue-400 transition-colors">
+                        <LogOut className="w-6 h-6"/>
+                    </button>
                     <button onClick={toggleSidebar} className="md:hidden">
-                        <FileText size={24} />
+                        <FileText size={24}/>
                     </button>
                 </div>
 
@@ -78,7 +80,7 @@ const Sidebar = () => {
                     <input
                         type="text"
                         placeholder="Search"
-                        className="w-full px-3 py-2 text-sm text-gray-100 bg-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400"
+                        className="w-full px-3 py-2 text-sm text-black bg-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
                     />
                 </div>
 
@@ -88,7 +90,7 @@ const Sidebar = () => {
                             <li key={item.key} className="mb-2">
                                 <button
                                     onClick={() => item.dropdown && toggleDropdown(item.key)}
-                                    className="flex items-center w-full px-4 py-2 text-gray-950 hover:bg-gray-700 hover:text-white rounded-md transition-colors duration-200"
+                                    className="flex items-center w-full px-4 py-2 text-blue-900 hover:bg-blue-500 hover:text-white rounded-md transition-colors duration-200"
                                 >
                                     {item.icon}
                                     <span className="ml-3">{item.label}</span>
@@ -110,7 +112,7 @@ const Sidebar = () => {
                                             <li key={index}>
                                                 <a
                                                     href="#"
-                                                    className="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-700 hover:text-white rounded-md transition-colors duration-200"
+                                                    className="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-400 hover:text-white rounded-md transition-colors duration-200"
                                                 >
                                                     {subItem}
                                                 </a>
@@ -124,18 +126,47 @@ const Sidebar = () => {
                 </nav>
             </aside>
 
-            <main className={`flex-1 p-4 ${isOpen ? 'md:ml-64' : ''}`}>
-                <button
-                    onClick={toggleSidebar}
-                    className="fixed top-4 left-4 z-50 md:hidden bg-gray-800 text-white p-2 rounded-md"
-                >
-                    <FileText size={24} />
-                </button>
-                <h1 className="text-2xl font-semibold mb-4">Dashboard Content</h1>
-                <p>Welcome to your dashboard!</p>
+            {/* Main content */}
+                {/* Navbar */}
+            <main className={`flex-1  ${isOpen ? 'md:ml-64' : ''}`}>
+                <nav className="bg-blue-300 text-white p-4 w-full">
+                    <div className="container mx-auto flex justify-between items-center">
+                        <div className="flex items-center text-2xl font-bold">
+                            <img
+                                width="40"
+                                src="/images/mediGom_Logo.png"/>
+                              Medi<span className="text-yellow-300">Gom</span>
+                        </div>
+                        <div className="flex items-center space-x-6">
+                            <div className="relative group">
+                                <button className="flex items-center space-x-1 hover:text-yellow-300 transition-colors">
+                                    <Mail className="w-6 h-6"/>
+                                </button>
+                            </div>
+                            <button className="relative hover:text-yellow-300 transition-colors">
+                                <MessageSquare className="w-6 h-6"/>
+                                <span
+                                    className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">23</span>
+                            </button>
+                            <button className="relative hover:text-yellow-300 transition-colors">
+                                <Bell className="w-6 h-6"/>
+                                <span
+                                    className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">98</span>
+                            </button>
+                            <button onClick={toggleSidebar}>
+                                <Menu className=" relative hover:text-yellow-300 w-6 h-6"/>
+                                {/*<FileText size={24}/>*/}
+                            </button>
+
+                        </div>
+                    </div>
+                </nav>
+
+                <h1 className="text-2xl font-semibold mb-4">컨텐츠 영역</h1>
+                <p>컨텐츠 영역</p>
             </main>
         </div>
     );
 };
 
-export default Sidebar;
+export default SidebarAndNavbar;
