@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import SidebarAndNavbar from "./components/Doctors";
-import Home from "./pages/Home";
+import SidebarAndNavbar from "./components/sideBar";
+import Home from "./pages/home";
 
-const Doctors = () => {
+function Admin () {
     const [activePage, setActivePage] = useState('home'); // 기본 페이지 설정
+
     // 페이지 렌더링 함수
     const renderPage = () => {
         switch (activePage) {
@@ -20,8 +21,7 @@ const Doctors = () => {
             {/* SidebarAndNavbar에 setActivePage, renderPage를 props로 전달 */}
             <SidebarAndNavbar setActivePage={setActivePage} renderPage={renderPage} />
         </>
+    )
+}
 
-    );
-};
-
-export default Doctors;
+export default Admin;
