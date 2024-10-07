@@ -24,6 +24,7 @@ import {
 import { Settings, MessageSquare, Bell, Menu } from 'lucide-react';
 import {Home} from "../pages/Home";
 import Doctors from "../index";
+import {UserManagement} from "../pages/UserManagement";
 
 const SidebarAndNavbar = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -52,7 +53,7 @@ const SidebarAndNavbar = () => {
     };
 
     const menuItems = [
-        { key: 'dashboard', icon: <User size={20} />, label: '환자관리', dropdown: ['Lorem ipsum', 'ipsum dolor', 'dolor ipsum', 'amet consectetur', 'ipsum dolor sit'] },
+        { key: 'dashboard', icon: <User size={20} />, label: '환자관리',page:'userManagement', dropdown: ['Lorem ipsum', 'ipsum dolor', 'dolor ipsum', 'amet consectetur', 'ipsum dolor sit'] },
         { key: 'fileManager', icon: <Folder size={20} />, label: '예약확인', dropdown: ['Lorem ipsum', 'ipsum dolor', 'dolor ipsum', 'amet consectetur', 'ipsum dolor sit'] },
         { key: 'calendar', icon: <FileText size={20} />, label: '증명서 발급', dropdown: ['Lorem ipsum', 'ipsum dolor', 'dolor ipsum', 'amet consectetur', 'ipsum dolor sit'] },
         { key: 'mailbox', icon: <FolderPlus size={20} />, label: '입원 신청', dropdown: ['Lorem ipsum', 'ipsum dolor', 'dolor ipsum', 'amet consectetur', 'ipsum dolor sit'] },
@@ -65,6 +66,8 @@ const SidebarAndNavbar = () => {
         switch (activePage) {
             case 'home':
                 return <Home />;
+            case 'userManagement':
+                return <UserManagement/>;
             // case 'schedule': return <ScheduleComponent />;
             // 다른 페이지 컴포넌트를 추가할 수 있음
             default:
@@ -148,7 +151,6 @@ const SidebarAndNavbar = () => {
             <main className={`flex-1  ${isOpen ? 'md:ml-64' : ''}`}>
                 <nav className="bg-blue-300 text-white p-4  w-full">
                     <div className="container mx-auto flex justify-between items-center">
-                        {/* 버튼 클릭 시 Home 페이지로 이동 */}
                         <button>
                         <div className="flex items-center text-2xl font-bold">
                             <img
