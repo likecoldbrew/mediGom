@@ -24,7 +24,7 @@ import {
 import { Settings, MessageSquare, Bell, Menu } from 'lucide-react';
 import {Home} from "../pages/Home";
 import Doctors from "../index";
-import {UserManagement} from "../pages/UserManagement";
+import {UserStateChange} from "../pages/UserStateChange";
 
 const SidebarAndNavbar = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -66,8 +66,8 @@ const SidebarAndNavbar = () => {
         switch (activePage) {
             case 'home':
                 return <Home />;
-            case 'userManagement':
-                return <UserManagement/>;
+            case 'userStateChange':
+                return <UserStateChange/>;
             // case 'schedule': return <ScheduleComponent />;
             // 다른 페이지 컴포넌트를 추가할 수 있음
             default:
