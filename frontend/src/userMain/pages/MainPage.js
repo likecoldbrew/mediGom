@@ -1,5 +1,5 @@
 import React from 'react';
-import "../style/tailwind.css";
+import "../style/index.css";
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import SubCategories from "../components/SubCategory";
