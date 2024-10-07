@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.or.nextit.backend.mapper.CategoryMapper">
+    <!-- 최상위 카테고리 조회 -->
+    <select id="selectTopCategories" resultType="Category">
+        SELECT category_id AS categoryId, name, parent_id AS parentId, `order`
+        FROM categories_main
+        WHERE parent_id IS NULL
+        ORDER BY `order`
+    </select>
+
+    <!-- 특정 카테고리의 하위 카테고리 조회 -->
+    <select id="selectSubCategories" parameterType="int" resultType="Category">
+        SELECT category_id AS categoryId, name, parent_id AS parentId, `order`
+        FROM categories_main
+        WHERE parent_id = #{parentId}
+        ORDER BY `order`
+    </select>
+</mapper>
