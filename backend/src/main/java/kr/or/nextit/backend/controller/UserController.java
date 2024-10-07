@@ -39,9 +39,4 @@ public class UserController {
         userService.deleteUser(userNo);
     }
 
-    //의사 이름 조회
-    @GetMapping("/doctors")
-    public List<User> getDoctorsName() {
-        return userService.getDoctorsName();
-    }
 }

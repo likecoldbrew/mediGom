@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -9,10 +9,16 @@ import axios from "axios";
 
 const DoctorInfo = () => {
     const {subcategory} = useParams(); // URL에서 subcategory 가져오기
-    // useEffect(() => {
-    //     axios.get('/api/users').then((response) => {
-    //     })
-    // }, []);
+    const [doctors, setDoctors] = useState([]);
+
+    useEffect(() => {
+         axios.get('/api/doctorsInfo').then((response) => {
+                setDoctors(response.data); // 가져온 데이터를 상태에 저장
+        }).catch((error) => {
+                console.error('Error fetching doctor info:', error);
+        })
+    }, []);
+    console.log("닥터정보",doctors);
 
     return (
         <div className="flex flex-col min-h-screen">
@@ -21,15 +27,22 @@ const DoctorInfo = () => {
             <div className=" container mx-auto px-4 py-8 flex flex-grow">
                 <main className="flex-grow pr-8 ">
                     <div className="flex-col min-h-full space-y-4 items-center justify-center">
-                        <div className="bg-white p-4 rounded shadow">
-                            <h2 className="text-xl font-semibold mt-4">홍길동 박사</h2>
-                            <p className="text-gray-600">내과 전문의</p>
-                        </div>
+                        {doctors.length > 0 ? ( // 데이터가 있을 때만 표시
+                            doctors.map((doctor, index) => (
+                                <div key={index} className="bg-white p-4 rounded shadow">
+                                    <h2 className="text-xl font-semibold mt-4">{doctor.user_name}</h2> {/* 의사 이름 */}
+                                    <p className="text-gray-600">진료과: {doctor.department_name}</p> {/* 진료과 */}
+                                    <p className="text-gray-600">진료분야: {doctor.treatments.join(', ')}</p> {/* 진료 분야 */}
+                                </div>
+                            ))
+                        ) : (
+                            <p>Loading...</p> // 로딩 중일 때 표시
+                        )}
                     </div>
                 </main>
                 <div className="flex flex-col space-y-4">
-                        <QuickMenu/>
-                        <ChatBot/>
+                    <QuickMenu/>
+                    <ChatBot/>
                 </div>
             </div>
             <Footer/>

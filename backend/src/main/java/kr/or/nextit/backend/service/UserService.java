@@ -33,9 +33,4 @@ public class UserService {
         userMapper.deleteUser(userNo);
     }
 
-    /* 의사 이름 조회*/
-    public List<User> getDoctorsName() {
-        return userMapper.getDoctorsName();
-    }
-
 }
