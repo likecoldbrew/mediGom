@@ -25,9 +25,10 @@ import { Settings, MessageSquare, Bell, Menu } from 'lucide-react';
 import {Home} from "../pages/Home";
 import Doctors from "../index";
 import {UserStateChange} from "../pages/UserStateChange";
+import UserManagement from "../pages/UserManagement";
 
 const SidebarAndNavbar = () => {
-    const [isOpen, setIsOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(true);
     const [activeDropdown, setActiveDropdown] = useState(null);
     const [activePage, setActivePage] = useState('home'); // 현재 활성화된 페이지 상태
 
@@ -53,8 +54,7 @@ const SidebarAndNavbar = () => {
     };
 
     const menuItems = [
-        { key: 'dashboard', icon: <User size={20} />, label: '환자관리',page:'userManagement', dropdown: ['Lorem ipsum', 'ipsum dolor', 'dolor ipsum', 'amet consectetur', 'ipsum dolor sit'] },
-        { key: 'fileManager', icon: <Folder size={20} />, label: '예약확인', dropdown: ['Lorem ipsum', 'ipsum dolor', 'dolor ipsum', 'amet consectetur', 'ipsum dolor sit'] },
+        { key: 'dashboard', icon: <User size={20} />, label: '환자관리',page:'userManagement', dropdown: ['환자 전체 목록', '내 환자 확인', '예약 환자 확인', '환자 등록'] },
         { key: 'calendar', icon: <FileText size={20} />, label: '증명서 발급', dropdown: ['Lorem ipsum', 'ipsum dolor', 'dolor ipsum', 'amet consectetur', 'ipsum dolor sit'] },
         { key: 'mailbox', icon: <FolderPlus size={20} />, label: '입원 신청', dropdown: ['Lorem ipsum', 'ipsum dolor', 'dolor ipsum', 'amet consectetur', 'ipsum dolor sit'] },
         { key: 'ecommerce', icon: <Calendar size={20} />, label: '휴무 신청', dropdown: ['Lorem ipsum', 'ipsum dolor', 'dolor ipsum', 'amet consectetur', 'ipsum dolor sit'] },
@@ -66,6 +66,8 @@ const SidebarAndNavbar = () => {
         switch (activePage) {
             case 'home':
                 return <Home />;
+            case'userManagement':
+                return <UserManagement/>;
             case 'userStateChange':
                 return <UserStateChange/>;
             // case 'schedule': return <ScheduleComponent />;
