@@ -16,8 +16,8 @@
 
     <!-- 유저 추가 -->
     <insert id="insertUser" parameterType="kr.or.nextit.backend.model.User">
-        INSERT INTO users (user_id, user_pass, user_name, user_rrn, gender, email, phone, user_add, user_add2, admin)
-        VALUES (#{userId}, #{userPass}, #{userName}, #{userRrn}, #{gender}, #{email}, #{phone}, #{userAdd}, #{userAdd2}, #{admin})
+        INSERT INTO users (user_id, user_pass, user_name, user_rrn, email, phone, user_add, user_add2, admin)
+        VALUES (#{userId}, #{userPass}, #{userName}, #{userRrn}, #{email}, #{phone}, #{userAdd}, #{userAdd2}, #{admin})
     </insert>
 
     <!-- 유저 수정 -->
@@ -27,7 +27,6 @@
             user_pass = #{userPass},
             user_name = #{userName},
             user_rrn = #{userRrn},
-            gender = #{gender},
             email = #{email},
             phone = #{phone},
             user_add = #{userAdd},
@@ -38,8 +37,9 @@
     </update>
 
     <!-- 유저 삭제 -->
-    <delete id="deleteUser" parameterType="int">
-        DELETE FROM users WHERE user_no = #{userNo}
-    </delete>
+    <update id="deleteUser" parameterType="int">
+        UPDATE users SET delete_yn = 'y' WHERE user_no = #{userNo}
+    </update>
+
 
 </mapper>

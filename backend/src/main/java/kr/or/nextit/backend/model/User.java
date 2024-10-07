@@ -1,10 +1,7 @@
 package kr.or.nextit.backend.model;
 
 import java.sql.Timestamp;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import jakarta.persistence.*;
 
 import lombok.Data;
 
@@ -27,4 +24,5 @@ public class User {
     private Timestamp createAt;
     private Timestamp updateAt;
     private int admin;
+    private String delete_yn;
 }
