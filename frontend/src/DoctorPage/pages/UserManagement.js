@@ -111,11 +111,11 @@ const UserManagement = () => {
                         <Search className="absolute left-3 top-2.5 text-gray-400" size={18} />
                     </div>
                     <div className="flex items-center space-x-4">
-                        <button type="button"
-                                className="px-4 py-2 bg-yellow-400 text-white rounded hover:bg-yellow-500">
-                            <UserPlus size={20} className="inline mr-2"/>
-                            환자 등록
-                        </button>
+                        {/*<button type="button"*/}
+                        {/*        className="px-4 py-2 bg-yellow-400 text-white rounded hover:bg-yellow-500">*/}
+                        {/*    <UserPlus size={20} className="inline mr-2"/>*/}
+                        {/*    환자 진단 등록*/}
+                        {/*</button>*/}
                         <div className="relative">
                             <button
                                 onClick={() => setIsFilterMenuOpen(!isFilterMenuOpen)}
@@ -240,9 +240,6 @@ const UserManagement = () => {
                                     <ChevronUp size={14} className="inline"/> :
                                     <ChevronDown size={14} className="inline"/>)}
                                 </th>
-                                <th className="px-6 py-3 text-center text-sm text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer">
-                                    환자상태변경
-                                </th>
                             </tr>
                             </thead>
                             <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
@@ -273,12 +270,7 @@ const UserManagement = () => {
                                     <td className="px-6 py-4 whitespace-nowrap text-center">{product.price}</td>
                                     <td className="px-6 py-4 whitespace-nowrap text-center">{product.price}</td>
                                     <td className="px-6 py-4 whitespace-nowrap text-center">{product.price}</td>
-                                    <td className="px-6 py-3 text-center ">
-                                        <button
-                                            className="px-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-                                            변경
-                                        </button>
-                                    </td>
+
                                 </tr>
                             ))}
                             </tbody>

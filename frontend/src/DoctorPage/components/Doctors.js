@@ -19,13 +19,16 @@ import {
     UserCheck,
     Smile,
     UserX,
-    Wind
+    Wind,
+    Send
 } from 'react-feather';
 import { Settings, MessageSquare, Bell, Menu } from 'lucide-react';
 import {Home} from "../pages/Home";
 import Doctors from "../index";
 import {UserStateChange} from "../pages/UserStateChange";
 import UserManagement from "../pages/UserManagement";
+import UserClinicCheck from "../pages/UserClinicCheck";
+import UserReservationCheck from "../pages/UserReservationCheck";
 
 const SidebarAndNavbar = () => {
     const [isOpen, setIsOpen] = useState(true);
@@ -54,11 +57,12 @@ const SidebarAndNavbar = () => {
     };
 
     const menuItems = [
-        { key: 'dashboard', icon: <User size={20} />, label: '환자관리',page:'userManagement', dropdown: ['환자 전체 목록', '내 환자 확인', '예약 환자 확인', '환자 등록'] },
-        { key: 'calendar', icon: <FileText size={20} />, label: '증명서 발급', dropdown: ['Lorem ipsum', 'ipsum dolor', 'dolor ipsum', 'amet consectetur', 'ipsum dolor sit'] },
-        { key: 'mailbox', icon: <FolderPlus size={20} />, label: '입원 신청', dropdown: ['Lorem ipsum', 'ipsum dolor', 'dolor ipsum', 'amet consectetur', 'ipsum dolor sit'] },
-        { key: 'ecommerce', icon: <Calendar size={20} />, label: '휴무 신청', dropdown: ['Lorem ipsum', 'ipsum dolor', 'dolor ipsum', 'amet consectetur', 'ipsum dolor sit'] },
-        { key: 'projects', icon: <FeatherSettings size={20} />, label: '마이페이지', dropdown: ['Lorem ipsum', 'ipsum dolor', 'dolor ipsum', 'amet consectetur', 'ipsum dolor sit'] }
+        { key: 'userManagement', icon: <User size={20} />, label: '환자 관리',page:'userManagement', dropdown: ['환자 전체 목록', '내 환자 확인', '예약 환자 확인'] },
+        { key: 'reservation', icon: <UserCheck size={20} />, label: '예약 확인' },
+        { key: 'documents', icon: <FileText size={20} />, label: '증명서 발급', dropdown: ['진단 환자 목록(사실 필요 없음)','서류 발급(목록에 같이 넣음 될ㄷ스)'] },
+        { key: 'Hospitalization', icon: <FolderPlus size={20} />, label: '입원 관리', dropdown: ['입원 환자 목록', '입원 신청','입원 상태 변경', '병실 현황'] },
+        { key: 'holiday', icon: <Send size={20} />, label: '휴무 신청' },
+        { key: 'mypage', icon: <FeatherSettings size={20} />, label: '마이페이지'}
     ];
 
     // 각 페이지에 해당하는 컴포넌트를 렌더링하는 함수
@@ -68,6 +72,10 @@ const SidebarAndNavbar = () => {
                 return <Home />;
             case'userManagement':
                 return <UserManagement/>;
+            case'userReservationCheck':
+                return <UserReservationCheck/>;
+            case'userClinicCheck':
+                return <UserClinicCheck/>;
             case 'userStateChange':
                 return <UserStateChange/>;
             // case 'schedule': return <ScheduleComponent />;
@@ -78,7 +86,7 @@ const SidebarAndNavbar = () => {
     };
 
     return (
-        <div className="flex h-screen bg-gray-100">
+        <div className="flex min-h-screen bg-gray-100">
             {/* Sidebar */}
             <aside className={`bg-white text-black w-64 min-h-screen p-4 ${isOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out fixed left-0 top-0 z-50`}>
                 <div className="flex items-center justify-between mb-6">
