@@ -20,7 +20,7 @@ public class DoctorInfoController {
 
     private final DoctorInfoService doctorInfoService;
 
-    @GetMapping
+    @GetMapping("/all")
     public List<DoctorInfoDTO> getDoctors() {
         return doctorInfoService.getAllDoctors();
     }

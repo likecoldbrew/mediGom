@@ -10,14 +10,21 @@ import axios from "axios";
 const DoctorInfo = () => {
     const {subcategory} = useParams(); // URL에서 subcategory 가져오기
     const [doctors, setDoctors] = useState([]);
-
+    // API 호출
     useEffect(() => {
-         axios.get('/api/doctorsInfo').then((response) => {
-                setDoctors(response.data); // 가져온 데이터를 상태에 저장
-        }).catch((error) => {
-                console.error('Error fetching doctor info:', error);
-        })
+        fetchDoctors();
     }, []);
+
+
+    const fetchDoctors=async ()=>{
+        try {
+            const response = await fetch('/api/doctorsInfo/all')
+            const data = await response.json();
+            setDoctors(data)
+        }catch (error){
+            console.error('Error fetching doctor info:', error);
+        }
+    }
     console.log("닥터정보",doctors);
 
     return (
@@ -30,8 +37,8 @@ const DoctorInfo = () => {
                         {doctors.length > 0 ? ( // 데이터가 있을 때만 표시
                             doctors.map((doctor, index) => (
                                 <div key={index} className="bg-white p-4 rounded shadow">
-                                    <h2 className="text-xl font-semibold mt-4">{doctor.user_name}</h2> {/* 의사 이름 */}
-                                    <p className="text-gray-600">진료과: {doctor.department_name}</p> {/* 진료과 */}
+                                    <h2 className="text-xl font-semibold mt-4">{doctor.userName}</h2> {/* 의사 이름 */}
+                                    <p className="text-gray-600">진료과: {doctor.departmentName}</p> {/* 진료과 */}
                                     <p className="text-gray-600">진료분야: {doctor.treatments.join(', ')}</p> {/* 진료 분야 */}
                                 </div>
                             ))
