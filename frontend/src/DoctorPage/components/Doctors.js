@@ -23,6 +23,7 @@ import {
 } from 'react-feather';
 import { Settings, MessageSquare, Bell, Menu } from 'lucide-react';
 import {Home} from "../pages/Home";
+import Doctors from "../index";
 
 const SidebarAndNavbar = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -147,16 +148,19 @@ const SidebarAndNavbar = () => {
             <main className={`flex-1  ${isOpen ? 'md:ml-64' : ''}`}>
                 <nav className="bg-blue-300 text-white p-4  w-full">
                     <div className="container mx-auto flex justify-between items-center">
+                        {/* 버튼 클릭 시 Home 페이지로 이동 */}
+                        <button>
                         <div className="flex items-center text-2xl font-bold">
                             <img
                                 width="40"
                                 src="/images/mediGom_Logo.png"/>
                               Medi<span className="text-yellow-300">Gom</span>
                         </div>
+                            </button>
                         <div className="flex items-center space-x-6">
                             <div className="relative group">
                                 <button className="flex items-center space-x-1 hover:text-yellow-300 transition-colors">
-                                    <Wind className="w-6 h-6"/>
+                                    <Wind className="w-6 h-6"/>날씨
                                 </button>
                             </div>
                             <button className="relative hover:text-yellow-300 transition-colors">

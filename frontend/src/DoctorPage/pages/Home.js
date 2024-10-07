@@ -64,6 +64,7 @@ export const Home = () => {
             });
         };
 
+
         return (
             <div className="doctor-paper-schedule bg-white p-4 rounded-lg shadow">
                 <div className="flex justify-center items-center ">
@@ -125,9 +126,9 @@ export const Home = () => {
                     <h2 className="text-xl font-semibold mb-4 flex items-center">
                         <List className="mr-2"/> 식단
                     </h2>
-                    <p>아침 식단: 불고기덮밥, 미역국, 김치, 샐러드</p>
-                    <p>점심 식단: 불고기덮밥, 미역국, 김치, 샐러드</p>
-                    <p>저녁 식단: 불고기덮밥, 미역국, 김치, 샐러드</p>
+                    <p><strong>아침 식단 :</strong> 불고기덮밥, 미역국, 김치, 샐러드</p>
+                    <p><strong>점심 식단 :</strong> 불고기덮밥, 미역국, 김치, 샐러드</p>
+                    <p><strong>저녁 식단 :</strong> 불고기덮밥, 미역국, 김치, 샐러드</p>
                 </div>
 
                 {/* Personal Alerts Section */}
