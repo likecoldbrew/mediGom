@@ -9,7 +9,6 @@ import MainPage from "./userMain/pages/MainPage";
 import Doctors from "./doctorPage";
 import Admin from "./admin";
 import DoctorInfo from "./userMain/pages/DoctorInfo";
-import Payment from "./components/Payment";
 
 function App() {
     return (
@@ -22,7 +21,7 @@ function App() {
                 <Route path="/signUp" element={<SignUpPage />} />
                 <Route path="/admin" element={<Admin />} />
                 <Route path="/doctors" element={<Doctors />} />
-                <Route path="/payment" element={<Payment/>}/>
+
             </Routes>
         </BrowserRouter>
     );
