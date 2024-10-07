@@ -1,7 +1,8 @@
 package kr.or.nextit.backend.service;
 
-import kr.or.nextit.backend.mapper.CategoryrMapper;
-import kr.or.nextit.backend.mapper.UserMapper;
+
+import kr.or.nextit.backend.mapper.CategoryMapper;
+
 import kr.or.nextit.backend.model.Category;
 import kr.or.nextit.backend.model.User;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CategoryService {
 
-    private final CategoryrMapper categoryMapper;
+    private final CategoryMapper categoryMapper;
 
     // 최상위 카테고리 가져오기
     public List<Category> getAllCategories() {

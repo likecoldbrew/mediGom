@@ -10,7 +10,6 @@ const Header = () => {
     /*선택한 카테고리 명*/
     const [selectCategory, setSelectCategory] = useState(null);
     const [selectSubCategory, setSelectSubCategory] = useState(null);
-
     useEffect(() => {
         axios.get('/api/categories')  // Use axios instead of fetch
             .then(response => {
@@ -19,12 +18,10 @@ const Header = () => {
             })
             .catch(error => console.error('Error fetching categories:', error));
     }, []);
-
     const handleSubCategorySelect = (categoryName, subCategoryName) => {
         setSelectCategory(categoryName);
         setSelectSubCategory(subCategoryName);
     };
-console.log(categories)
     return (
         <header className="bg-white shadow-sm">
             <div className="container mx-auto px-4 py-4">

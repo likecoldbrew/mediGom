@@ -9,7 +9,6 @@ import MainPage from "./userMain/pages/MainPage";
 import Doctors from "./doctorPage";
 import Admin from "./admin";
 import DoctorInfo from "./userMain/pages/DoctorInfo";
-import EmployLogin from "./userMain/pages/EmployLogin";
 
 function App() {
     return (
@@ -19,10 +18,10 @@ function App() {
                 <Route path="/:subcategory" element={<SubCategories />} />
                 <Route path="/1001" element={<DoctorInfo />} />
                 <Route path="/login" element={<LoginPage />} />
-                <Route path="/empLogin" element={<EmployLogin />} />s
                 <Route path="/signUp" element={<SignUpPage />} />
                 <Route path="/admin" element={<Admin />} />
                 <Route path="/doctors" element={<Doctors />} />
+
             </Routes>
         </BrowserRouter>
     );

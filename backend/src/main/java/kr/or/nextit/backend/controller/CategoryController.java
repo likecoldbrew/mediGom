@@ -1,9 +1,7 @@
 package kr.or.nextit.backend.controller;
 
 import kr.or.nextit.backend.model.Category;
-import kr.or.nextit.backend.model.User;
 import kr.or.nextit.backend.service.CategoryService;
-import kr.or.nextit.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
