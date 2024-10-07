@@ -20,6 +20,7 @@ public class UserService {
         return userMapper.getUserById(userNo);
     }
 
+
     public void insertUser(User user) {
         userMapper.insertUser(user);
     }
@@ -31,4 +32,10 @@ public class UserService {
     public void deleteUser(int userNo) {
         userMapper.deleteUser(userNo);
     }
+
+    /* 의사 이름 조회*/
+    public List<User> getDoctorsName() {
+        return userMapper.getDoctorsName();
+    }
+
 }

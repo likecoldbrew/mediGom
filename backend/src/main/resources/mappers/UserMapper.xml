@@ -14,6 +14,10 @@
         SELECT * FROM users WHERE user_no = #{userNo}
     </select>
 
+    <!-- 의사 이름 조회 -->
+    <select id="getDoctorsName" resultType="kr.or.nextit.backend.model.User">
+        SELECT user_name FROM users WHERE admin = 1
+    </select>
     <!-- 유저 추가 -->
     <insert id="insertUser" parameterType="kr.or.nextit.backend.model.User">
         INSERT INTO users (user_id, user_pass, user_name, user_rrn, gender, email, phone, user_add, user_add2, admin)

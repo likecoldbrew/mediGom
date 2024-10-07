@@ -16,8 +16,8 @@ function App() {
         <BrowserRouter>
             <Routes>
                 <Route path="/" element={<MainPage />} />
-                {/*<Route path="/:subcategory" element={<SubCategories />} />*/}
-                <Route path="/1001" element={<DoctorInfo />} />
+                <Route path="/:subcategory" element={<SubCategories />} />
+                <Route path="/101" element={<DoctorInfo />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/empLogin" element={<EmployLogin />} />
                 <Route path="/signUp" element={<SignUpPage />} />
