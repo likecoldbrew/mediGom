@@ -39,4 +39,9 @@ public class UserController {
         userService.deleteUser(userNo);
     }
 
+    @GetMapping("/check-id/{id}")
+    public boolean checkId(@PathVariable("id") String userId) {
+        return userService.checkIdExists(userId);
+    }
+
 }
