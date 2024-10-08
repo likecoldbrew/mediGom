@@ -30,6 +30,7 @@ const QuickMenu=()=>{
                 ref={contentRef}
                 className={`space-y-4 h-full overflow-y-auto ${isOverflow ? 'text-sm' : 'text-lg'}`} // 글자 크기 조절
             >
+
                 {sidebarItems.map((item, index) => (
                     <button
                         key={index}

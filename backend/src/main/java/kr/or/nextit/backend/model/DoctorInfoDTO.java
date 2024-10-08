@@ -21,7 +21,6 @@ public class DoctorInfoDTO {
             this.treatments = new ArrayList<>();
         }
     }
-
     public void setUserNames(String userNames) {
         if (userNames != null) {
             this.userNames = Arrays.asList(userNames.split(","));

@@ -74,4 +74,5 @@
         md.department_name;  <!-- 진료과명으로 그룹화 -->
     </select>
 
+
 </mapper>

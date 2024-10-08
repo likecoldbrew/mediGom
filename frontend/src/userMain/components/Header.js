@@ -60,6 +60,7 @@ const Header = () => {
                                         >
                                             <div
                                                 className="px-3 py-1 sm:px-2 sm:py-1 lg:px-4 lg:py-2 hover:bg-sky-100 cursor-pointer hover:font-bold">
+
                                                 {sub.name}
                                             </div>
                                         </Link>
