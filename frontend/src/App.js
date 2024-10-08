@@ -13,6 +13,7 @@ import UserStateChange from "./doctorPage/pages/UserStateChange";
 import UserClinicCheck from "./doctorPage/pages/UserClinicCheck";
 import UserReservationCheck from "./doctorPage/pages/UserReservationCheck";
 import EmployLogin from "./userMain/pages/employLogin";
+import Payment from "./components/Payment";
 
 
 function App() {
@@ -31,6 +32,8 @@ function App() {
                 <Route path="/doctors/userStateChange" element={<UserStateChange />} />
                 <Route path="/doctors/userClinicCheck" element={<UserClinicCheck />} />
                 <Route path="/doctors/userReservationCheck" element={<UserReservationCheck />} />
+
+                <Route path="/payment" element={<Payment />} />
             </Routes>
         </BrowserRouter>
     );
