@@ -16,7 +16,7 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
-    @GetMapping
+    @GetMapping("/main")
     public ResponseEntity<List<Category>> getAllCategories() {
         try {
             List<Category> categories = categoryService.getAllCategories();
@@ -28,5 +28,8 @@ public class CategoryController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+
+
 
 }
