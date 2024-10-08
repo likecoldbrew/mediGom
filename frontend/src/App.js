@@ -9,6 +9,9 @@ import MainPage from "./userMain/pages/MainPage";
 import Doctors from "./doctorPage";
 import Admin from "./admin";
 import DoctorInfo from "./userMain/pages/DoctorInfo";
+import UserStateChange from "./doctorPage/pages/UserStateChange";
+import UserClinicCheck from "./doctorPage/pages/UserClinicCheck";
+import UserReservationCheck from "./doctorPage/pages/UserReservationCheck";
 
 function App() {
     return (
@@ -21,7 +24,10 @@ function App() {
                 <Route path="/signUp" element={<SignUpPage />} />
                 <Route path="/admin" element={<Admin />} />
                 <Route path="/doctors" element={<Doctors />} />
-
+                {/*연동 안해놔서 임시로 그냥 화면에서 보려고 함*/}
+                <Route path="/doctors/userStateChange" element={<UserStateChange />} />
+                <Route path="/doctors/userClinicCheck" element={<UserClinicCheck />} />
+                <Route path="/doctors/userReservationCheck" element={<UserReservationCheck />} />
             </Routes>
         </BrowserRouter>
     );
