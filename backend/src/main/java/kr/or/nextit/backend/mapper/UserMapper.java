@@ -3,7 +3,9 @@ package kr.or.nextit.backend.mapper;
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import kr.or.nextit.backend.model.User;
+
 import org.apache.ibatis.annotations.Param;
+
 
 @Mapper
 public interface UserMapper {

@@ -3,6 +3,8 @@ package kr.or.nextit.backend.service;
 
 import kr.or.nextit.backend.mapper.CategoryMapper;
 import kr.or.nextit.backend.model.Category;
+import kr.or.nextit.backend.model.User;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -16,10 +16,12 @@ public class DoctorInfoService {
 
     private final DoctorInfoMapper doctorInfoMapper;
 
+
     //전체 의사 조회
     public List<DoctorInfoDTO> getAllDoctors() {
         return doctorInfoMapper.getDoctors();
     }
+
 
     //전체 진료과 조회
     public List<DoctorInfoDTO> getAllDepartments() {

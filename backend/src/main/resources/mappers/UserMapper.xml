@@ -45,6 +45,7 @@
         UPDATE users SET delete_yn = 'y' WHERE user_no = #{userNo}
     </update>
 
+
     <!-- ID 중복 확인 쿼리 추가 -->
     <select id="checkIdExists" parameterType="String" resultType="boolean">
         SELECT COUNT(*) > 0 FROM users WHERE user_id = #{userId};
