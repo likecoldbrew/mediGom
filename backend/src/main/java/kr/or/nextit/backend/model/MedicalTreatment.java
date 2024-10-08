@@ -2,10 +2,7 @@ package kr.or.nextit.backend.model;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "medical_treatment")  // 테이블 이름을 명시

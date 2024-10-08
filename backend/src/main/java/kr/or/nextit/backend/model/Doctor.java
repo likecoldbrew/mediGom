@@ -2,7 +2,7 @@ package kr.or.nextit.backend.model;
 
 import lombok.Data;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "doctors")  // 테이블 이름을 명시
