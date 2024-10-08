@@ -16,8 +16,7 @@ import EmployLogin from "./userMain/pages/employLogin";
 import DepartmentInfo from "./userMain/pages/DepartmentInfo";
 import UserMain from "./userMain/index";
 import Payment from "./components/Payment";
-import "./index.css"
-
+import HospitalInfo from "./userMain/pages/HospitalInfo";
 import Home from "./admin/pages/Home";
 import AllUsersList from "./admin/pages/AllUsersList";
 import PatientList from "./admin/pages/PatientList";
@@ -32,6 +31,7 @@ function App() {
                     <Route index element={<MainPage />} />
                     <Route path="101" element={<DoctorInfo />} />
                     <Route path="102" element={<DepartmentInfo />} />
+                    <Route path="103" element={<HospitalInfo />} />
                     <Route path="subcategory" element={<SubCategories />} />
                 </Route>
                 <Route path="/login" element={<LoginPage />} />
