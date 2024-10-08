@@ -16,21 +16,22 @@ const DoctorInfo = () => {
     }, []);
 
 
-    const fetchDoctors=async ()=>{
+    const fetchDoctors = async () => {
         try {
             const response = await fetch('/api/doctorsInfo/all')
             const data = await response.json();
             setDoctors(data)
-        }catch (error){
+        } catch (error) {
             console.error('Error fetching doctor info:', error);
         }
     }
-    console.log("닥터정보",doctors);
+    console.log("닥터정보", doctors);
 
     return (
         <div className="flex flex-col min-h-screen">
             <Header/>
             <SubCategories/>
+
             <div className=" container mx-auto px-4 py-8 flex flex-grow">
                 <main className="flex-grow pr-8 ">
                     <div className="flex-col min-h-full space-y-4 items-center justify-center">
