@@ -29,6 +29,8 @@ import {UserStateChange} from "../pages/UserStateChange";
 import UserManagement from "../pages/UserManagement";
 import UserClinicCheck from "../pages/UserClinicCheck";
 import UserReservationCheck from "../pages/UserReservationCheck";
+import Certificates from "../pages/Certificates";
+import {Outlet} from "react-router-dom";
 
 const SidebarAndNavbar = () => {
     const [isOpen, setIsOpen] = useState(true);
@@ -59,7 +61,7 @@ const SidebarAndNavbar = () => {
     const menuItems = [
         { key: 'userManagement', icon: <User size={20} />, label: '환자 관리',page:'userManagement', dropdown: ['환자 전체 목록', '내 환자 확인', '예약 환자 확인'] },
         { key: 'reservation', icon: <UserCheck size={20} />, label: '예약 확인' },
-        { key: 'documents', icon: <FileText size={20} />, label: '증명서 발급', dropdown: ['진단 환자 목록(사실 필요 없음)','서류 발급(목록에 같이 넣음 될ㄷ스)'] },
+        { key: 'documents', icon: <FileText size={20} />, label: '증명서 발급',page:'certificates', dropdown: ['진단 환자 목록(사실 필요 없음)','서류 발급(목록에 같이 넣음 될ㄷ스)'] },
         { key: 'Hospitalization', icon: <FolderPlus size={20} />, label: '입원 관리', dropdown: ['입원 환자 목록', '입원 신청','입원 상태 변경', '병실 현황'] },
         { key: 'holiday', icon: <Send size={20} />, label: '휴무 신청' },
         { key: 'mypage', icon: <FeatherSettings size={20} />, label: '마이페이지'}
@@ -78,6 +80,8 @@ const SidebarAndNavbar = () => {
                 return <UserClinicCheck/>;
             case 'userStateChange':
                 return <UserStateChange/>;
+            case 'certificates':
+                return <Certificates/>;
             // case 'schedule': return <ScheduleComponent />;
             // 다른 페이지 컴포넌트를 추가할 수 있음
             default:
@@ -200,8 +204,8 @@ const SidebarAndNavbar = () => {
                 </nav>
 
                 {/* 동적으로 변경되는 콘텐츠 영역 */}
-                <div className="p-4">
-                    {renderPage()} {/* 부모 컴포넌트에서 받은 renderPage 호출 */}
+                <div>
+                        <Outlet/>
                 </div>
 
             </main>

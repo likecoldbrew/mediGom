@@ -3,7 +3,7 @@ import {Moon, Sun, Search, Filter, List, Grid, ChevronUp, ChevronDown, MoreVerti
 
 
 
-const initialProducts = [
+const initialusers = [
     { id: 1, name: 'Ocean', image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?...', category: 'Furniture', status: 'active', sales: 11, stock: 36, price: 560 },
     { id: 2, name: 'Lou', image: 'https://images.unsplash.com/photo-1484154218962-a197022b5858?...', category: 'Kitchen', status: 'disabled', sales: 6, stock: 46, price: 710 },
     { id: 3, name: 'Yellow', image: '/placeholder.svg?height=40&width=40', category: 'Decoration', status: 'active', sales: 61, stock: 56, price: 360 },
@@ -37,8 +37,8 @@ const UserClinicCheck = () => {
         };
     };
 
-    const [products, setProducts] = useState(initialProducts);
-    const [filteredProducts, setFilteredProducts] = useState(initialProducts);
+    const [users, setUsers] = useState(initialusers);
+    const [filteredusers, setFilteredusers] = useState(initialusers);
     const [searchTerm, setSearchTerm] = useState('');
     const [categoryFilter, setCategoryFilter] = useState('All Categories');
     const [statusFilter, setStatusFilter] = useState('All Status');
@@ -48,11 +48,11 @@ const UserClinicCheck = () => {
 
 
     useEffect(() => {
-        let result = [...products];
+        let result = [...users];
 
         if (searchTerm) {
-            result = result.filter(product =>
-                Object.values(product).some(value => {
+            result = result.filter(user =>
+                Object.values(user).some(value => {
                     if (value !== null && value !== undefined) {
                         return value.toString().toLowerCase().includes(searchTerm.toLowerCase());
                     }
@@ -62,14 +62,14 @@ const UserClinicCheck = () => {
         }
 
         if (categoryFilter !== 'All Categories') {
-            result = result.filter(product => product.category === categoryFilter);
+            result = result.filter(user => user.category === categoryFilter);
         }
 
         if (statusFilter !== 'All Status') {
-            result = result.filter(product => product.status.toLowerCase() === statusFilter.toLowerCase());
+            result = result.filter(user => user.status.toLowerCase() === statusFilter.toLowerCase());
         }
 
-        if (products.length && typeof products[0][sortColumn] === 'undefined') {
+        if (users.length && typeof users[0][sortColumn] === 'undefined') {
             console.error('Invalid sortColumn value:', sortColumn);
         } else {
             result.sort((a, b) => {
@@ -79,8 +79,8 @@ const UserClinicCheck = () => {
             });
         }
 
-        setFilteredProducts(result);
-    }, [searchTerm, categoryFilter, statusFilter, products, sortColumn, sortDirection]);
+        setFilteredusers(result);
+    }, [searchTerm, categoryFilter, statusFilter, users, sortColumn, sortDirection]);
 
     const handleSort = (column) => {
         if (column === sortColumn) {
@@ -96,7 +96,7 @@ const UserClinicCheck = () => {
         <div className="container mx-auto px-4 py-8">
             {/* 헤더 */}
             <div className="flex justify-between items-center mb-8">
-                <h1 className="text-2xl font-bold">환자 목록</h1>
+                <h1 className="text-2xl font-bold">내 환자 확인</h1>
             </div>
             {/* 검색 및 필터 */}
             <div className="flex flex-col md:flex-row justify-between items-center mb-6 space-y-4 md:space-y-0">
@@ -241,33 +241,33 @@ const UserClinicCheck = () => {
                     </tr>
                     </thead>
                     <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                    {filteredProducts.map((product) => (
-                        <tr key={product.id}>
+                    {filteredusers.map((user) => (
+                        <tr key={user.id}>
                             <td className="px-6 py-4 whitespace-nowrap">
                                 <div className="flex items-center">
                                     <input type="checkbox"
                                            className="form-checkbox h-5 w-5 mr-3 text-blue-500"/>
-                                    <img className="h-10 w-10 rounded-full mr-3" src={product.image}
-                                         alt={product.name}/>
-                                    <div className="text-sm font-medium">{product.name}</div>
+                                    <img className="h-10 w-10 rounded-full mr-3" src={user.image}
+                                         alt={user.name}/>
+                                    <div className="text-sm font-medium">{user.name}</div>
                                 </div>
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm text-center">{product.category}</td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-center">{user.category}</td>
                             <td className="px-6 py-4 whitespace-nowrap text-center">
                       <span
                           className={`px-2 inline-flex  text-xs leading-5 font-semibold rounded-full ${
-                              product.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                              user.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
                           }`}
                       >
-                        {product.status}
+                        {user.status}
                       </span>
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-center">{product.sales}</td>
-                            <td className="px-6 py-4 whitespace-nowrap text-center">{product.stock}</td>
-                            <td className="px-6 py-4 whitespace-nowrap text-center">${product.price}</td>
-                            <td className="px-6 py-4 whitespace-nowrap text-center">{product.price}</td>
-                            <td className="px-6 py-4 whitespace-nowrap text-center">{product.price}</td>
-                            <td className="px-6 py-4 whitespace-nowrap text-center">{product.price}</td>
+                            <td className="px-6 py-4 whitespace-nowrap text-center">{user.sales}</td>
+                            <td className="px-6 py-4 whitespace-nowrap text-center">{user.stock}</td>
+                            <td className="px-6 py-4 whitespace-nowrap text-center">${user.price}</td>
+                            <td className="px-6 py-4 whitespace-nowrap text-center">{user.price}</td>
+                            <td className="px-6 py-4 whitespace-nowrap text-center">{user.price}</td>
+                            <td className="px-6 py-4 whitespace-nowrap text-center">{user.price}</td>
                             <td className="px-6 py-3 text-center ">
                                 <button
                                     className="px-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">

@@ -13,6 +13,9 @@ import UserStateChange from "./doctorPage/pages/UserStateChange";
 import UserClinicCheck from "./doctorPage/pages/UserClinicCheck";
 import UserReservationCheck from "./doctorPage/pages/UserReservationCheck";
 import EmployLogin from "./userMain/pages/employLogin";
+import Certificates from "./doctorPage/pages/Certificates";
+import UserManagement from "./doctorPage/pages/UserManagement";
+import Home from "./doctorPage/pages/Home";
 
 
 function App() {
@@ -26,11 +29,14 @@ function App() {
                 <Route path="/empLogin" element={<EmployLogin />} />
                 <Route path="/signUp" element={<SignUpPage />} />
                 <Route path="/admin" element={<Admin />} />
-                <Route path="/doctors" element={<Doctors />} />
-                {/*연동 안해놔서 임시로 그냥 화면에서 보려고 함*/}
-                <Route path="/doctors/userStateChange" element={<UserStateChange />} />
-                <Route path="/doctors/userClinicCheck" element={<UserClinicCheck />} />
-                <Route path="/doctors/userReservationCheck" element={<UserReservationCheck />} />
+                <Route path="/doctors" element={<Doctors/>}>
+                    <Route index element={<Home/>}/>
+                    <Route path="list" element={<UserManagement/>}/>
+                    <Route path="reserv" element={<UserReservationCheck/>}/>
+                    <Route path="clinic" element={<UserClinicCheck/>}/>
+                    <Route path="state" element={<UserStateChange/>}/>
+                    <Route path="certificate" element={<Certificates/>}/>
+                </Route>
             </Routes>
         </BrowserRouter>
     );
