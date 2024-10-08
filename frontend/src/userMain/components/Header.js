@@ -11,13 +11,23 @@ const Header = () => {
     const [selectCategory, setSelectCategory] = useState(null);
     const [selectSubCategory, setSelectSubCategory] = useState(null);
     useEffect(() => {
-        axios.get('/api/categories/main')  // Use axios instead of fetch
-            .then(response => {
-                console.log('Categories fetched:', response.data);
-                setCategories(response.data);
-            })
-            .catch(error => console.error('Error fetching categories:', error));
+        const fetchCategories = async () => {
+            try {
+                const response = await fetch('/api/categories/main');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                console.log('Categories fetched:', data);
+                setCategories(data);
+            } catch (error) {
+                console.error('Error fetching categories:', error);
+            }
+        };
+
+        fetchCategories();
     }, []);
+
     const handleSubCategorySelect = (categoryName, subCategoryName) => {
         setSelectCategory(categoryName);
         setSelectSubCategory(subCategoryName);
@@ -62,7 +72,6 @@ const Header = () => {
                                         >
                                             <div
                                                 className="px-3 py-1 sm:px-2 sm:py-1 lg:px-4 lg:py-2 hover:bg-sky-100 cursor-pointer hover:font-bold">
-
                                                 {sub.name}
                                             </div>
                                         </Link>
