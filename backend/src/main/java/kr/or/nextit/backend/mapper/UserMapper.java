@@ -20,4 +20,8 @@ public interface UserMapper {
 
     // 유저 삭제
     void deleteUser(int userNo);
+
+    // 의사 이름 조회
+    List<User> getDoctorsName();
+
 }
