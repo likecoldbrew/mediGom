@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.or.nextit.backend.mapper.DoctorInfoMapper">
+
+    <!-- 모든 유저 조회 -->
+    <select id="getDoctors" resultType="kr.or.nextit.backend.model.DoctorInfoDTO">
+        SELECT
+            u.user_name,
+            md.department_name,
+            GROUP_CONCAT(mt.treatment_name) AS treatments
+        FROM
+            users u
+                JOIN
+            doctors d ON u.user_no = d.doctor_user_no
+                JOIN
+            medical_department md ON d.department = md.department_no
+                JOIN
+            medical_treatment mt ON FIND_IN_SET(mt.treatment_no, d.treatment) > 0
+        WHERE
+            u.admin = 1
+        GROUP BY
+            u.user_name, md.department_name;
+    </select>
+
+    <!-- 이름 검색으로 의사 조회 -->
+    <select id="searchDoctors" parameterType="String" resultType="kr.or.nextit.backend.model.DoctorInfoDTO">
+        SELECT
+        u.user_name,
+        md.department_name,
+        GROUP_CONCAT(DISTINCT mt.treatment_name) AS treatments
+        FROM
+        users u
+        JOIN doctors d ON u.user_no = d.doctor_user_no
+        JOIN medical_department md ON d.department = md.department_no
+        JOIN medical_treatment mt ON FIND_IN_SET(mt.treatment_no, d.treatment) > 0
+        WHERE
+        u.admin = 1 AND u.user_name LIKE CONCAT('%', #{value}, '%')  <!-- 검색어 조건 추가 -->
+        GROUP BY
+        u.user_name, md.department_name;
+    </select>
+
+</mapper>

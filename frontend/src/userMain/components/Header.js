@@ -45,7 +45,7 @@ const Header = () => {
                                      onMouseEnter={() => setHoveredCategory(category.name)}
                                      onMouseLeave={() => setHoveredCategory(null)}>
                                     {category.subcategories.map((sub) => (
-                                        <Link key={sub.categoryId} to={`/${sub.categoryId}`} onClick={() => handleSubCategorySelect(category.name, sub.name)}>
+                                        <Link key={sub.categoryId} to={`/${sub.categoryId}`} state={{ selectCategory: category.name, selectSubCategory: sub.name }} onClick={() => handleSubCategorySelect(category.name, sub.name)}>
                                             <div className="px-4 py-2 hover:bg-sky-100 cursor-pointer hover:font-bold">
                                                 {sub.name}
                                             </div>

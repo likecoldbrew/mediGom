@@ -8,13 +8,13 @@ const QuickMenu=()=>{
         { name: "이용안내", icon: "ℹ️" },
     ];
     return (
-        <div className="bg-sky-50 rounded-lg p-4 shadow-md">
-            <h3 className="text-lg font-bold text-sky-800 mb-4">빠른 메뉴</h3>
-            <div className="space-y-4">
+        <div className="sticky top-10 right-4 bg-sky-50 rounded-lg p-4 shadow-md h-60">
+
+            <div className="space-y-4 h-full  overflow-y-auto">
                 {sidebarItems.map((item, index) => (
                     <button
                         key={index}
-                        className="w-full bg-white hover:bg-sky-100 text-sky-800 font-bold py-2 px-4 rounded flex items-center justify-center transition-colors"
+                        className="w-full bg-white  hover:bg-sky-100 text-sky-800 font-bold py-2 px-4 rounded flex items-center justify-center transition-colors"
                     >
                         <span className="mr-2">{item.icon}</span>
                         {item.name}
