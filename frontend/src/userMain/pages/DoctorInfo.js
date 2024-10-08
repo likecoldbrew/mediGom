@@ -105,9 +105,9 @@ const DoctorInfo = () => {
                         {doctors.length > 0 ? ( // 데이터가 있을 때만 표시
                             doctors.map((doctor, index) => (
                                 <div key={index} className="bg-white p-4 rounded shadow">
-                                    <h2 className="text-xl font-semibold mt-4">{doctor.userName}</h2> {/* 의사 이름 */}
-                                    <p className="text-gray-600">진료과: {doctor.departmentName}</p> {/* 진료과 */}
-                                    <p className="text-gray-600">진료분야: {doctor.treatments.join(', ')}</p> {/* 진료 분야 */}
+                                    <h2 className="text-xl font-semibold mb-3 ">{doctor.userName}</h2> {/* 의사 이름 */}
+                                    <p className="text-gray-600"><span className="font-bold">진료과:</span> {doctor.departmentName}</p> {/* 진료과 */}
+                                    <p className="text-gray-600"><span className="font-bold">진료분야:</span> {doctor.treatments.join(', ')}</p> {/* 진료 분야 */}
                                 </div>
                             ))
                         ) : (
