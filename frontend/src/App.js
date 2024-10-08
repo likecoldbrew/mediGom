@@ -13,6 +13,7 @@ import UserStateChange from "./DoctorPage/pages/UserStateChange";
 import UserClinicCheck from "./DoctorPage/pages/UserClinicCheck";
 import UserReservationCheck from "./DoctorPage/pages/UserReservationCheck";
 import EmployLogin from "./userMain/pages/employLogin";
+import DepartmentInfo from "./userMain/pages/DepartmentInfo";
 
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
                 <Route path="/" element={<MainPage />} />
                 <Route path="/:subcategory" element={<SubCategories />} />
                 <Route path="/101" element={<DoctorInfo />} />
+                <Route path="/102" element={<DepartmentInfo />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/empLogin" element={<EmployLogin />} />
                 <Route path="/signUp" element={<SignUpPage />} />
