@@ -80,7 +80,6 @@ const DoctorInfo = () => {
 
     return (
         <div className="flex flex-col min-h-screen">
-            <Header/>
             <SubCategories/>
             <div className="flex flex-col items-center justify-center mt-8">
                 <div className="flex max-w-3xl w-full">
@@ -121,7 +120,7 @@ const DoctorInfo = () => {
                     <ChatBot/>
                 </div>
             </div>
-            <Footer/>
+
         </div>
     );
 };

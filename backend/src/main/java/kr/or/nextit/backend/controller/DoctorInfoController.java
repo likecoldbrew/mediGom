@@ -29,5 +29,16 @@ public class DoctorInfoController {
         return doctorInfoService.searchDoctors(name);
     }
 
+    //전체 진료과
+    @GetMapping("/allDepartment")
+    public List<DoctorInfoDTO> getDepartments() {
+        return doctorInfoService.getAllDepartments();
+    }
+
+    // 진료과 검색
+    @GetMapping("/department")
+    public List<DoctorInfoDTO> searchDepartment(@RequestParam String departmentName) {
+        return doctorInfoService.searchDepartment(departmentName);
+    }
 
 }

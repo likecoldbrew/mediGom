@@ -14,16 +14,20 @@ import UserClinicCheck from "./DoctorPage/pages/UserClinicCheck";
 import UserReservationCheck from "./DoctorPage/pages/UserReservationCheck";
 import EmployLogin from "./userMain/pages/employLogin";
 import DepartmentInfo from "./userMain/pages/DepartmentInfo";
+import UserMain from "./userMain/index";
+
 
 
 function App() {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={<MainPage />} />
-                <Route path="/:subcategory" element={<SubCategories />} />
-                <Route path="/101" element={<DoctorInfo />} />
-                <Route path="/102" element={<DepartmentInfo />} />
+                <Route path="/" element={<UserMain />} >
+                    <Route index element={<MainPage />} />
+                    <Route path="101" element={<DoctorInfo />} />
+                    <Route path="102" element={<DepartmentInfo />} />
+                    <Route path="subcategory" element={<SubCategories />} />
+                </Route>
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/empLogin" element={<EmployLogin />} />
                 <Route path="/signUp" element={<SignUpPage />} />

@@ -21,8 +21,19 @@ public class DoctorInfoService {
         return doctorInfoMapper.getDoctors();
     }
 
+    //전체 진료과 조회
+    public List<DoctorInfoDTO> getAllDepartments() {
+        return doctorInfoMapper.getDepartments();
+    }
+
     //의사 검색
     public List<DoctorInfoDTO> searchDoctors(String searchTerm) {
         return doctorInfoMapper.searchDoctors(searchTerm);
     }
+
+    // 진료과 검색
+    public List<DoctorInfoDTO> searchDepartment(String departmentName) {
+        return doctorInfoMapper.searchDepartment(departmentName);
+    }
+
 }
