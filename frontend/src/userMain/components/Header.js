@@ -28,25 +28,39 @@ const Header = () => {
                 <div className="flex justify-between items-center">
                     <img src="/images/userMain/logo.png" className="h-24 " alt="logo"/>
                     <nav className="hidden md:flex space-x-10">
-                        <button className="text-sky-600 hover:text-sky-800 hover:font-bold transition-colors">로그인</button>
-                        <button className="text-sky-600 hover:text-sky-800 hover:font-bold transition-colors">회원가입</button>
+                        <button className="text-sky-600 hover:text-sky-800 hover:font-bold transition-colors">로그인
+                        </button>
+                        <button className="text-sky-600 hover:text-sky-800 hover:font-bold transition-colors">회원가입
+                        </button>
                     </nav>
                 </div>
-                <nav className="mt-4 flex-1 flex flex-wrap justify-center gap-28">
+                <nav className="mt-4 flex-1 flex flex-wrap justify-center gap-12 sm:gap-6 lg:gap-28">
                     {categories.map((category, index) => (
                         <div
                             key={index}
                             className="relative"
                             onMouseEnter={() => setHoveredCategory(category.name)}
                         >
-                            <span className="cursor-pointer text-sky-600 text-xl hover:font-bold hover:text-sky-800 transition-colors">{category.name}</span>
+            <span
+                className="cursor-pointer text-sky-600 text-lg sm:text-base lg:text-xl hover:font-bold hover:text-sky-800 transition-colors">
+                {category.name}
+            </span>
                             {hoveredCategory === category.name && category.subcategories && category.subcategories.length > 0 && (
-                                <div className="absolute left-0 mt-2 w-48 bg-white border rounded shadow-lg"
-                                     onMouseEnter={() => setHoveredCategory(category.name)}
-                                     onMouseLeave={() => setHoveredCategory(null)}>
+                                <div
+                                    className="absolute left-0 mt-2 w-40 sm:w-36 lg:w-48 bg-white border rounded shadow-lg"
+                                    onMouseEnter={() => setHoveredCategory(category.name)}
+                                    onMouseLeave={() => setHoveredCategory(null)}
+                                >
                                     {category.subcategories.map((sub) => (
-                                        <Link key={sub.categoryId} to={`/${sub.categoryId}`} state={{ selectCategory: category.name, selectSubCategory: sub.name }} onClick={() => handleSubCategorySelect(category.name, sub.name)}>
-                                            <div className="px-4 py-2 hover:bg-sky-100 cursor-pointer hover:font-bold">
+                                        <Link
+                                            key={sub.categoryId}
+                                            to={`/${sub.categoryId}`}
+                                            state={{selectCategory: category.name, selectSubCategory: sub.name}}
+                                            onClick={() => handleSubCategorySelect(category.name, sub.name)}
+                                        >
+                                            <div
+                                                className="px-3 py-1 sm:px-2 sm:py-1 lg:px-4 lg:py-2 hover:bg-sky-100 cursor-pointer hover:font-bold">
+
                                                 {sub.name}
                                             </div>
                                         </Link>
@@ -56,6 +70,7 @@ const Header = () => {
                         </div>
                     ))}
                 </nav>
+
             </div>
         </header>
     );
