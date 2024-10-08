@@ -72,14 +72,65 @@ const DoctorInfo = () => {
     debouncedSearch(value);
   };
 
-  // 엔터 키 입력 핸들링
-  const handleKeyDown = (event) => {
-    if (event.key === "Enter") {
-      event.preventDefault();
-      debouncedSearch.cancel(); // 디바운싱된 호출을 취소
-      handleSearch(searchTerm); // 즉시 검색 수행
-    }
-  };
+
+    // 입력 변경 핸들러
+    const handleInputChange = (e) => {
+        const value = e.target.value;
+        setSearchTerm(value);
+        debouncedSearch(value);
+    };
+
+    // 엔터 키 입력 핸들링
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            debouncedSearch.cancel(); // 디바운싱된 호출을 취소
+            handleSearch(searchTerm); // 즉시 검색 수행
+        }
+    };
+
+    return (
+        <div className="flex flex-col min-h-screen">
+            <SubCategories/>
+            <div className="flex flex-col items-center justify-center mt-8">
+                <div className="flex max-w-3xl w-full">
+                    <input
+                        type="text"
+                        className="form-input border rounded-l-md px-4 py-2 w-full"
+                        placeholder="찾고 싶은 의료진 이름을 검색해보세요"
+                        value={searchTerm}
+                        onChange={handleInputChange} // 입력 시 디바운스된 검색 함수 호출
+                        onKeyDown={handleKeyDown} // 엔터 키 핸들링
+                    />
+                    <button className="bg-sky-100 hover:bg-sky-200 text-white px-4 py-2 rounded-r-md"  onClick={() => {
+                        debouncedSearch.cancel(); // 디바운싱된 호출을 취소
+                        handleSearch(searchTerm); // 즉시 검색 수행
+                    }}  aria-label="의사 검색">
+                        {icon}
+                    </button>
+                </div>
+            </div>
+            <div className=" container mx-auto px-4 py-8 flex flex-grow">
+                <main className="flex-grow pr-8 ">
+                    <div className="flex-col min-h-full space-y-4 items-center justify-center">
+                        {doctors.length > 0 ? ( // 데이터가 있을 때만 표시
+                            doctors.map((doctor, index) => (
+                                <div key={index} className="bg-white p-4 rounded shadow">
+                                    <h2 className="text-xl font-semibold mb-3 ">{doctor.userName}</h2> {/* 의사 이름 */}
+                                    <p className="text-gray-600"><span className="font-bold">진료과:</span> {doctor.departmentName}</p> {/* 진료과 */}
+                                    <p className="text-gray-600"><span className="font-bold">진료분야:</span> {doctor.treatments.join(', ')}</p> {/* 진료 분야 */}
+                                </div>
+                            ))
+                        ) : (
+                            <p>Loading...</p> // 로딩 중일 때 표시
+                        )}
+                    </div>
+                </main>
+                <div className="flex flex-col space-y-4">
+                    <QuickMenu/>
+                    <ChatBot/>
+                </div>
+            </div>
 
   return (
     <div className="flex flex-col min-h-screen">
