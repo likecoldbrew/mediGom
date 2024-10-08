@@ -3,6 +3,7 @@ import {useParams} from 'react-router-dom';
 import QuickMenu from "../components/QuickMenu";
 import SubCategories from "../components/SubCategory";
 import ChatBot from "../components/ChatBot";
+import Map from "../components/Map";
 
 
 const HospitalInfo = () => {
@@ -78,15 +79,10 @@ const HospitalInfo = () => {
                             ))}
                         </h2>
                     </div>
-                    <div className="bg-white p-4 border border-blue-300 rounded shadow relative mt-10">
 
-
-
-                        <h2 className="text-xl text-center font-bold m-8 relative z-10"> {/* z-index 조정 */}
-                            {introText.map((line, index) => (
-                                <p key={index} className="text-black mb-2">{line}</p>
-                            ))}
-                        </h2>
+                    <h2 className="text-xl  font-bold m-4">병원 위치</h2>
+                    <div className="bg-white p-4 border border-blue-300 rounded shadow relative ">
+                         <Map/>
                     </div>
                 </main>
                 <div className="flex flex-col space-y-4">

@@ -20,7 +20,7 @@ public class Category {
 
     private int order;
 
-    private String userYN;
+    private String userYn;
 
     // 하위 카테고리 저장 필드
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "parentCategory")
