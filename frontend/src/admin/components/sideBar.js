@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Outlet } from 'react-router-dom';
 import {
     Calendar,
     FileText,
@@ -21,11 +22,26 @@ import {
     UserX
 } from 'react-feather';
 import { Settings, MessageSquare, Bell, Menu } from 'lucide-react';
-import { Home } from '../pages/home';
 
-const SidebarAndNavbar = ({ renderPage, setActivePage }) => {
-    const [isOpen, setIsOpen] = useState(false);
+const SidebarAndNavbar = () => {
+    const [isOpen, setIsOpen] = useState(true);
     const [activeDropdown, setActiveDropdown] = useState(null);
+    const [category, setCategory] = useState([]);
+
+    // API 호출
+    useEffect(() => {
+       // fetchCategory();
+    }, []);
+
+    const fetchCategory = async () => {
+        try {
+            const response = await fetch('/api/category/admin'); // Spring Boot 서버에서 데이터 가져오기
+            const data = await response.json();
+            setCategory(data); // 상태 업데이트
+        } catch (error) {
+            console.error('Error fetching users:', error);
+        }
+    };
 
     useEffect(() => {
         const handleResize = () => {
@@ -49,7 +65,8 @@ const SidebarAndNavbar = ({ renderPage, setActivePage }) => {
     };
 
     const menuItems = [
-        { key: 'dashboard', icon: <User size={20} />, label: '회원 관리', dropdown: ['Lorem ipsum', 'ipsum dolor', 'dolor ipsum', 'amet consectetur', 'ipsum dolor sit'] },
+        { key: 'dashboard', icon: <User size={20} />, label: '회원 관리',
+            dropdown: ['전체 목록', '사용자 목록', '직원 목록', '관리자 목록'] },
         { key: 'fileManager', icon: <Folder size={20} />, label: '스케줄 관리', dropdown: ['Lorem ipsum', 'ipsum dolor', 'dolor ipsum', 'amet consectetur', 'ipsum dolor sit'] },
         { key: 'calendar', icon: <FileText size={20} />, label: '입원 승인', dropdown: ['Lorem ipsum', 'ipsum dolor', 'dolor ipsum', 'amet consectetur', 'ipsum dolor sit'] },
         { key: 'mailbox', icon: <FolderPlus size={20} />, label: '식단 등록', dropdown: ['Lorem ipsum', 'ipsum dolor', 'dolor ipsum', 'amet consectetur', 'ipsum dolor sit'] },
@@ -58,7 +75,7 @@ const SidebarAndNavbar = ({ renderPage, setActivePage }) => {
     ];
 
     return (
-        <div className="flex h-screen bg-gray-100">
+        <div className="flex min-h-screen bg-gray-100">
             {/* 사이드 바 */}
             <aside className={`bg-white text-black w-64 min-h-screen p-4
                 ${isOpen ? 'translate-x-0' : '-translate-x-full'}
@@ -89,7 +106,7 @@ const SidebarAndNavbar = ({ renderPage, setActivePage }) => {
                         {menuItems.map((item) => (
                             <li key={item.key} className="mb-2">
                                 <button
-                                    onClick={() => {setActivePage(item.page); // 클릭 시 페이지 설정
+                                    onClick={() => {
                                         if (item.dropdown) toggleDropdown(item.key);}}
                                     className="flex items-center w-full px-4 py-2 text-blue-900 hover:bg-blue-500 hover:text-white rounded-md transition-colors duration-200"
                                 >
@@ -111,12 +128,13 @@ const SidebarAndNavbar = ({ renderPage, setActivePage }) => {
                                     <ul className="pl-4 mt-2 space-y-1">
                                         {item.dropdown.map((subItem, index) => (
                                             <li key={index}>
-                                                <a
-                                                    href=""
-                                                    className="block px-4 py-2 text-sm text-blue-800 hover:bg-blue-400 hover:text-white rounded-md transition-colors duration-200"
+                                                <button
+                                                    onClick={() => {
+                                                    }}
+                                                    className="block w-full text-left px-4 py-2 text-sm text-blue-800 hover:bg-blue-400 hover:text-white rounded-md transition-colors duration-200"
                                                 >
                                                     {subItem}
-                                                </a>
+                                                </button>
                                             </li>
                                         ))}
                                     </ul>
@@ -132,10 +150,10 @@ const SidebarAndNavbar = ({ renderPage, setActivePage }) => {
             <main className={`flex-1  ${isOpen ? 'md:ml-64' : ''}`}>
                 <nav className="bg-blue-300 text-white p-4 w-full">
                     <div className="container mx-auto flex justify-between items-center">
-                        <div className="flex items-center text-2xl font-bold">
-                            <img className="mr-2"
-                                width="40"
-                                src="/images/mediGom_Logo.png" />
+                        <div className="flex items-center text-2xl font-bold w-1/5">
+                            <img className="mr-2 w-1/12"
+                                src="/images/mediGom_Logo.png"
+                               />
                             Medi<span className="text-yellow-300">Gom</span>
                         </div>
                         <div className="flex items-center space-x-6">
@@ -165,7 +183,7 @@ const SidebarAndNavbar = ({ renderPage, setActivePage }) => {
 
                 {/* 동적으로 변경되는 콘텐츠 영역 */}
                 <div className="p-4">
-                    {renderPage()} {/* 부모 컴포넌트에서 받은 renderPage 호출 */}
+                    <Outlet /> {/* URL에 따라 렌더링될 콘텐츠 */}
                 </div>
 
             </main>
