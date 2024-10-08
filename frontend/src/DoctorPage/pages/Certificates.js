@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+
 import {Label, Input, Button, Filter, List, Grid, ChevronUp, ChevronDown, MoreVertical, UserPlus} from 'lucide-react';
 
 const Certificates=()=> {
@@ -9,7 +10,7 @@ const Certificates=()=> {
     const [selectedCertificates, setSelectedCertificates] = useState([]);
 
     const certificates = ['진단서', '소견서', '처방전'];
-    const departments = ['내과', '외과', '소아과', '산부인과', '정형외과'];
+    const departments = ['내과','일반외과' ,'정형외과', '소아청소년과', '산부인과', '심장내과', '신경과', '신경외과','피부과','안과','이비인후과','비뇨기과','정신건강의학과','영상의학과','종양내과','소화기내과','신장내과','내분비내과','혈액내과','류마티스내과','감염내과','알레르기내과','성형외과','응급의학과','마취통증의학과','가정의학과','재활의학과','치과','호흡기내과','혈관외과','흉부외과','핵의학과','병리과'];
 
     const handleNameChange = (event) => {
         setPatientName(event.target.value);
@@ -46,32 +47,21 @@ const Certificates=()=> {
 
     return (
         <div>
-        <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-md">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div className="z-20 mt-20 ml-96 max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-md ">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
                 <div>
-                    <label htmlFor="nameSearch" className="block text-sm font-medium text-gray-700 mb-1">이름 검색</label>
+                    <label htmlFor="nameSearch" className="block text-sm font-medium text-gray-700 mb-1">환자 성명</label>
                     <input
                         id="nameSearch"
                         type="text"
                         value={patientName}
                         onChange={handleNameChange}
-                        placeholder="환자 이름 입력"
+                        placeholder="환자 이름 띄워야함"
                         className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
                     />
                 </div>
                 <div>
-                    <label htmlFor="certificateSearch" className="block text-sm font-medium text-gray-700 mb-1">증명서 검색</label>
-                    <input
-                        id="certificateSearch"
-                        type="text"
-                        value={certificateSearch}
-                        onChange={handleCertificateSearchChange}
-                        placeholder="증명서 검색"
-                        className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                    />
-                </div>
-                <div>
-                    <label htmlFor="department" className="block text-sm font-medium text-gray-700 mb-1">진료과</label>
+                    <label htmlFor="department" className="block text-sm font-medium text-gray-700 mb-1">담당 진료과</label>
                     <select
                         id="department"
                         value={selectedDepartment}
@@ -84,22 +74,65 @@ const Certificates=()=> {
                         ))}
                     </select>
                 </div>
-            </div>
-
-            <div className="mb-6">
-                <p className="text-sm font-medium text-gray-700 mb-2">신청증명서:</p>
-                <div className="space-y-2">
-                    {certificates.map(cert => (
-                        <label key={cert} className="flex items-center">
-                            <input
-                                type="checkbox"
-                                checked={selectedCertificates.includes(cert)}
-                                onChange={() => handleCertificateChange(cert)}
-                                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 mr-2"
-                            />
-                            <span className="text-sm text-gray-700">{cert}</span>
-                        </label>
-                    ))}
+                <div>
+                    <label htmlFor="certificateSearch" className="block text-sm font-medium text-gray-700 mb-1">담당
+                        담당의</label>
+                    <input
+                        id="certificateSearch"
+                        type="text"
+                        value={certificateSearch}
+                        onChange={handleCertificateSearchChange}
+                        placeholder="담당의 이름 떠야함"
+                        className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                    />
+                </div>
+                <div>
+                    <label htmlFor="nameSearch" className="block text-sm font-medium text-gray-700 mb-1">증상명</label>
+                    <input
+                        id="nameSearch"
+                        type="text"
+                        value={patientName}
+                        onChange={handleNameChange}
+                        placeholder="증상 입력"
+                        className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                    />
+                </div>
+                <div>
+                    <label htmlFor="nameSearch" className="block text-sm font-medium text-gray-700 mb-1">증명서 종류</label>
+                    <select
+                        id="department"
+                        value={selectedDepartment}
+                        onChange={handleDepartmentChange}
+                        className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                    >
+                        <option value="">선택하세요</option>
+                        {departments.map(dept => (
+                            <option key={dept} value={dept}>{dept}</option>
+                        ))}
+                    </select>
+                </div>
+                {/*체크 박스 잠시 접어둠*/}
+                {/*<div className="mb-6">*/}
+                {/*    <p className="text-sm font-medium text-gray-700 mb-2">신청증명서:</p>*/}
+                {/*    <div className="space-y-2">*/}
+                {/*        {certificates.map(cert => (*/}
+                {/*            <label key={cert} className="flex items-center">*/}
+                {/*                <input*/}
+                {/*                    type="checkbox"*/}
+                {/*                    checked={selectedCertificates.includes(cert)}*/}
+                {/*                    onChange={() => handleCertificateChange(cert)}*/}
+                {/*                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 mr-2"*/}
+                {/*            />*/}
+                {/*            <span className="text-sm text-gray-700">{cert}</span>*/}
+                {/*        </label>*/}
+                {/*    ))}*/}
+                {/*</div>*/}
+                <div>
+                    <label htmlFor="nameSearch" className="block text-sm font-medium text-gray-700 mb-1"></label>
+                </div>
+                <div>
+                    <label htmlFor="nameSearch" className="block text-sm font-medium text-gray-700 mb-1">진단 내용</label>
+                    <textarea className="w-full p-1 " placeholder="내용을 입력하세요."/>
                 </div>
             </div>
 
@@ -145,6 +178,7 @@ const Certificates=()=> {
             )}
         </div>
         </div>
+        
     );
 }
 export default Certificates;

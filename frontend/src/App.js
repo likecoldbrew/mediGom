@@ -16,6 +16,7 @@ import EmployLogin from "./userMain/pages/employLogin";
 import Certificates from "./doctorPage/pages/Certificates";
 import UserManagement from "./doctorPage/pages/UserManagement";
 import Home from "./doctorPage/pages/Home";
+import CertificateList from "./doctorPage/pages/CertificateList";
 
 
 function App() {
@@ -35,6 +36,7 @@ function App() {
                     <Route path="reserv" element={<UserReservationCheck/>}/>
                     <Route path="clinic" element={<UserClinicCheck/>}/>
                     <Route path="state" element={<UserStateChange/>}/>
+                    <Route path="certificateList" element={<CertificateList/>}/>
                     <Route path="certificate" element={<Certificates/>}/>
                 </Route>
             </Routes>

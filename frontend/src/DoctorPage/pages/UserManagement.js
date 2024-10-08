@@ -48,6 +48,7 @@ const UserManagement = () => {
 
 
     useEffect(() => {
+
         let result = [...users];
 
         if (searchTerm) {
