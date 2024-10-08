@@ -11,7 +11,7 @@ const Header = () => {
     const [selectCategory, setSelectCategory] = useState(null);
     const [selectSubCategory, setSelectSubCategory] = useState(null);
     useEffect(() => {
-        axios.get('/api/categories')  // Use axios instead of fetch
+        axios.get('/api/categories/main')  // Use axios instead of fetch
             .then(response => {
                 console.log('Categories fetched:', response.data);
                 setCategories(response.data);
@@ -26,7 +26,9 @@ const Header = () => {
         <header className="bg-white shadow-sm">
             <div className="container mx-auto px-4 py-4">
                 <div className="flex justify-between items-center">
-                    <img src="/images/userMain/logo.png" className="h-24 " alt="logo"/>
+                    <Link to="/" className="h-24">
+                        <img src="/images/userMain/logo.png" className="h-24" alt="logo" />
+                    </Link>
                     <nav className="hidden md:flex space-x-10">
                         <button className="text-sky-600 hover:text-sky-800 hover:font-bold transition-colors">로그인
                         </button>

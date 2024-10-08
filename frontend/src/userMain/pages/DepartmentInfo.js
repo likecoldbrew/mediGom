@@ -5,6 +5,7 @@ import SubCategories from "../components/SubCategory";
 import ChatBot from "../components/ChatBot";
 import axios from "axios";
 import debounce from 'lodash.debounce';
+import Modal from '../components/DepartmentModal'; // 모달 임포트
 
 const DepartmentInfo = () => {
     const {subcategory} = useParams(); // URL에서 subcategory 가져오기
@@ -12,6 +13,8 @@ const DepartmentInfo = () => {
     const [searchTerm, setSearchTerm] = useState(''); // 검색어 상태 추가
     const [loading, setLoading] = useState(false); // 로딩 상태 추가
     const [error, setError] = useState(null); // 에러 상태 추가
+    const [selectedDepartment, setSelectedDepartment] = useState(null); // 선택된 부서 상태 추가
+    const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 추가
     const icon = "🔍";
 
     // API 호출
@@ -78,6 +81,12 @@ const DepartmentInfo = () => {
         }
     };
 
+    // 부서 클릭 핸들러
+    const handleDepartmentClick = (dept) => {
+        setSelectedDepartment(dept); // 클릭한 부서 설정
+        setIsModalOpen(true); // 모달 열기
+    };
+
     return (
         <div className="flex flex-col min-h-screen">
             <SubCategories/>
@@ -86,15 +95,15 @@ const DepartmentInfo = () => {
                     <input
                         type="text"
                         className="form-input border rounded-l-md px-4 py-2 w-full"
-                        placeholder="찾고 싶은 의료진 이름을 검색해보세요"
+                        placeholder="찾고 싶은 진료과를 검색해보세요"
                         value={searchTerm}
                         onChange={handleInputChange}
                         onKeyDown={handleKeyDown}
                     />
-                    <button className="bg-sky-50 hover:bg-sky-100 text-white px-4 py-2 rounded-r-md"  onClick={() => {
+                    <button className="bg-sky-100 hover:bg-sky-200 text-white px-4 py-2 rounded-r-md"  onClick={() => {
                         debouncedSearch.cancel(); // 디바운싱된 호출을 취소
                         handleSearch(searchTerm); // 즉시 검색 수행
-                    }}  aria-label="의사 검색">
+                    }}  aria-label="진료과 검색">
                         {icon}
                     </button>
                 </div>
@@ -104,9 +113,9 @@ const DepartmentInfo = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
                         {department.length > 0 ? (
                             department.map((dept, index) => (
-                                <div key={index} className="bg-white p-4 rounded shadow">
+                                <div key={index} className="bg-white  hover:bg-sky-200 hover:font-bold h-36 border border-blue-300 p-4 rounded shadow" onClick={() => handleDepartmentClick(dept)}>
                                     <h2 className="text-xl font-semibold mb-3">{dept.departmentName}</h2> {/* 의사 이름 */}
-                                    <p className="text-gray-600">진료분야:{dept.treatments.join(', ')}</p> {/* 진료 분야 */}
+                                    <p className="text-gray-600">진료분야: {dept.treatments.join(', ')}</p> {/* 진료 분야 */}
                                 </div>
                             ))
                         ) : (
@@ -119,6 +128,11 @@ const DepartmentInfo = () => {
                     <ChatBot/>
                 </div>
             </div>
+            <Modal
+                isOpen={isModalOpen} // 모달 상태
+                onClose={() => setIsModalOpen(false)} // 모달 닫기 핸들러
+                department={selectedDepartment} // 선택된 부서 전달
+            />
         </div>
     );
 };

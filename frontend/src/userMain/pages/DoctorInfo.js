@@ -91,7 +91,7 @@ const DoctorInfo = () => {
                         onChange={handleInputChange} // 입력 시 디바운스된 검색 함수 호출
                         onKeyDown={handleKeyDown} // 엔터 키 핸들링
                     />
-                    <button className="bg-sky-50 hover:bg-sky-100 text-white px-4 py-2 rounded-r-md"  onClick={() => {
+                    <button className="bg-sky-100 hover:bg-sky-200 text-white px-4 py-2 rounded-r-md"  onClick={() => {
                         debouncedSearch.cancel(); // 디바운싱된 호출을 취소
                         handleSearch(searchTerm); // 즉시 검색 수행
                     }}  aria-label="의사 검색">
