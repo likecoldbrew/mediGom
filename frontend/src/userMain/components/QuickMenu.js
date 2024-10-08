@@ -8,9 +8,9 @@ const QuickMenu=()=>{
         { name: "이용안내", icon: "ℹ️" },
     ];
     return (
-        <div className="bg-sky-50 rounded-lg p-4 shadow-md">
+        <div className="sticky top-20 right-4 bg-sky-50 rounded-lg p-4 shadow-md h-80">
             <h3 className="text-lg font-bold text-sky-800 mb-4">빠른 메뉴</h3>
-            <div className="space-y-4">
+            <div className="space-y-4 h-full  overflow-y-auto">
                 {sidebarItems.map((item, index) => (
                     <button
                         key={index}

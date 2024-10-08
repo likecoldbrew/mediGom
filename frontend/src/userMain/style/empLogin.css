@@ -124,9 +124,9 @@
 }
 
 .overlay {
-  background: #FF416C;
-  background: -webkit-linear-gradient(to right, #FF4B2B, #FF416C);
-  background: linear-gradient(to right, #FF4B2B, #FF416C);
+  background: #e0f2fe;
+  background: -webkit-linear-gradient(to right,  #f0f9ff, #e0f2fe);
+  background: linear-gradient(to right,  #f0f9ff, #e0f2fe);
   background-repeat: no-repeat;
   background-size: cover;
   background-position: 0 0;
