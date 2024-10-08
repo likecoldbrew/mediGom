@@ -4,6 +4,9 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import kr.or.nextit.backend.model.User;
 
+import org.apache.ibatis.annotations.Param;
+
+
 @Mapper
 public interface UserMapper {
     // 모든 유저 조회
@@ -23,5 +26,8 @@ public interface UserMapper {
 
     // 의사 이름 조회
     List<User> getDoctorsName();
+
+    // ID 중복 확인 메서드
+    boolean checkIdExists(@Param("userId") String userId);
 
 }
