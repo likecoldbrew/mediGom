@@ -15,14 +15,14 @@ import UserReservationCheck from "./DoctorPage/pages/UserReservationCheck";
 import EmployLogin from "./userMain/pages/employLogin";
 import DepartmentInfo from "./userMain/pages/DepartmentInfo";
 import UserMain from "./userMain/index";
-
+import Payment from "./components/Payment";
 
 
 function App() {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={<UserMain />} >
+               <Route path="/" element={<UserMain />} >
                     <Route index element={<MainPage />} />
                     <Route path="101" element={<DoctorInfo />} />
                     <Route path="102" element={<DepartmentInfo />} />
@@ -37,6 +37,7 @@ function App() {
                 <Route path="/doctors/userStateChange" element={<UserStateChange />} />
                 <Route path="/doctors/userClinicCheck" element={<UserClinicCheck />} />
                 <Route path="/doctors/userReservationCheck" element={<UserReservationCheck />} />
+                <Route path="/payment" element={<Payment />} />
             </Routes>
         </BrowserRouter>
     );

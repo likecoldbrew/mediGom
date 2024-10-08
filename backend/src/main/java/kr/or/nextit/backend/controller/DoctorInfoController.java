@@ -1,6 +1,5 @@
 package kr.or.nextit.backend.controller;
 
-
 import kr.or.nextit.backend.model.DoctorInfoDTO;
 import kr.or.nextit.backend.service.DoctorInfoService;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +21,7 @@ public class DoctorInfoController {
     public List<DoctorInfoDTO> getDoctors() {
         return doctorInfoService.getAllDoctors();
     }
+
 
     // 의사 검색
     @GetMapping("/search")

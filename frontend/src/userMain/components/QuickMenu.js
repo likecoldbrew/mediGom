@@ -14,7 +14,15 @@ const QuickMenu=()=>{
     };
     return (
         <div className="sticky top-10 right-4 bg-sky-100 rounded-lg p-4 shadow-md h-60">
+<<<<<<< HEAD
             <div className="space-y-4 h-full  overflow-y-auto">
+=======
+            <div
+                ref={contentRef}
+                className={`space-y-4 h-full overflow-y-auto ${isOverflow ? 'text-sm' : 'text-lg'}`} // 글자 크기 조절
+            >
+
+>>>>>>> 32245754bbf30dbf7b225f80bc6af60be163277b
                 {sidebarItems.map((item, index) => (
                     <button
                         key={index}

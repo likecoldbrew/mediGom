@@ -10,6 +10,7 @@ const ChatBot=()=>{
             >
                 <div
                     className="w-16 h-16 bg-sky-100 hover:bg-sky-200 rounded-full  flex items-center justify-center mb-2">
+
                     <span className="text-3xl">{icon}</span>
                 </div>
                 {name}
