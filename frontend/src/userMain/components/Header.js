@@ -66,12 +66,12 @@ const Header = () => {
                                     {category.subcategories.map((sub) => (
                                         <Link
                                             key={sub.categoryId}
-                                            to={`/${sub.categoryId}`}
+                                            to={`/${sub.urlName}`}
                                             state={{selectCategory: category.name, selectSubCategory: sub.name}}
                                             onClick={() => handleSubCategorySelect(category.name, sub.name)}
                                         >
                                             <div
-                                                className="px-3 py-1 sm:px-2 sm:py-1 lg:px-4 lg:py-2 hover:bg-sky-100 cursor-pointer hover:font-bold">
+                                                className="px-3 py-1 sm:px-2 sm:py-1 lg:px-4 lg:py-2 hover:bg-sky-100 cursor-pointer hover:font-bold  z-50">
                                                 {sub.name}
                                             </div>
                                         </Link>

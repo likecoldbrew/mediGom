@@ -14,7 +14,7 @@ public class AdminCategory {
     private int categoryId;
     private String name;
     private Integer parentId; // 부모 카테고리 ID
-    private String userYN;
+    private String useYn;
     private int categoryOrder;
 
     // 하위 카테고리 저장 필드

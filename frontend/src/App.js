@@ -29,9 +29,9 @@ function App() {
             <Routes>
                <Route path="/" element={<UserMain />} >
                     <Route index element={<MainPage />} />
-                    <Route path="101" element={<DoctorInfo />} />
-                    <Route path="102" element={<DepartmentInfo />} />
-                    <Route path="103" element={<HospitalInfo />} />
+                    <Route path="mediInfo" element={<DoctorInfo />} />
+                    <Route path="department" element={<DepartmentInfo />} />
+                    <Route path="hospitalInfo" element={<HospitalInfo />} />
                     <Route path="subcategory" element={<SubCategories />} />
                 </Route>
                 <Route path="/login" element={<LoginPage />} />
