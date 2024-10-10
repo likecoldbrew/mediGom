@@ -10,6 +10,6 @@ import jakarta.persistence.*;
 public class MedicalDepartment {
     @Id
     @GeneratedValue
-    private Long departmentNo;    // 진료과 ID
+    private int departmentNo;    // 진료과 ID
     private String departmentName; // 진료과 이름
 }

@@ -30,11 +30,11 @@ function App() {
                 <Route path="/empLogin" element={<EmployLogin />} />
                 <Route path="/signUp" element={<SignUpPage />} />
                 <Route path="/admin" element={<Admin />} />
-                <Route path="/doctors" element={<Doctors/>}>
+                <Route path="/doctor" element={<Doctors/>}>
                     <Route index element={<Home/>}/>
                     <Route path="list" element={<UserManagement/>}/>
-                    <Route path="reserv" element={<UserReservationCheck/>}/>
                     <Route path="clinic" element={<UserClinicCheck/>}/>
+                    <Route path="reserv" element={<UserReservationCheck/>}/>
                     <Route path="state" element={<UserStateChange/>}/>
                     <Route path="certificateList" element={<CertificateList/>}/>
                     <Route path="certificate" element={<Certificates/>}/>

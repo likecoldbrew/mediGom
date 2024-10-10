@@ -1,21 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {Moon, Sun, Search, Filter, List, Grid, ChevronUp, ChevronDown, MoreVertical, UserPlus} from 'lucide-react';
 
-
-
-const initialusers = [
-    { id: 1, name: 'Ocean', image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?...', category: 'Furniture', status: 'active', sales: 11, stock: 36, price: 560 },
-    { id: 2, name: 'Lou', image: 'https://images.unsplash.com/photo-1484154218962-a197022b5858?...', category: 'Kitchen', status: 'disabled', sales: 6, stock: 46, price: 710 },
-    { id: 3, name: 'Yellow', image: '/placeholder.svg?height=40&width=40', category: 'Decoration', status: 'active', sales: 61, stock: 56, price: 360 },
-    { id: 4, name: 'Dreamy', image: '/placeholder.svg?height=40&width=40', category: 'Bedroom', status: 'disabled', sales: 41, stock: 66, price: 260 },
-    { id: 5, name: 'Boheme', image: '/placeholder.svg?height=40&width=40', category: 'Furniture', status: 'active', sales: 32, stock: 40, price: 350 },
-    { id: 6, name: 'Sky', image: '/placeholder.svg?height=40&width=40', category: 'Bathroom', status: 'disabled', sales: 22, stock: 44, price: 160 },
-    { id: 7, name: 'Midnight', image: '/placeholder.svg?height=40&width=40', category: 'Furniture', status: 'active', sales: 23, stock: 45, price: 340 },
-    { id: 8, name: 'Palm', image: '/placeholder.svg?height=40&width=40', category: 'Decoration', status: 'active', sales: 24, stock: 46, price: 60 },
-    { id: 9, name: 'Forest', image: '/placeholder.svg?height=40&width=40', category: 'Living Room', status: 'active', sales: 41, stock: 16, price: 270 },
-    { id: 10, name: 'Sand', image: '/placeholder.svg?height=40&width=40', category: 'Living Room', status: 'disabled', sales: 52, stock: 16, price: 230 },
-];
-
 const UserManagement = () => {
 
     const UsersList = () => {
@@ -37,8 +22,8 @@ const UserManagement = () => {
         };
     };
 
-    const [users, setUsers] = useState(initialusers);
-    const [filteredusers, setFilteredusers] = useState(initialusers);
+    const [users, setUsers] = useState([]);
+    const [filteredusers, setFilteredusers] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [categoryFilter, setCategoryFilter] = useState('All Categories');
     const [statusFilter, setStatusFilter] = useState('All Status');

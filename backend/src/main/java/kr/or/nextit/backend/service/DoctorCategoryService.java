@@ -1,10 +1,7 @@
 package kr.or.nextit.backend.service;
 
-
-import kr.or.nextit.backend.mapper.CategoryMapper;
-import kr.or.nextit.backend.model.Category;
-import kr.or.nextit.backend.model.User;
-
+import kr.or.nextit.backend.mapper.DoctorCategoryMapper;
+import kr.or.nextit.backend.model.DoctorCategory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,16 +9,15 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class CategoryService {
+public class DoctorCategoryService {
 
-    private final CategoryMapper categoryMapper;
-
+    private final DoctorCategoryMapper doctorcategoryMapper;
     // 최상위 카테고리 가져오기
-    public List<Category> getAllCategories() {
-        List<Category> topCategories = categoryMapper.selectTopCategories();
-        for (Category category : topCategories) {
+    public List<DoctorCategory> getAllCategories() {
+        List<DoctorCategory> topCategories = doctorcategoryMapper.selectTopCategories();
+        for (DoctorCategory category : topCategories) {
             // 각 카테고리의 하위 카테고리도 조회하여 추가
-            List<Category> subCategories = categoryMapper.selectSubCategories(category.getCategoryId());
+            List<DoctorCategory> subCategories = doctorcategoryMapper.selectSubCategories(category.getCategoryId());
             category.setSubcategories(subCategories);  // subcategories 필드를 모델에 추가 필요
         }
         return topCategories;

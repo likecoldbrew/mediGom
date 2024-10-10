@@ -6,6 +6,8 @@ import kr.or.nextit.backend.mapper.UserMapper;
 import kr.or.nextit.backend.model.User;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -32,5 +34,8 @@ public class UserService {
     public void deleteUser(int userNo) {
         userMapper.deleteUser(userNo);
     }
+
+    public boolean checkIdExists(String userId) { userMapper.checkIdExists(userId);
+        return userMapper.checkIdExists(userId); }
 
 }
