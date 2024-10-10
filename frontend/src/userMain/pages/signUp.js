@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import "../style/tailwind.css";
 import axios from 'axios';
+import {Link} from "react-router-dom";
 
 export default function SignUpPage() {
     const [formData, setFormData] = useState({
@@ -138,7 +139,9 @@ export default function SignUpPage() {
         <div className="min-h-screen bg-gray-100">
             <div className="w-full bg-sky-100 py-2 border-y border-sky-200">
                 <div className="container mx-auto px-4 flex items-center">
+                    <Link to="/" className="h-24">
                     <img src="/images/userMain/logo.png" className="h-16 mr-2" alt="logo"/>
+                    </Link>
                     <p className="text-lg font-bold">
                         medi<span className="text-yellow-500">Gom</span>
                     </p>
@@ -175,12 +178,12 @@ export default function SignUpPage() {
                                         type="text"
                                         placeholder="영문과 숫자만 입력해주세요."
                                         required
-                                        className="appearance-none block w-3/4 px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                        className="appearance-none block w-2/3 px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                         onChange={handleChange}
                                     />
                                     <button
                                         type="button"
-                                        className="ml-3 inline-flex items-center justify-center w-1/4 px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-sky-500 hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                        className="ml-3 inline-flex items-center justify-center w-1/3 px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-sky-500 hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                                         onClick={checkIdAvailability}
                                     >
                                         중복 확인

@@ -43,7 +43,7 @@ const QuickMenu=()=>{
     };
 
     return (
-        <div className="sticky top-10 right-4 bg-sky-100 rounded-lg p-4 shadow-md h-80">
+        <div className="sticky top-10 right-4 w-64 bg-sky-100 rounded-lg p-4 shadow-md h-80">
 
             <div className="space-y-4 h-full  overflow-y-auto">
 

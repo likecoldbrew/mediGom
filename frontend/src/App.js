@@ -21,6 +21,7 @@ import Home from "./admin/pages/Home";
 import AllUsersList from "./admin/pages/AllUsersList";
 import PatientList from "./admin/pages/PatientList";
 import DoctorList from "./admin/pages/DoctorList";
+import Community from "./userMain/pages/Community";
 
 
 function App() {
@@ -33,7 +34,9 @@ function App() {
                     <Route path="department" element={<DepartmentInfo />} />
                     <Route path="hospitalInfo" element={<HospitalInfo />} />
                     <Route path="subcategory" element={<SubCategories />} />
-                </Route>
+                    <Route path="community" element={<Community/>} />
+
+               </Route>
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/empLogin" element={<EmployLogin />} />
                 <Route path="/signUp" element={<SignUpPage />} />

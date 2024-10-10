@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
 import axios from "axios";
 import '../style/tailwind.css';
 
@@ -35,13 +35,17 @@ const Header = () => {
             <div className="container mx-auto px-4 py-4">
                 <div className="flex justify-between items-center">
                     <Link to="/" className="h-24">
-                        <img src="/images/userMain/logo.png" className="h-24" alt="logo" />
+                        <img src="/images/userMain/logo.png" className="h-24" alt="logo"/>
                     </Link>
                     <nav className="hidden md:flex space-x-10">
-                        <button className="text-sky-600 hover:text-sky-800 hover:font-bold transition-colors">로그인
-                        </button>
+                        <Link to="/login">
+                            <button className="text-sky-600 hover:text-sky-800 hover:font-bold transition-colors">로그인
+                            </button>
+                        </Link>
+                        <Link to="/signUp">
                         <button className="text-sky-600 hover:text-sky-800 hover:font-bold transition-colors">회원가입
                         </button>
+                        </Link>
                     </nav>
                 </div>
                 <nav className="mt-4 flex-1 flex flex-wrap justify-center gap-12 sm:gap-6 lg:gap-28">

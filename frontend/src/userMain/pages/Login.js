@@ -26,14 +26,16 @@ export default function LoginPage() {
         <div className="flex flex-col min-h-screen bg-gray-100">
             <header className="w-full bg-sky-100 py-2 border-y border-sky-200">
                 <div className="container mx-auto px-4 flex items-center">
+                    <Link to="/" className="h-24">
                     <img src="/images/userMain/logo.png" className="h-16 mr-2" alt="logo"/>
+                    </Link>
                     <p className="text-lg font-bold">
                         medi<span className="text-yellow-500">Gom</span>
                     </p>
                 </div>
             </header>
             <div className="flex flex-col lg:flex-row justify-center items-center py-12 sm:px-6 lg:px-8">
-                <div className="lg:w-1/4 mb-8 lg:mb-0 lg:pr-8">
+                <div className="lg:w-1/4 mb-8 lg:mb-0 lg:pr-8 mt-28">
                     <div className="bg-green-100 rounded-full p-8 max-w-md mx-auto relative">
                         <img src="/images/userMain/logo.png" alt="logo" className="w-full h-auto"/>
                         <div className="absolute inset-0 flex items-center justify-center">
@@ -44,7 +46,7 @@ export default function LoginPage() {
                     </div>
                 </div>
 
-                <div className="lg:w-3/4 w-full max-w-md">
+                <div className="lg:w-3/4 w-full mt-28 max-w-md">
                     <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
                         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
                             로그인
