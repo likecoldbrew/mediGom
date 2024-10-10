@@ -18,10 +18,8 @@ const Header = () => {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 const data = await response.json();
-                console.log('Categories fetched:', data);
                 setCategories(data);
             } catch (error) {
-                console.error('Error fetching categories:', error);
             }
         };
 

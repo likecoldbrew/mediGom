@@ -6,7 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LoginPage from "./userMain/pages/Login";
 import SignUpPage from "./userMain/pages/signUp";
 import MainPage from "./userMain/pages/MainPage";
-import Doctors from "./DoctorPage";
+// import Doctors from "./doctorPage";
 import Admin from "./admin";
 import DoctorInfo from "./userMain/pages/DoctorInfo";
 import UserStateChange from "./DoctorPage/pages/UserStateChange";
@@ -43,7 +43,7 @@ function App() {
                     <Route path="patient" element={<PatientList />} />
                     <Route path="doctor" element={<DoctorList />} />
                 </Route>
-                <Route path="/doctors" element={<Doctors />} />
+                {/*<Route path="/doctors" element={<Doctors />} />*/}
                 {/*연동 안해놔서 임시로 그냥 화면에서 보려고 함*/}
                 <Route path="/doctors/userStateChange" element={<UserStateChange />} />
                 <Route path="/doctors/userClinicCheck" element={<UserClinicCheck />} />

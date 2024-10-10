@@ -121,9 +121,10 @@ const HospitalInfo = () => {
                                 <Map/>
                             </div>
                         </div>
-                        <h2 className="text-xl flex-grow font-bold m-4">근처 편의시설</h2>
+                        <h2 className="text-xl flex-grow font-bold m-4">근처 약국위치</h2>
                         <div className=" bg-white flex-grow  p-4 border border-blue-300 rounded shadow relative ">
-
+                            <p className="text-center font-bold">※ 마커를 클릭하면 약국 이름이 뜹니다.</p>
+                            <br/>
                             <div className="flex justify-center">
                                 <PharmacyMap/>
                             </div>
