@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import SidebarAndNavbar from "./components/sideBar";
-import Home from "./pages/home";
+import SidebarAndNavbar from "./components/SideBar";
+import Home from "./pages/Home";
 
 function Admin () {
     const [activePage, setActivePage] = useState('home'); // 기본 페이지 설정

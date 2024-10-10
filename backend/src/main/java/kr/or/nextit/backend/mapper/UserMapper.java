@@ -12,6 +12,8 @@ public interface UserMapper {
     // 모든 유저 조회
     List<User> getAllUsers();
 
+    List<User> getAllPatient();
+
     // 특정 유저 조회
     User getUserById(int userNo);
 

@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
-@Table(name = "users")  // 테이블 이름을 명시
+//@Table(name = "users")  // 테이블 이름을 명시
 @Data
 public class User {
     @Id
@@ -22,6 +22,7 @@ public class User {
     private String userAdd2;
     private Timestamp createAt;
     private Timestamp updateAt;
-    private int admin;
-    private String deleteYn;
+    private String departmentName;
+    private String diagnosis;
+    private String doctorName;
 }

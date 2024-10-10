@@ -18,6 +18,10 @@ public class UserService {
         return userMapper.getAllUsers();
     }
 
+    public List<User> getAllPatient() {
+        return userMapper.getAllPatient();
+    }
+
     public User getUserById(int userNo) {
         return userMapper.getUserById(userNo);
     }

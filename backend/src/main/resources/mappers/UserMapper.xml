@@ -18,6 +18,20 @@
     <select id="getDoctorsName" resultType="kr.or.nextit.backend.model.User">
         SELECT user_name FROM users WHERE admin = 1
     </select>
+
+    <select id="getAllPatient" resultType="kr.or.nextit.backend.model.User">
+        SELECT
+            *
+        FROM
+            doctors d
+                JOIN
+            medical_records mr ON mr.doctor_no = d.doctor_no
+                JOIN
+            users u ON d.doctor_user_no = u.user_no
+                JOIN
+            medical_department md ON d.department = md.department_no
+    </select>
+
     <!-- 유저 추가 -->
     <insert id="insertUser" parameterType="kr.or.nextit.backend.model.User">
         INSERT INTO users (user_id, user_pass, user_name, user_rrn, email, phone, user_add, user_add2, admin)
