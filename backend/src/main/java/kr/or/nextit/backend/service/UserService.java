@@ -1,11 +1,9 @@
 package kr.or.nextit.backend.service;
 
-import java.util.List;
-import org.springframework.stereotype.Service;
 import kr.or.nextit.backend.mapper.UserMapper;
 import kr.or.nextit.backend.model.User;
 import lombok.RequiredArgsConstructor;
-
+import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service

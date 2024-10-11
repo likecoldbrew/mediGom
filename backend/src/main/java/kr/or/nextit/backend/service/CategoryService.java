@@ -4,11 +4,12 @@ package kr.or.nextit.backend.service;
 import kr.or.nextit.backend.mapper.CategoryMapper;
 import kr.or.nextit.backend.model.Category;
 import kr.or.nextit.backend.model.User;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -27,8 +28,7 @@ public class CategoryService {
         return topCategories;
     }
 
-//    // 특정 카테고리의 하위 카테고리 조회
-//    public List<Category> getSubCategories(int parentId) {
-//        return categoryMapper.selectSubCategories(parentId);
-//    }
+    public Category getCategoryWithParent(String urlName) {
+        return categoryMapper.selectCategoryWithParent(urlName);
+    }
 }

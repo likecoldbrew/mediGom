@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/categories")
@@ -27,6 +28,11 @@ public class CategoryController {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+    }
+
+    @GetMapping("/{urlName}")
+    public Category getCategory(@PathVariable String urlName) {
+        return categoryService.getCategoryWithParent(urlName);
     }
 
 

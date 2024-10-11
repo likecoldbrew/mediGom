@@ -16,7 +16,6 @@ public class User {
     private String userPass;
     private String userName;
     private String userRrn;
-    private String gender;
     private String email;
     private String phone;
     private String userAdd;
@@ -24,5 +23,5 @@ public class User {
     private Timestamp createAt;
     private Timestamp updateAt;
     private int admin;
-    private String delete_yn;
+    private String deleteYn;
 }
