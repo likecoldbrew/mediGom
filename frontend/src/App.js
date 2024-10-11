@@ -14,7 +14,7 @@ import UserClinicCheck from "./doctorPage/pages/UserClinicCheck";
 import UserReservationCheck from "./doctorPage/pages/UserReservationCheck";
 import EmployLogin from "./userMain/pages/employLogin";
 import AdminHome from "./admin/pages/Home";
-import DoctorHome from "./doctorPage/pages/Home"
+import DoctorHome from "./doctorPage/pages/Home";
 import DepartmentInfo from "./userMain/pages/DepartmentInfo";
 import UserMain from "./userMain/index";
 import Payment from "./components/Payment";
