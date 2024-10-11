@@ -4,34 +4,25 @@ import {
     Calendar,
     FileText,
     Folder,
-    Users,
     Mail,
-    Map,
     PieChart,
     Settings as FeatherSettings,
-    File,
-    Anchor,
     User,
-    Aperture,
     FolderPlus,
-    MinusCircle,
-    LogIn,
     LogOut,
-    UserCheck,
     Smile,
-    UserX
 } from 'react-feather';
-import { Settings, MessageSquare, Bell, Menu } from 'lucide-react';
+import { MessageSquare, Bell, Menu } from 'lucide-react';
 
 const SidebarAndNavbar = () => {
     const [isOpen, setIsOpen] = useState(true);
     const [activeDropdown, setActiveDropdown] = useState(null);
-
     const [category, setCategory] = useState([]);
 
     // API 호출
     useEffect(() => {
         fetchCategory();
+
     }, []);
 
     const fetchCategory = async () => {
@@ -137,7 +128,7 @@ const SidebarAndNavbar = () => {
                                 ) : (
                                     // 드롭다운이 없는 경우 바로 링크
                                     <Link
-                                        to={menuItem.url}
+                                        to={menuItem.urlName}
                                         className="flex items-center w-full px-4 py-2 text-blue-900 hover:bg-blue-500 hover:text-white rounded-md transition-colors duration-200"
                                     >
                                         {menuItem.icon}

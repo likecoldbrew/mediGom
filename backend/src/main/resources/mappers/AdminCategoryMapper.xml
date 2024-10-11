@@ -6,7 +6,7 @@
 
     <!-- 최상위 카테고리 조회 -->
     <select id="selectTopCategories" resultType="kr.or.nextit.backend.model.AdminCategory">
-        SELECT category_id, name, parent_id, category_order
+        SELECT category_id, name, parent_id, use_yn, category_order, url_name
         FROM categories_admin
         WHERE parent_id IS NULL
         ORDER BY category_order
@@ -14,7 +14,7 @@
 
     <!-- 특정 카테고리의 하위 카테고리 조회 -->
     <select id="selectSubCategories" parameterType="int" resultType="kr.or.nextit.backend.model.AdminCategory">
-        SELECT category_id, name, parent_id, category_order
+        SELECT category_id, name, parent_id, use_yn, category_order, url_name
         FROM categories_admin
         WHERE parent_id = #{parentId}
         ORDER BY category_order
