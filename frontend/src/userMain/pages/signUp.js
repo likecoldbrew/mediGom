@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "../style/tailwind.css";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import Post from "../components/Post.js";
 
 export default function SignUpPage() {
   const [formData, setFormData] = useState({
@@ -124,7 +125,6 @@ export default function SignUpPage() {
         `http://localhost:8080/api/users/check-id/${formData.id}`
       );
       setIsIdAvailable(response.data); // 응답이 true/false로 온다고 가정
-      console.log(response);
     } catch (error) {
       console.error("Error checking ID availability:", error);
       setIsIdAvailable(false);
@@ -144,6 +144,24 @@ export default function SignUpPage() {
     } else {
       console.log("Form submitted:", formData);
     }
+  };
+
+  //다음 주소 api
+  const [enroll_company, setEnroll_company] = useState({
+    address: "",
+  });
+
+  const [popup, setPopup] = useState(false);
+
+  const handleInput = (e) => {
+    setEnroll_company({
+      ...enroll_company,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleComplete = (data) => {
+    setPopup(!popup);
   };
 
   return (
@@ -410,19 +428,27 @@ export default function SignUpPage() {
                 </label>
                 <div className="mt-1 flex rounded-md shadow-sm">
                   <input
-                    id="add"
-                    name="add"
+                    id="address"
+                    name="address"
                     type="text"
-                    required
-                    className="appearance-none w-3/4 block px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                    onChange={handleChange}
+                    value={enroll_company.address}
+                    onClick={handleComplete}
+                    className="flex-1 focus:ring-blue-500 focus:border-blue-500 block w-full rounded-md sm:text-sm border-gray-300"
+                    placeholder="주소를 입력하세요"
                   />
                   <button
                     type="button"
-                    className="ml-3 inline-flex items-center justify-center w-1/4 px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-sky-500 hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    onClick={() => setPopup(true)}
+                    className="w-1/4 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-500"
                   >
                     찾기
                   </button>
+                  {popup && (
+                    <Post
+                      company={enroll_company}
+                      setcompany={setEnroll_company}
+                    ></Post>
+                  )}
                 </div>
               </div>
 

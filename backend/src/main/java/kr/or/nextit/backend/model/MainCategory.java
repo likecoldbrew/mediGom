@@ -6,7 +6,6 @@ import lombok.Data;
 import java.util.List;
 
 @Entity
-@Table(name = "categories_main")  // 테이블 이름을 명시
 @Data
 public class MainCategory {
 

@@ -6,7 +6,6 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "categories_admin")  // 테이블 이름을 명시
 @Data
 public class AdminCategory {
     @Id
