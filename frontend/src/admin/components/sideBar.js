@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, Link } from 'react-router-dom';
 import {
     Calendar,
     FileText,
@@ -26,11 +26,12 @@ import { Settings, MessageSquare, Bell, Menu } from 'lucide-react';
 const SidebarAndNavbar = () => {
     const [isOpen, setIsOpen] = useState(true);
     const [activeDropdown, setActiveDropdown] = useState(null);
+
     const [category, setCategory] = useState([]);
 
     // API 호출
     useEffect(() => {
-       // fetchCategory();
+       fetchCategory();
     }, []);
 
     const fetchCategory = async () => {
@@ -64,15 +65,25 @@ const SidebarAndNavbar = () => {
         setActiveDropdown(activeDropdown === key ? null : key);  // 드롭다운 메뉴 토글
     };
 
-    const menuItems = [
-        { key: 'dashboard', icon: <User size={20} />, label: '회원 관리',
-            dropdown: ['전체 목록', '사용자 목록', '직원 목록', '관리자 목록'] },
-        { key: 'fileManager', icon: <Folder size={20} />, label: '스케줄 관리', dropdown: ['Lorem ipsum', 'ipsum dolor', 'dolor ipsum', 'amet consectetur', 'ipsum dolor sit'] },
-        { key: 'calendar', icon: <FileText size={20} />, label: '입원 승인', dropdown: ['Lorem ipsum', 'ipsum dolor', 'dolor ipsum', 'amet consectetur', 'ipsum dolor sit'] },
-        { key: 'mailbox', icon: <FolderPlus size={20} />, label: '식단 등록', dropdown: ['Lorem ipsum', 'ipsum dolor', 'dolor ipsum', 'amet consectetur', 'ipsum dolor sit'] },
-        { key: 'ecommerce', icon: <Calendar size={20} />, label: '카테고리 관리', dropdown: ['Lorem ipsum', 'ipsum dolor', 'dolor ipsum', 'amet consectetur', 'ipsum dolor sit'] },
-        { key: 'projects', icon: <FeatherSettings size={20} />, label: '마이페이지', dropdown: ['Lorem ipsum', 'ipsum dolor', 'dolor ipsum', 'amet consectetur', 'ipsum dolor sit'] }
+    // 아이콘 배열 (카테고리와 순서를 맞춰서 배치)
+    const icons = [
+        <User size={20} />,         // 회원 관리
+        <Calendar size={20} />,     // 일정 관리
+        <FileText size={20} />,     // 입원 승인
+        <FolderPlus size={20} />,   // 식단 등록
+        <PieChart size={20} />,     // 카테고리 관리
+        <FeatherSettings size={20} /> // 사이트 관리
+        // 필요한 만큼 아이콘 추가
     ];
+
+    // 카테고리를 기반으로 동적 메뉴 생성
+    const menuItems = category.map((item, index) => ({
+        key: String(index + 1), // 고유 키 값 (index를 문자열로 변환)
+        icon: icons[index] || <Folder size={20} />, // 아이콘 배열에서 가져오고, 없으면 기본 아이콘 사용
+        label: item.name, // 카테고리 이름 사용
+        dropdown: item.subcategories || [], // 서브 카테고리 목록 (서버에서 받아온 데이터에 따라)
+        url: item.urlName
+    }));
 
     return (
         <div className="flex min-h-screen bg-gray-100">
@@ -103,38 +114,47 @@ const SidebarAndNavbar = () => {
 
                 <nav>
                     <ul>
-                        {menuItems.map((item) => (
-                            <li key={item.key} className="mb-2">
-                                <button
-                                    onClick={() => {
-                                        if (item.dropdown) toggleDropdown(item.key);}}
-                                    className="flex items-center w-full px-4 py-2 text-blue-900 hover:bg-blue-500 hover:text-white rounded-md transition-colors duration-200"
-                                >
-                                    {item.icon}
-                                    <span className="ml-3">{item.label}</span>
-                                    {item.dropdown && (
+                        {menuItems.map((menuItem) => (
+                            <li key={menuItem.key} className="mb-2">
+                                {menuItem.dropdown.length > 0 ? (
+                                    // 드롭다운이 있는 경우 버튼으로 토글
+                                    <button
+                                        onClick={() => toggleDropdown(menuItem.key)}
+                                        className="flex items-center w-full px-4 py-2 text-blue-900 hover:bg-blue-500 hover:text-white rounded-md transition-colors duration-200"
+                                    >
+                                        {menuItem.icon}
+                                        <span className="ml-3">{menuItem.label}</span>
                                         <svg
                                             className={`ml-auto h-5 w-5 transform ${
-                                                activeDropdown === item.key ? 'rotate-180' : ''
+                                                activeDropdown === menuItem.key ? 'rotate-180' : ''
                                             } transition-transform duration-200`}
                                             viewBox="0 0 20 20"
                                             fill="currentColor"
                                         >
-                                            <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                                            <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0-1.414z" clipRule="evenodd" />
                                         </svg>
-                                    )}
-                                </button>
-                                {item.dropdown && activeDropdown === item.key && (
+                                    </button>
+                                ) : (
+                                    // 드롭다운이 없는 경우 바로 링크
+                                    <Link
+                                        to={menuItem.url}
+                                        className="flex items-center w-full px-4 py-2 text-blue-900 hover:bg-blue-500 hover:text-white rounded-md transition-colors duration-200"
+                                    >
+                                        {menuItem.icon}
+                                        <span className="ml-3">{menuItem.label}</span>
+                                    </Link>
+                                )}
+
+                                {menuItem.dropdown.length > 0 && activeDropdown === menuItem.key && (
                                     <ul className="pl-4 mt-2 space-y-1">
-                                        {item.dropdown.map((subItem, index) => (
+                                        {menuItem.dropdown.map((subItem, index) => (
                                             <li key={index}>
-                                                <button
-                                                    onClick={() => {
-                                                    }}
+                                                <Link
+                                                    to={subItem.urlName}
                                                     className="block w-full text-left px-4 py-2 text-sm text-blue-800 hover:bg-blue-400 hover:text-white rounded-md transition-colors duration-200"
                                                 >
-                                                    {subItem}
-                                                </button>
+                                                    {subItem.name}
+                                                </Link>
                                             </li>
                                         ))}
                                     </ul>
@@ -150,8 +170,8 @@ const SidebarAndNavbar = () => {
             <main className={`flex-1  ${isOpen ? 'md:ml-64' : ''}`}>
                 <nav className="bg-blue-300 text-white p-4 w-full">
                     <div className="container mx-auto flex justify-between items-center">
-                        <div className="flex items-center text-2xl font-bold w-1/5">
-                            <img className="mr-2 w-1/12"
+                        <div className="flex items-center text-2xl font-bold w-1/4">
+                            <img className="mr-3 w-1/12"
                                 src="/images/mediGom_Logo.png"
                                />
                             Medi<span className="text-yellow-300">Gom</span>

@@ -13,6 +13,7 @@ import Home from "./admin/pages/Home";
 import AllUsersList from "./admin/pages/AllUsersList";
 import PatientList from "./admin/pages/PatientList";
 import DoctorList from "./admin/pages/DoctorList";
+import AdminList from "./admin/pages/AdminList";
 
 function App() {
     return (
@@ -28,6 +29,7 @@ function App() {
                     <Route path="all" element={<AllUsersList />} />
                     <Route path="patient" element={<PatientList />} />
                     <Route path="doctor" element={<DoctorList />} />
+                    <Route path="admin" element={<AdminList />} />
                 </Route>
                 <Route path="/doctors" element={<Doctors />} />
             </Routes>

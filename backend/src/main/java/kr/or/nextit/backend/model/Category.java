@@ -14,8 +14,9 @@ public class Category {
     private int categoryId;
     private String name;
     private Integer parentId; // 부모 카테고리 ID
-    private String userYN;
+    private String useYn;
     private int categoryOrder;
+    private String urlName;
 
     // 하위 카테고리 저장 필드
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "parentCategory")
@@ -25,4 +26,6 @@ public class Category {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parentId", insertable = false, updatable = false) // 부모 ID와 연결
     private Category parentCategory;
+
+
 }
