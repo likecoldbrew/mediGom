@@ -1,15 +1,21 @@
 package kr.or.nextit.backend.service;
 
+
 import kr.or.nextit.backend.mapper.CategoryMapper;
 import kr.or.nextit.backend.model.Category;
+import kr.or.nextit.backend.model.User;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
 public class CategoryService {
+
     private final CategoryMapper categoryMapper;
 
     // 최상위 카테고리 가져오기
@@ -21,5 +27,9 @@ public class CategoryService {
             category.setSubcategories(subCategories);  // subcategories 필드를 모델에 추가 필요
         }
         return topCategories;
+    }
+
+    public Category getCategoryWithParent(String urlName) {
+        return categoryMapper.selectCategoryWithParent(urlName);
     }
 }
