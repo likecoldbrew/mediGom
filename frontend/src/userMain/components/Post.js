@@ -18,11 +18,9 @@ const Post = (props) => {
       fullAddress += extraAddress !== "" ? ` (${extraAddress})` : "";
     }
 
-    props.setcompany({
-      ...props.company,
-      address: fullAddress,
-    });
+    props.handleComplete({ address: fullAddress });
   };
+
   const style = {
     width: "400px",
     height: "600px",

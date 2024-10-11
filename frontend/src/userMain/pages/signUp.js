@@ -34,7 +34,6 @@ export default function SignUpPage() {
       ...prevState,
       [name]: value,
     }));
-    // Clear the error message for the corresponding field
     setErrorMessages((prevState) => ({
       ...prevState,
       [name]: "",
@@ -135,14 +134,50 @@ export default function SignUpPage() {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const validationErrors = validateForm();
 
     if (Object.keys(validationErrors).length > 0) {
       setErrorMessages(validationErrors);
     } else {
-      console.log("Form submitted:", formData);
+      try {
+        const response = await axios.post(
+          "http://localhost:8080/api/users/register",
+          {
+            userId: formData.id,
+            userPass: formData.password,
+            userName: formData.name,
+            userRrn: `${formData.rrn1}-${formData.rrn2}`,
+            userAdd: formData.add,
+            userAdd2: formData.add2,
+            phone: formData.phone,
+            email: formData.email,
+          }
+        );
+
+        if (response.status === 201) {
+          console.log("User registered successfully:", response.data);
+          // Redirect or reset form here
+          setFormData({
+            userId: "",
+            userPass: "",
+            userName: "",
+            userRrn: "",
+            userAdd: "",
+            userAdd2: "",
+            phone: "",
+            email: "",
+          });
+          // Optionally navigate to another page
+        }
+      } catch (error) {
+        console.error("Error registering user:", error);
+        setErrorMessages((prev) => ({
+          ...prev,
+          id: "회원가입 중 오류가 발생했습니다.",
+        }));
+      }
     }
   };
 
@@ -161,6 +196,17 @@ export default function SignUpPage() {
   };
 
   const handleComplete = (data) => {
+    const fullAddress = data.address;
+    setEnroll_company({
+      ...enroll_company,
+      address: fullAddress,
+    });
+
+    setFormData((prevState) => ({
+      ...prevState,
+      add: fullAddress,
+    }));
+
     setPopup(!popup);
   };
 
@@ -428,11 +474,11 @@ export default function SignUpPage() {
                 </label>
                 <div className="mt-1 flex rounded-md shadow-sm">
                   <input
-                    id="address"
-                    name="address"
+                    id="add"
+                    name="add"
                     type="text"
                     value={enroll_company.address}
-                    onClick={handleComplete}
+                    onChange={handleChange}
                     className="flex-1 focus:ring-blue-500 focus:border-blue-500 block w-full rounded-md sm:text-sm border-gray-300"
                     placeholder="주소를 입력하세요"
                   />
@@ -445,9 +491,10 @@ export default function SignUpPage() {
                   </button>
                   {popup && (
                     <Post
+                      handleComplete={handleComplete}
                       company={enroll_company}
                       setcompany={setEnroll_company}
-                    ></Post>
+                    />
                   )}
                 </div>
               </div>
