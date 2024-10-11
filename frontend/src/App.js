@@ -43,14 +43,15 @@ function App() {
           <Route path="patient" element={<PatientList />} />
           <Route path="doctor" element={<DoctorList />} />
         </Route>
-        <Route path="/doctors" element={<Doctors />} />
-        {/*연동 안해놔서 임시로 그냥 화면에서 보려고 함*/}
-        <Route path="/doctors/userStateChange" element={<UserStateChange />} />
-        <Route path="/doctors/userClinicCheck" element={<UserClinicCheck />} />
-        <Route
-          path="/doctors/userReservationCheck"
-          element={<UserReservationCheck />}
-        />
+        <Route path="/doctor" element={<Doctors />}>
+          <Route index element={<Home />} />
+          <Route path="list" element={<UserManagement />} />
+          <Route path="clinic" element={<UserClinicCheck />} />
+          <Route path="reserv" element={<UserReservationCheck />} />
+          <Route path="state" element={<UserStateChange />} />
+          <Route path="certificateList" element={<CertificateList />} />
+          <Route path="certificate" element={<Certificates />} />
+        </Route>
         <Route path="/payment" element={<Payment />} />
       </Routes>
     </BrowserRouter>

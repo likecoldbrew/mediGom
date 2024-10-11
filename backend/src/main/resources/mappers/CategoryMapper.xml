@@ -4,6 +4,7 @@
 <mapper namespace="kr.or.nextit.backend.mapper.CategoryMapper">
     <!-- 최상위 카테고리 조회 -->
     <select id="selectTopCategories" resultType="kr.or.nextit.backend.model.Category">
+
         SELECT category_id, name, parent_id, category_order, url_name
         FROM categories_main
         WHERE parent_id IS NULL
@@ -12,6 +13,7 @@
 
     <!-- 특정 카테고리의 하위 카테고리 조회 -->
     <select id="selectSubCategories" parameterType="int" resultType="kr.or.nextit.backend.model.Category">
+
         SELECT category_id, name, parent_id, category_order, url_name
         FROM categories_main
         WHERE parent_id = #{parentId}
