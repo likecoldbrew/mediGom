@@ -4,7 +4,8 @@
 <mapper namespace="kr.or.nextit.backend.mapper.CategoryMapper">
     <!-- 최상위 카테고리 조회 -->
     <select id="selectTopCategories" resultType="kr.or.nextit.backend.model.Category">
-        SELECT category_id, name, parent_id, category_order,url_name
+
+        SELECT category_id, name, parent_id, category_order, url_name
         FROM categories_main
         WHERE parent_id IS NULL
         ORDER BY category_order
@@ -12,9 +13,26 @@
 
     <!-- 특정 카테고리의 하위 카테고리 조회 -->
     <select id="selectSubCategories" parameterType="int" resultType="kr.or.nextit.backend.model.Category">
-        SELECT category_id, name, parent_id, category_order,url_name
+
+        SELECT category_id, name, parent_id, category_order, url_name
         FROM categories_main
         WHERE parent_id = #{parentId}
         ORDER BY category_order
     </select>
+
+    <!-- 특정 urlName로 카테고리와 부모 카테고리 조회 -->
+    <select id="selectCategoryWithParent" parameterType="String" resultMap="CategoryWithParentMap">
+        SELECT c1.name AS subCategoryName, c2.name AS parentCategoryName, c1.url_name
+        FROM categories_main c1
+                 LEFT JOIN categories_main c2 ON c1.parent_id = c2.category_id
+        WHERE c1.url_name = #{urlName} and c1.parent_id is not null
+    </select>
+    <!-- 결과 매핑 -->
+    <resultMap id="CategoryWithParentMap" type="kr.or.nextit.backend.model.Category">
+        <result property="categoryId" column="category_id"/>
+        <result property="subCategoryName" column="subCategoryName"/>
+        <result property="parentCategoryName" column="parentCategoryName"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="urlName" column="url_name"/>
+    </resultMap>
 </mapper>

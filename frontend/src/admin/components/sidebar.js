@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Outlet, Link } from 'react-router-dom';
 import {
     Calendar,
     FileText,
@@ -18,17 +19,14 @@ import {
     LogOut,
     UserCheck,
     Smile,
-    UserX,
-    Wind,
-    Send
+    UserX
 } from 'react-feather';
 import { Settings, MessageSquare, Bell, Menu } from 'lucide-react';
-import {Outlet,Link} from "react-router-dom";
 
 const SidebarAndNavbar = () => {
     const [isOpen, setIsOpen] = useState(true);
     const [activeDropdown, setActiveDropdown] = useState(null);
-    const [activePage, setActivePage] = useState('home'); // 현재 활성화된 페이지 상태
+
     const [category, setCategory] = useState([]);
 
     // API 호출
@@ -38,14 +36,13 @@ const SidebarAndNavbar = () => {
 
     const fetchCategory = async () => {
         try {
-            const response = await fetch('/api/category/doctor'); // Spring Boot 서버에서 데이터 가져오기
+            const response = await fetch('/api/category/admin'); // Spring Boot 서버에서 데이터 가져오기
             const data = await response.json();
             setCategory(data); // 상태 업데이트
         } catch (error) {
             console.error('Error fetching users:', error);
         }
     };
-
 
     useEffect(() => {
         const handleResize = () => {
@@ -57,7 +54,7 @@ const SidebarAndNavbar = () => {
         };
 
         window.addEventListener('resize', handleResize);
-        handleResize();
+        handleResize(); // 처음 로드될 때 한 번 실행
 
         return () => window.removeEventListener('resize', handleResize);
     }, []);
@@ -68,23 +65,14 @@ const SidebarAndNavbar = () => {
         setActiveDropdown(activeDropdown === key ? null : key);  // 드롭다운 메뉴 토글
     };
 
-    // const menuItems = [
-    //     { key: 'userManagement', icon: <User size={20} />, label: '환자 관리',page:'userManagement', dropdown: ['환자 전체 목록', '내 환자 확인', '예약 환자 확인'] },
-    //     { key: 'reservation', icon: <UserCheck size={20} />, label: '예약 확인' },
-    //     { key: 'documents', icon: <FileText size={20} />, label: '증명서 요청',page:'certificateList', dropdown: ['서류 발급 요청 목록'] },
-    //     { key: 'Hospitalization', icon: <FolderPlus size={20} />, label: '입원 관리', dropdown: ['입원 환자 목록', '입원 신청','입원 상태 변경', '병실 현황'] },
-    //     { key: 'holiday', icon: <Send size={20} />, label: '휴무 신청' },
-    //     { key: 'mypage', icon: <FeatherSettings size={20} />, label: '마이페이지'}
-    // ];
-
     // 아이콘 배열 (카테고리와 순서를 맞춰서 배치)
     const icons = [
-        <User size={20} />,         // 환자 관리
-        <UserCheck size={20} />,     // 예약 확인
-        <FileText size={20} />,     // 증명서 요청
-        <FolderPlus size={20} />,   // 입원 신청
-        <Send size={20} />,     // 휴무 신청
-        <FeatherSettings size={20} /> // 마이페이지
+        <User size={20} />,         // 회원 관리
+        <Calendar size={20} />,     // 일정 관리
+        <FileText size={20} />,     // 입원 승인
+        <FolderPlus size={20} />,   // 식단 등록
+        <PieChart size={20} />,     // 카테고리 관리
+        <FeatherSettings size={20} /> // 사이트 관리
         // 필요한 만큼 아이콘 추가
     ];
 
@@ -97,27 +85,22 @@ const SidebarAndNavbar = () => {
         url: item.urlName
     }));
 
-    // console.log(menuItems[0])
-    // console.log(menuItems[3])
-    // console.log(menuItems[0].dropdown)
-
     return (
         <div className="flex min-h-screen bg-gray-100">
-            {/* Sidebar */}
-            <aside className={`bg-white text-black w-64 min-h-screen p-4 ${isOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out fixed left-0 top-0 z-10`}>
+            {/* 사이드 바 */}
+            <aside className={`bg-white text-black w-64 min-h-screen p-4
+                ${isOpen ? 'translate-x-0' : '-translate-x-full'}
+                 transition-transform duration-300 ease-in-out fixed left-0 top-0 z-50`}>
                 <div className="flex items-center justify-between mb-6">
                     <div className="flex items-center">
                         <Smile size={24} className="w-10 h-10 rounded-full mr-3 "/>
                         <div>
-                            <h2 className="text-lg font-semibold text-gray-800">김의사</h2>
-                            <p className="text-xs text-gray-500">마취과 치프</p>
+                            <h2 className="text-lg font-semibold text-gray-800">관리자</h2>
+                            <p className="text-xs text-gray-500">히히</p>
                         </div>
                     </div>
                     <button className="relative hover:text-blue-400 transition-colors">
                         <LogOut className="w-6 h-6"/>
-                    </button>
-                    <button onClick={toggleSidebar} className="md:hidden">
-                        <FileText size={24}/>
                     </button>
                 </div>
 
@@ -148,15 +131,13 @@ const SidebarAndNavbar = () => {
                                             viewBox="0 0 20 20"
                                             fill="currentColor"
                                         >
-                                            <path fillRule="evenodd"
-                                                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0-1.414z"
-                                                  clipRule="evenodd"/>
+                                            <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0-1.414z" clipRule="evenodd" />
                                         </svg>
                                     </button>
                                 ) : (
                                     // 드롭다운이 없는 경우 바로 링크
                                     <Link
-                                        to={menuItem.urlName}
+                                        to={menuItem.url}
                                         className="flex items-center w-full px-4 py-2 text-blue-900 hover:bg-blue-500 hover:text-white rounded-md transition-colors duration-200"
                                     >
                                         {menuItem.icon}
@@ -181,34 +162,26 @@ const SidebarAndNavbar = () => {
                             </li>
                         ))}
                     </ul>
-
                 </nav>
             </aside>
 
             {/* Main content */}
             {/* Navbar */}
             <main className={`flex-1  ${isOpen ? 'md:ml-64' : ''}`}>
-                <nav className="bg-blue-300 text-white p-4  w-full">
+                <nav className="bg-blue-300 text-white p-4 w-full">
                     <div className="container mx-auto flex justify-between items-center">
-                        <button>
-                            <div className="flex items-center text-2xl font-bold">
-                                <img
-                                    width="40"
-                                    src="/images/mediGom_Logo.png"/>
-                                Medi<span className="text-yellow-300">Gom</span>
-                            </div>
-                        </button>
+                        <div className="flex items-center text-2xl font-bold w-1/4">
+                            <img className="mr-3 w-1/12"
+                                 src="/images/mediGom_Logo.png"
+                            />
+                            Medi<span className="text-yellow-300">Gom</span>
+                        </div>
                         <div className="flex items-center space-x-6">
                             <div className="relative group">
                                 <button className="flex items-center space-x-1 hover:text-yellow-300 transition-colors">
-                                    <Wind className="w-6 h-6"/>날씨
+                                    <Mail className="w-6 h-6"/>
                                 </button>
                             </div>
-                            <button className="relative hover:text-yellow-300 transition-colors">
-                                <Mail className="w-6 h-6"/>
-                                <span
-                                    className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">10</span>
-                            </button>
                             <button className="relative hover:text-yellow-300 transition-colors">
                                 <MessageSquare className="w-6 h-6"/>
                                 <span
@@ -230,7 +203,7 @@ const SidebarAndNavbar = () => {
 
                 {/* 동적으로 변경되는 콘텐츠 영역 */}
                 <div className="p-4">
-                    <Outlet/> {/* URL에 따라 렌더링될 콘텐츠 */}
+                    <Outlet /> {/* URL에 따라 렌더링될 콘텐츠 */}
                 </div>
 
             </main>
