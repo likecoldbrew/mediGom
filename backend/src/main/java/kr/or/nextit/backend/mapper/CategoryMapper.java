@@ -15,4 +15,3 @@ public interface CategoryMapper {
     // 카테고리와 부모 카테고리 조회
     Category selectCategoryWithParent(String urlName);
 }
-

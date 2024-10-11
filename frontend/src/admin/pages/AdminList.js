@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 
-const PatientList = () => {
-    const [patients, setPatients] = useState([]);
+const AdminList = () => {
+    const [admins, setAdmins] = useState([]);
 
     // API 호출
     useEffect(() => {
-        fetchPatients();
+        fetchAdmins();
     }, []);
 
-    const fetchPatients = async () => {
+    const fetchAdmins = async () => {
         try {
-            const response = await fetch('/api/users/patient'); // Spring Boot 서버에서 데이터 가져오기
+            const response = await fetch('/api/users/admin'); // Spring Boot 서버에서 데이터 가져오기
             const data = await response.json();
-            setPatients(data); // 상태 업데이트
+            setAdmins(data); // 상태 업데이트
         } catch (error) {
             console.error('Error fetching users:', error);
         }
@@ -40,19 +40,19 @@ const PatientList = () => {
                 </tr>
                 </thead>
                 <tbody>
-                {patients.map(patient => (
-                    <tr key={patient.userNo} className="hover:bg-gray-100">
-                        <td className="py-2 px-4 border">{patient.userNo}</td>
-                        <td className="py-2 px-4 border">{patient.userId}</td>
-                        <td className="py-2 px-4 border">{patient.userName}</td>
-                        <td className="py-2 px-4 border">{patient.userRrn}</td>
-                        <td className="py-2 px-4 border">{patient.email}</td>
-                        <td className="py-2 px-4 border">{patient.userAdd}</td>
-                        <td className="py-2 px-4 border">{patient.userAdd2}</td>
-                        <td className="py-2 px-4 border">{format(new Date(patient.createAt), 'yyyy-MM-dd HH:mm:ss')}</td>
-                        <td className="py-2 px-4 border">{format(new Date(patient.updateAt), 'yyyy-MM-dd HH:mm:ss')}</td>
-                        <td className="py-2 px-4 border">{patient.admin}</td>
-                        <td className="py-2 px-4 border">{patient.deleteYn}</td>
+                {admins.map(admin => (
+                    <tr key={admin.userNo} className="hover:bg-gray-100">
+                        <td className="py-2 px-4 border">{admin.userNo}</td>
+                        <td className="py-2 px-4 border">{admin.userId}</td>
+                        <td className="py-2 px-4 border">{admin.userName}</td>
+                        <td className="py-2 px-4 border">{admin.userRrn}</td>
+                        <td className="py-2 px-4 border">{admin.email}</td>
+                        <td className="py-2 px-4 border">{admin.userAdd}</td>
+                        <td className="py-2 px-4 border">{admin.userAdd2}</td>
+                        <td className="py-2 px-4 border">{format(new Date(admin.createAt), 'yyyy-MM-dd HH:mm:ss')}</td>
+                        <td className="py-2 px-4 border">{format(new Date(admin.updateAt), 'yyyy-MM-dd HH:mm:ss')}</td>
+                        <td className="py-2 px-4 border">{admin.admin}</td>
+                        <td className="py-2 px-4 border">{admin.deleteYn}</td>
                         {/* 필요한 다른 사용자 정보를 추가하세요 */}
                     </tr>
                 ))}
@@ -61,4 +61,4 @@ const PatientList = () => {
         </div>
     );
 };
-export default PatientList;
+export default AdminList;

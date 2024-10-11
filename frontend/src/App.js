@@ -7,6 +7,7 @@ import LoginPage from "./userMain/pages/Login";
 import SignUpPage from "./userMain/pages/signUp";
 import MainPage from "./userMain/pages/MainPage";
 import Doctors from "./doctorPage";
+
 import Admin from "./admin";
 import DoctorInfo from "./userMain/pages/DoctorInfo";
 import UserStateChange from "./doctorPage/pages/UserStateChange";
@@ -42,6 +43,7 @@ function App() {
           <Route path="all" element={<AllUsersList />} />
           <Route path="patient" element={<PatientList />} />
           <Route path="doctor" element={<DoctorList />} />
+          <Route path="admin" element={<AdminList />} />
         </Route>
         <Route path="/doctor" element={<Doctors />}>
           <Route index element={<Home />} />
