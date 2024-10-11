@@ -2,7 +2,6 @@ package kr.or.nextit.backend.controller;
 
 import kr.or.nextit.backend.model.AdminCategory;
 import kr.or.nextit.backend.service.AdminCategoryService;
-import kr.or.nextit.backend.mapper.AdminCategoryMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

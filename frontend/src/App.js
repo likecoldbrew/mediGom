@@ -7,22 +7,25 @@ import LoginPage from "./userMain/pages/Login";
 import SignUpPage from "./userMain/pages/signUp";
 import MainPage from "./userMain/pages/MainPage";
 import Doctors from "./doctorPage";
-
 import Admin from "./admin";
 import DoctorInfo from "./userMain/pages/DoctorInfo";
 import UserStateChange from "./doctorPage/pages/UserStateChange";
 import UserClinicCheck from "./doctorPage/pages/UserClinicCheck";
 import UserReservationCheck from "./doctorPage/pages/UserReservationCheck";
 import EmployLogin from "./userMain/pages/employLogin";
-import Home from "./doctorPage/pages/Home";
+import AdminHome from "./admin/pages/Home";
+import DoctorHome from "./doctorPage/pages/Home"
 import DepartmentInfo from "./userMain/pages/DepartmentInfo";
 import UserMain from "./userMain/index";
 import Payment from "./components/Payment";
 import HospitalInfo from "./userMain/pages/HospitalInfo";
-import Home from "./admin/pages/Home";
-import AllUsersList from "./admin/pages/AllUsersList";
-import PatientList from "./admin/pages/PatientList";
-import DoctorList from "./admin/pages/DoctorList";
+import UserManagement from "./doctorPage/pages/UserManagement";
+import CertificateList from "./doctorPage/pages/CertificateList";
+import Certificates from "./doctorPage/pages/Certificates";
+import AllUsersList from "./admin/pages/list/AllUsersList";
+import PatientList from "./admin/pages/list/PatientList";
+import DoctorList from "./admin/pages/list/DoctorList";
+import AdminList from "./admin/pages/list/AdminList";
 
 function App() {
   return (
@@ -39,14 +42,14 @@ function App() {
         <Route path="/empLogin" element={<EmployLogin />} />
         <Route path="/signUp" element={<SignUpPage />} />
         <Route path="/admin" element={<Admin />}>
-          <Route index element={<Home />} /> {/* 기본 페이지 */}
+          <Route index element={<AdminHome />} /> {/* 기본 페이지 */}
           <Route path="all" element={<AllUsersList />} />
           <Route path="patient" element={<PatientList />} />
           <Route path="doctor" element={<DoctorList />} />
           <Route path="admin" element={<AdminList />} />
         </Route>
         <Route path="/doctor" element={<Doctors />}>
-          <Route index element={<Home />} />
+          <Route index element={<DoctorHome />} />
           <Route path="list" element={<UserManagement />} />
           <Route path="clinic" element={<UserClinicCheck />} />
           <Route path="reserv" element={<UserReservationCheck />} />

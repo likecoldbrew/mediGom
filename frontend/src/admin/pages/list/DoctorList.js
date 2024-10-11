@@ -4,6 +4,13 @@ import { format } from 'date-fns';
 
 const DoctorList = () => {
     const [doctors, setDoctors] = useState([]);
+    const [filteredDoctors, setFilteredDoctors] = useState([]);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [statusFilter, setStatusFilter] = useState('All Status');
+    const [isGridView, setIsGridView] = useState(false);
+    const [isFilterMenuOpen, setIsFilterMenuOpen] = useState(false);
+    const [sortColumn, setSortColumn] = useState('name');
+    const [sortDirection, setSortDirection] = useState('asc');
 
     // API 호출
     useEffect(() => {
@@ -16,19 +23,11 @@ const DoctorList = () => {
             const data = await response.json();
             setDoctors(data); // 상태 업데이트
             setFilteredDoctors(data); // 필터링된 목록 초기화
+
         } catch (error) {
             console.error('Error fetching users:', error);
         }
     };
-
-    const [filteredDoctors, setFilteredDoctors] = useState([]);
-    const [searchTerm, setSearchTerm] = useState('');
-    const [categoryFilter, setCategoryFilter] = useState('All Categories');
-    const [statusFilter, setStatusFilter] = useState('All Status');
-    const [isGridView, setIsGridView] = useState(false);
-    const [isFilterMenuOpen, setIsFilterMenuOpen] = useState(false);
-    const [sortColumn, setSortColumn] = useState('name');
-    const [sortDirection, setSortDirection] = useState('asc');
 
     useEffect(() => {
         let result = [...doctors];
@@ -44,22 +43,26 @@ const DoctorList = () => {
             );
         }
 
-        if (categoryFilter !== 'All Categories') {
-            result = result.filter(doctor => doctor.category === categoryFilter);
-        }
-
         if (statusFilter !== 'All Status') {
-            result = result.filter(doctor => doctor.status.toLowerCase() === statusFilter.toLowerCase());
+            result = result.filter(doctor => doctor.deleteYn.toLowerCase() === statusFilter.toLowerCase());
         }
 
         result.sort((a, b) => {
-            if (a[sortColumn] < b[sortColumn]) return sortDirection === 'asc' ? -1 : 1;
-            if (a[sortColumn] > b[sortColumn]) return sortDirection === 'asc' ? 1 : -1;
-            return 0;
+            const aValue = a[sortColumn] ?? '';
+            const bValue = b[sortColumn] ?? '';
+
+            // 모든 값들을 문자열로 변환 후 정렬
+            const aString = aValue.toString();
+            const bString = bValue.toString();
+
+            // localeCompare를 사용하여 한국어와 숫자 모두 정렬
+            return sortDirection === 'asc'
+                ? aString.localeCompare(bString, 'ko', { numeric: true })
+                : bString.localeCompare(aString, 'ko', { numeric: true });
         });
 
         setFilteredDoctors(result);
-    }, [searchTerm, categoryFilter, statusFilter, doctors, sortColumn, sortDirection]);
+    }, [searchTerm, statusFilter, doctors, sortColumn, sortDirection]);
 
     const handleSort = (column) => {
         if (column === sortColumn) {
@@ -87,7 +90,6 @@ const DoctorList = () => {
                     </div>
                     <div className="flex items-center space-x-4">
                         <div className="relative">
-
                             <button
                                 onClick={() => setIsFilterMenuOpen(!isFilterMenuOpen)}
                                 className="px-4 py-2 bg-gray-200 dark:bg-gray-700 rounded-md flex items-center"
@@ -97,33 +99,17 @@ const DoctorList = () => {
                                 <ChevronDown className="ml-2 w-4 h-4"/>
                             </button>
                             {isFilterMenuOpen && (
-                                <div
-                                    className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg z-10">
+                                <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg z-10">
                                     <div className="p-4">
-                                        <label className="block mb-2">Category</label>
-                                        <select
-                                            value={categoryFilter}
-                                            onChange={(e) => setCategoryFilter(e.target.value)}
-                                            className="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600"
-                                        >
-                                            <option>All Categories</option>
-                                            <option>Furniture</option>
-                                            <option>Kitchen</option>
-                                            <option>Decoration</option>
-                                            <option>Bedroom</option>
-                                            <option>Bathroom</option>
-                                            <option>Living Room</option>
-                                        </select>
-
-                                        <label className="block mt-4 mb-2">Status</label>
+                                        <label className="block mb-2">Status</label>
                                         <select
                                             value={statusFilter}
                                             onChange={(e) => setStatusFilter(e.target.value)}
                                             className="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600"
                                         >
                                             <option>All Status</option>
-                                            <option>Active</option>
-                                            <option>Disabled</option>
+                                            <option value={"N"}>Active</option>
+                                            <option value={"Y"}>Disabled</option>
                                         </select>
                                     </div>
                                 </div>
@@ -149,22 +135,22 @@ const DoctorList = () => {
                     // 그리드 뷰
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                         {filteredDoctors.map((doctor) => (
-                            <div key={doctor.id}
+                            <div key={doctor.userId}
                                  className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
                                 <img src={doctor.image} alt={doctor.name} className="w-full h-48 object-cover"/>
                                 <div className="p-4">
                                     <div className="flex items-center justify-between">
-                                        <h2 className="text-lg font-semibold">{doctor.name}</h2>
+                                        <h2 className="text-lg font-semibold">{doctor.userName}</h2>
                                         <input type="checkbox" className="form-checkbox h-5 w-5 text-blue-500"/>
                                     </div>
-                                    <p className="text-sm text-gray-600 dark:text-gray-400">{doctor.category}</p>
+                                    <p className="text-sm text-gray-600 dark:text-gray-400">{doctor.rank}</p>
                                     <p className={`text-sm ${doctor.status === 'active' ? 'text-green-500' : 'text-red-500'}`}>
                                         {doctor.status}
                                     </p>
                                 </div>
                                 <div
                                     className="px-4 py-2 bg-gray-100 dark:bg-gray-700 flex justify-between items-center">
-                                    <p className="text-sm font-semibold">${doctor.price}</p>
+                                    <p className="text-sm font-semibold">{doctor.departmentName}</p>
                                     <button className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">
                                         <MoreVertical size={18}/>
                                     </button>
@@ -180,57 +166,25 @@ const DoctorList = () => {
                             <tr className="bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600">
                                 <th
                                     className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer"
-                                    onClick={() => handleSort('user_no')}
+                                    onClick={() => handleSort('userNo')}
                                 >
-                                    user no {sortColumn === 'user_no' && (sortDirection === 'asc' ?
+                                    번호 {sortColumn === 'userNo' && (sortDirection === 'asc' ?
                                     <ChevronUp size={14} className="inline"/> :
                                     <ChevronDown size={14} className="inline"/>)}
                                 </th>
                                 <th
                                     className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer"
-                                    onClick={() => handleSort('user_id')}
+                                    onClick={() => handleSort('userId')}
                                 >
-                                    id {sortColumn === 'user_id' && (sortDirection === 'asc' ?
+                                    아이디 {sortColumn === 'userId' && (sortDirection === 'asc' ?
                                     <ChevronUp size={14} className="inline"/> :
                                     <ChevronDown size={14} className="inline"/>)}
                                 </th>
                                 <th
                                     className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer"
-                                    onClick={() => handleSort('user_name')}
+                                    onClick={() => handleSort('userName')}
                                 >
-                                    name {sortColumn === 'user_name' && (sortDirection === 'asc' ?
-                                    <ChevronUp size={14} className="inline"/> :
-                                    <ChevronDown size={14} className="inline"/>)}
-                                </th>
-                                <th
-                                    className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer"
-                                    onClick={() => handleSort('user_rrn')}
-                                >
-                                    rrn {sortColumn === 'user_rrn' && (sortDirection === 'asc' ?
-                                    <ChevronUp size={14} className="inline"/> :
-                                    <ChevronDown size={14} className="inline"/>)}
-                                </th>
-                                <th
-                                    className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer"
-                                    onClick={() => handleSort('email')}
-                                >
-                                    email {sortColumn === 'email' && (sortDirection === 'asc' ?
-                                    <ChevronUp size={14} className="inline"/> :
-                                    <ChevronDown size={14} className="inline"/>)}
-                                </th>
-                                <th
-                                    className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer"
-                                    onClick={() => handleSort('user_add1')}
-                                >
-                                    address 1 {sortColumn === 'user_add1' && (sortDirection === 'asc' ?
-                                    <ChevronUp size={14} className="inline"/> :
-                                    <ChevronDown size={14} className="inline"/>)}
-                                </th>
-                                <th
-                                    className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer"
-                                    onClick={() => handleSort('user_add2')}
-                                >
-                                    address 2 {sortColumn === 'user_add2' && (sortDirection === 'asc' ?
+                                    이름 {sortColumn === 'userName' && (sortDirection === 'asc' ?
                                     <ChevronUp size={14} className="inline"/> :
                                     <ChevronDown size={14} className="inline"/>)}
                                 </th>
@@ -238,39 +192,15 @@ const DoctorList = () => {
                                     className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer"
                                     onClick={() => handleSort('phone')}
                                 >
-                                    phone {sortColumn === 'phone' && (sortDirection === 'asc' ?
+                                    전화번호 {sortColumn === 'phone' && (sortDirection === 'asc' ?
                                     <ChevronUp size={14} className="inline"/> :
                                     <ChevronDown size={14} className="inline"/>)}
                                 </th>
                                 <th
                                     className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer"
-                                    onClick={() => handleSort('createAt')}
+                                    onClick={() => handleSort('departmentName')}
                                 >
-                                    created date {sortColumn === 'createAt' && (sortDirection === 'asc' ?
-                                    <ChevronUp size={14} className="inline"/> :
-                                    <ChevronDown size={14} className="inline"/>)}
-                                </th>
-                                <th
-                                    className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer"
-                                    onClick={() => handleSort('updateAt')}
-                                >
-                                    updated date {sortColumn === 'updateAt' && (sortDirection === 'asc' ?
-                                    <ChevronUp size={14} className="inline"/> :
-                                    <ChevronDown size={14} className="inline"/>)}
-                                </th>
-                                <th
-                                    className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer"
-                                    onClick={() => handleSort('admin')}
-                                >
-                                    admin {sortColumn === 'admin' && (sortDirection === 'asc' ?
-                                    <ChevronUp size={14} className="inline"/> :
-                                    <ChevronDown size={14} className="inline"/>)}
-                                </th>
-                                <th
-                                    className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer"
-                                    onClick={() => handleSort('deleteYn')}
-                                >
-                                    delete {sortColumn === 'deleteYn' && (sortDirection === 'asc' ?
+                                    진료과 {sortColumn === 'departmentName' && (sortDirection === 'asc' ?
                                     <ChevronUp size={14} className="inline"/> :
                                     <ChevronDown size={14} className="inline"/>)}
                                 </th>
@@ -279,30 +209,23 @@ const DoctorList = () => {
                             <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                             {filteredDoctors.map((doctor) => (
                                 <tr key={doctor.userNo}>
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        <div className="flex items-center">
+                                    <td className="px-6 py-4 whitespace-nowrap text-center">
+                                        <div className="flex items-center justify-center">
                                             <div className="text-sm font-medium">{doctor.userNo}</div>
                                         </div>
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-center">{doctor.userId}</td>
                                     <td className="px-6 py-4 whitespace-nowrap text-center">
-                      <span
-                          className={`px-2 inline-flex  text-xs leading-5 font-semibold rounded-full ${
-                              doctor.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-                          }`}
-                      >
-                        {doctor.userName}
-                      </span>
+                                      <span
+                                          className={`px-2 inline-flex  text-xs leading-5 font-semibold rounded-full ${
+                                              doctor.deleteYn === 'N' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                                          }`}
+                                      >
+                                        {doctor.userName}
+                                      </span>
                                     </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-center">{doctor.userRrn}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-center">{doctor.email}</td>
-                                    <td className="px-6 py-4 whitespace-wrap text-center">{doctor.userAdd}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-center">{doctor.userAdd2}</td>
                                     <td className="px-6 py-4 whitespace-nowrap text-center">{doctor.phone}</td>
-                                    <td className="px-6 py-4 whitespace-wrap text-center">{format(new Date(doctor.createAt), 'yyyy-MM-dd')}</td>
-                                    <td className="px-6 py-4 whitespace-wrap text-center">{format(new Date(doctor.updateAt), 'yyyy-MM-dd')}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-center">{doctor.admin}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-center">{doctor.deleteYn}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-center">{doctor.departmentName}</td>
                                 </tr>
                             ))}
                             </tbody>
