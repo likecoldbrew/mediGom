@@ -1,6 +1,5 @@
 package kr.or.nextit.backend.mapper;
 
-import kr.or.nextit.backend.model.Category;
 import kr.or.nextit.backend.model.Hospital;
 import org.apache.ibatis.annotations.Mapper;
 

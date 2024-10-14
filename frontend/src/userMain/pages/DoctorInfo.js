@@ -6,7 +6,6 @@ import QuickMenu from "../components/QuickMenu";
 import SubCategories from "../components/SubCategory";
 import ChatBot from "../components/ChatBot";
 import axios from "axios";
-
 import debounce from "lodash.debounce";
 
 const DoctorInfo = () => {
@@ -22,7 +21,7 @@ const DoctorInfo = () => {
     fetchDoctors();
   }, []);
 
-  //의사 정보 호출
+  // 의사 정보 호출
   const fetchDoctors = async () => {
     setLoading(true);
     setError(null);
@@ -32,6 +31,9 @@ const DoctorInfo = () => {
       setDoctors(data);
     } catch (error) {
       console.error("Error fetching doctor info:", error);
+      setError("의사 정보를 가져오는 중 오류가 발생했습니다.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -57,11 +59,12 @@ const DoctorInfo = () => {
       setLoading(false);
     }
   };
+
   // 디바운싱된 검색 함수
   const debouncedSearch = useCallback(
     debounce((value) => {
       handleSearch(value);
-    }, 150), // 300ms 지연
+    }, 150), // 150ms 지연
     []
   );
 
@@ -72,65 +75,14 @@ const DoctorInfo = () => {
     debouncedSearch(value);
   };
 
-
-    // 입력 변경 핸들러
-    const handleInputChange = (e) => {
-        const value = e.target.value;
-        setSearchTerm(value);
-        debouncedSearch(value);
-    };
-
-    // 엔터 키 입력 핸들링
-    const handleKeyDown = (event) => {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-            debouncedSearch.cancel(); // 디바운싱된 호출을 취소
-            handleSearch(searchTerm); // 즉시 검색 수행
-        }
-    };
-
-    return (
-        <div className="flex flex-col min-h-screen">
-            <SubCategories/>
-            <div className="flex flex-col items-center justify-center mt-8">
-                <div className="flex max-w-3xl w-full">
-                    <input
-                        type="text"
-                        className="form-input border rounded-l-md px-4 py-2 w-full"
-                        placeholder="찾고 싶은 의료진 이름을 검색해보세요"
-                        value={searchTerm}
-                        onChange={handleInputChange} // 입력 시 디바운스된 검색 함수 호출
-                        onKeyDown={handleKeyDown} // 엔터 키 핸들링
-                    />
-                    <button className="bg-sky-100 hover:bg-sky-200 text-white px-4 py-2 rounded-r-md"  onClick={() => {
-                        debouncedSearch.cancel(); // 디바운싱된 호출을 취소
-                        handleSearch(searchTerm); // 즉시 검색 수행
-                    }}  aria-label="의사 검색">
-                        {icon}
-                    </button>
-                </div>
-            </div>
-            <div className=" container mx-auto px-4 py-8 flex flex-grow">
-                <main className="flex-grow pr-8 ">
-                    <div className="flex-col min-h-full space-y-4 items-center justify-center">
-                        {doctors.length > 0 ? ( // 데이터가 있을 때만 표시
-                            doctors.map((doctor, index) => (
-                                <div key={index} className="bg-white p-4 rounded shadow">
-                                    <h2 className="text-xl font-semibold mb-3 ">{doctor.userName}</h2> {/* 의사 이름 */}
-                                    <p className="text-gray-600"><span className="font-bold">진료과:</span> {doctor.departmentName}</p> {/* 진료과 */}
-                                    <p className="text-gray-600"><span className="font-bold">진료분야:</span> {doctor.treatments.join(', ')}</p> {/* 진료 분야 */}
-                                </div>
-                            ))
-                        ) : (
-                            <p>Loading...</p> // 로딩 중일 때 표시
-                        )}
-                    </div>
-                </main>
-                <div className="flex flex-col space-y-4">
-                    <QuickMenu/>
-                    <ChatBot/>
-                </div>
-            </div>
+  // 엔터 키 입력 핸들링
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      debouncedSearch.cancel(); // 디바운싱된 호출을 취소
+      handleSearch(searchTerm); // 즉시 검색 수행
+    }
+  };
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -157,28 +109,32 @@ const DoctorInfo = () => {
           </button>
         </div>
       </div>
-      <div className=" container mx-auto px-4 py-8 flex flex-grow">
+      <div className="container mx-auto px-4 py-8 flex flex-grow">
         <main className="flex-grow pr-8 ">
           <div className="flex-col min-h-full space-y-4 items-center justify-center">
-            {doctors.length > 0 ? ( // 데이터가 있을 때만 표시
+            {loading ? (
+              <p>Loading...</p>
+            ) : doctors.length > 0 ? (
               doctors.map((doctor, index) => (
                 <div key={index} className="bg-white p-4 rounded shadow">
-                  <h2 className="text-xl font-semibold mt-4">
+                  <h2 className="text-xl font-semibold mb-3">
                     {doctor.userName}
                   </h2>{" "}
                   {/* 의사 이름 */}
                   <p className="text-gray-600">
-                    진료과: {doctor.departmentName}
+                    <span className="font-bold">진료과:</span>{" "}
+                    {doctor.departmentName}
                   </p>{" "}
                   {/* 진료과 */}
                   <p className="text-gray-600">
-                    진료분야: {doctor.treatments.join(", ")}
+                    <span className="font-bold">진료분야:</span>{" "}
+                    {doctor.treatments.join(", ")}
                   </p>{" "}
                   {/* 진료 분야 */}
                 </div>
               ))
             ) : (
-              <p>Loading...</p> // 로딩 중일 때 표시
+              <p>검색 결과가 없습니다.</p>
             )}
           </div>
         </main>
@@ -187,6 +143,7 @@ const DoctorInfo = () => {
           <ChatBot />
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

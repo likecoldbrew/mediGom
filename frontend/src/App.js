@@ -1,27 +1,35 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import SubCategories from "./userMain/components/SubCategory";
-import axios from "axios";
 import "./index.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LoginPage from "./userMain/pages/Login";
 import SignUpPage from "./userMain/pages/signUp";
 import MainPage from "./userMain/pages/MainPage";
-import Doctors from "./doctorPage";
+// import Doctors from "./DoctorPage";
 import Admin from "./admin";
 import DoctorInfo from "./userMain/pages/DoctorInfo";
-import UserStateChange from "./doctorPage/pages/UserStateChange";
-import UserClinicCheck from "./doctorPage/pages/UserClinicCheck";
-import UserReservationCheck from "./doctorPage/pages/UserReservationCheck";
+// import UserStateChange from "./DoctorPage/pages/UserStateChange";
+// import UserClinicCheck from "./DoctorPage/pages/UserClinicCheck";
+// import UserReservationCheck from "./DoctorPage/pages/UserReservationCheck";
 import EmployLogin from "./userMain/pages/employLogin";
-import Home from "./doctorPage/pages/Home";
+import AdminHome from "./admin/pages/Home";
+// import DoctorHome from "./DoctorPage/pages/Home";
 import DepartmentInfo from "./userMain/pages/DepartmentInfo";
 import UserMain from "./userMain/index";
 import Payment from "./components/Payment";
 import HospitalInfo from "./userMain/pages/HospitalInfo";
-import Home from "./admin/pages/Home";
-import AllUsersList from "./admin/pages/AllUsersList";
-import PatientList from "./admin/pages/PatientList";
-import DoctorList from "./admin/pages/DoctorList";
+// import UserManagement from "./DoctorPage/pages/UserManagement";
+// import CertificateList from "./DoctorPage/pages/CertificateList";
+// import Certificates from "./DoctorPage/pages/Certificates";
+import AllUsersList from "./admin/pages/list/AllUsersList";
+import PatientList from "./admin/pages/list/PatientList";
+import DoctorList from "./admin/pages/list/DoctorList";
+import AdminList from "./admin/pages/list/AdminList";
+import Community from "./userMain/pages/Community";
+import CommunityDetail from "./userMain/pages/CommunityDetail";
+import BoardRegist from "./userMain/pages/BoardRegist";
+import BoardUpdate from "./userMain/pages/BoardUpdate";
+import Faq from "./userMain/pages/Faq";
 
 function App() {
   return (
@@ -29,28 +37,35 @@ function App() {
       <Routes>
         <Route path="/" element={<UserMain />}>
           <Route index element={<MainPage />} />
-          <Route path="101" element={<DoctorInfo />} />
-          <Route path="102" element={<DepartmentInfo />} />
-          <Route path="103" element={<HospitalInfo />} />
+          <Route path="mediInfo" element={<DoctorInfo />} />
+          <Route path="department" element={<DepartmentInfo />} />
+          <Route path="hospitalInfo" element={<HospitalInfo />} />
           <Route path="subcategory" element={<SubCategories />} />
+          <Route path="community/:page?" element={<Community />} />
+          <Route path="board/:boardId" element={<CommunityDetail />} />
+          <Route path="board/regist" element={<BoardRegist />} />
+          <Route path="board/update/:boardId" element={<BoardUpdate />} />
+          <Route path="faq/:page?" element={<Faq />} />
         </Route>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/empLogin" element={<EmployLogin />} />
         <Route path="/signUp" element={<SignUpPage />} />
         <Route path="/admin" element={<Admin />}>
-          <Route index element={<Home />} /> {/* 기본 페이지 */}
+          <Route index element={<AdminHome />} /> {/* 기본 페이지 */}
           <Route path="all" element={<AllUsersList />} />
           <Route path="patient" element={<PatientList />} />
           <Route path="doctor" element={<DoctorList />} />
+          <Route path="admin" element={<AdminList />} />
         </Route>
-        <Route path="/doctors" element={<Doctors />} />
-        {/*연동 안해놔서 임시로 그냥 화면에서 보려고 함*/}
-        <Route path="/doctors/userStateChange" element={<UserStateChange />} />
-        <Route path="/doctors/userClinicCheck" element={<UserClinicCheck />} />
-        <Route
-          path="/doctors/userReservationCheck"
-          element={<UserReservationCheck />}
-        />
+        {/*<Route path="/doctor" element={<Doctors />}>*/}
+        {/*  <Route index element={<DoctorHome />} />*/}
+        {/*  <Route path="list" element={<UserManagement />} />*/}
+        {/*  <Route path="clinic" element={<UserClinicCheck />} />*/}
+        {/*  <Route path="reserv" element={<UserReservationCheck />} />*/}
+        {/*  <Route path="state" element={<UserStateChange />} />*/}
+        {/*  <Route path="certificateList" element={<CertificateList />} />*/}
+        {/*  <Route path="certificate" element={<Certificates />} />*/}
+        {/*</Route>*/}
         <Route path="/payment" element={<Payment />} />
       </Routes>
     </BrowserRouter>

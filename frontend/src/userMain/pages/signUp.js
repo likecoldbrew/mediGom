@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import "../style/tailwind.css";
 import axios from "axios";
+import { Link } from "react-router-dom";
+import Post from "../components/Post.js";
 
 export default function SignUpPage() {
   const [formData, setFormData] = useState({
@@ -32,8 +34,6 @@ export default function SignUpPage() {
       ...prevState,
       [name]: value,
     }));
-
-    // Clear the error message for the corresponding field
     setErrorMessages((prevState) => ({
       ...prevState,
       [name]: "",
@@ -124,7 +124,6 @@ export default function SignUpPage() {
         `http://localhost:8080/api/users/check-id/${formData.id}`
       );
       setIsIdAvailable(response.data); // 응답이 true/false로 온다고 가정
-      console.log(response);
     } catch (error) {
       console.error("Error checking ID availability:", error);
       setIsIdAvailable(false);
@@ -135,26 +134,93 @@ export default function SignUpPage() {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const validationErrors = validateForm();
 
     if (Object.keys(validationErrors).length > 0) {
       setErrorMessages(validationErrors);
     } else {
-      console.log("Form submitted:", formData);
+      try {
+        const response = await axios.post(
+          "http://localhost:8080/api/users/register",
+          {
+            userId: formData.id,
+            userPass: formData.password,
+            userName: formData.name,
+            userRrn: `${formData.rrn1}-${formData.rrn2}`,
+            userAdd: formData.add,
+            userAdd2: formData.add2,
+            phone: formData.phone,
+            email: formData.email,
+          }
+        );
+
+        if (response.status === 201) {
+          console.log("User registered successfully:", response.data);
+          // Redirect or reset form here
+          setFormData({
+            userId: "",
+            userPass: "",
+            userName: "",
+            userRrn: "",
+            userAdd: "",
+            userAdd2: "",
+            phone: "",
+            email: "",
+          });
+          // Optionally navigate to another page
+        }
+      } catch (error) {
+        console.error("Error registering user:", error);
+        setErrorMessages((prev) => ({
+          ...prev,
+          id: "회원가입 중 오류가 발생했습니다.",
+        }));
+      }
     }
+  };
+
+  //다음 주소 api
+  const [enroll_company, setEnroll_company] = useState({
+    address: "",
+  });
+
+  const [popup, setPopup] = useState(false);
+
+  const handleInput = (e) => {
+    setEnroll_company({
+      ...enroll_company,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleComplete = (data) => {
+    const fullAddress = data.address;
+    setEnroll_company({
+      ...enroll_company,
+      address: fullAddress,
+    });
+
+    setFormData((prevState) => ({
+      ...prevState,
+      add: fullAddress,
+    }));
+
+    setPopup(!popup);
   };
 
   return (
     <div className="min-h-screen bg-gray-100">
       <div className="w-full bg-sky-100 py-2 border-y border-sky-200">
         <div className="container mx-auto px-4 flex items-center">
-          <img
-            src="/images/userMain/logo.png"
-            className="h-16 mr-2"
-            alt="logo"
-          />
+          <Link to="/" className="h-24">
+            <img
+              src="/images/userMain/logo.png"
+              className="h-16 mr-2"
+              alt="logo"
+            />
+          </Link>
           <p className="text-lg font-bold">
             medi<span className="text-yellow-500">Gom</span>
           </p>
@@ -200,12 +266,12 @@ export default function SignUpPage() {
                     type="text"
                     placeholder="영문과 숫자만 입력해주세요."
                     required
-                    className="appearance-none block w-3/4 px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    className="appearance-none block w-2/3 px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                     onChange={handleChange}
                   />
                   <button
                     type="button"
-                    className="ml-3 inline-flex items-center justify-center w-1/4 px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-sky-500 hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    className="ml-3 inline-flex items-center justify-center w-1/3 px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-sky-500 hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                     onClick={checkIdAvailability}
                   >
                     중복 확인
@@ -241,11 +307,11 @@ export default function SignUpPage() {
                     id="password"
                     name="password"
                     type="password"
+                    placeholder="8자 이상, 영문+숫자+특수문자 포함해주세요."
                     required
                     className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                     onChange={handleChange}
                   />
-
                   {errorMessages.password && (
                     <p className="text-red-600 text-sm">
                       {errorMessages.password}
@@ -270,7 +336,6 @@ export default function SignUpPage() {
                     className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                     onChange={handleChange}
                   />
-
                   {errorMessages.confirmPassword && (
                     <p className="text-red-600 text-sm">
                       {errorMessages.confirmPassword}
@@ -392,7 +457,6 @@ export default function SignUpPage() {
                     className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                     onChange={handleChange}
                   />
-
                   {errorMessages.email && (
                     <p className="text-red-600 text-sm">
                       {errorMessages.email}
@@ -408,22 +472,30 @@ export default function SignUpPage() {
                 >
                   주소
                 </label>
-
                 <div className="mt-1 flex rounded-md shadow-sm">
                   <input
                     id="add"
                     name="add"
                     type="text"
-                    required
-                    className="appearance-none w-3/4 block px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    value={enroll_company.address}
                     onChange={handleChange}
+                    className="flex-1 focus:ring-blue-500 focus:border-blue-500 block w-full rounded-md sm:text-sm border-gray-300"
+                    placeholder="주소를 입력하세요"
                   />
                   <button
                     type="button"
-                    className="ml-3 inline-flex items-center justify-center w-1/4 px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-sky-500 hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    onClick={() => setPopup(true)}
+                    className="w-1/4 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-500"
                   >
                     찾기
                   </button>
+                  {popup && (
+                    <Post
+                      handleComplete={handleComplete}
+                      company={enroll_company}
+                      setcompany={setEnroll_company}
+                    />
+                  )}
                 </div>
               </div>
 

@@ -6,7 +6,6 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "categories_admin")  // 테이블 이름을 명시
 @Data
 public class AdminCategory {
     @Id
@@ -14,8 +13,9 @@ public class AdminCategory {
     private int categoryId;
     private String name;
     private Integer parentId; // 부모 카테고리 ID
-    private String userYN;
+    private String useYn;
     private int categoryOrder;
+    private String urlName;
 
     // 하위 카테고리 저장 필드
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "parentCategory")
