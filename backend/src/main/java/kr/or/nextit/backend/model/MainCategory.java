@@ -13,9 +13,7 @@ public class MainCategory {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // IDENTITY 전략 사용
     private int categoryId;
     private String name;
-    private Integer parentId; // 부모 카테고리 ID
-
-    private int order;
+    private int parentId; // 부모 카테고리 ID
     private String useYn;
     private int categoryOrder;
     private String urlName;
