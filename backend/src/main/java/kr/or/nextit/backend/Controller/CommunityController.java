@@ -57,11 +57,13 @@ public class CommunityController {
             @PathVariable int boardId,
             @RequestParam("title") String title,
             @RequestParam("content") String content,
-            @RequestParam(value = "file", required = false) MultipartFile[] files) {
+            @RequestParam("userId") String userId,
+            @RequestParam(value = "files", required = false) MultipartFile[] files) {
         Community boardDTO = new Community();
         boardDTO.setBoardId(boardId);
         boardDTO.setTitle(title);
         boardDTO.setContent(content);
+        boardDTO.setUserId(userId);
 
         // 첨부파일 처리 (업로드, DB에 저장 등)
         if (files != null &&  files.length > 0) {

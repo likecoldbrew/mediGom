@@ -58,7 +58,7 @@ const Community = () => {
   };
 
   //한 페이지당 게시글 수
-  const itemsPerPage = 2; // 페이지당 항목 수
+  const itemsPerPage = 10; // 페이지당 항목 수
 
   // 현재 페이지에 해당하는 항목 계산
   const indexOfLastItem = currentPage * itemsPerPage;

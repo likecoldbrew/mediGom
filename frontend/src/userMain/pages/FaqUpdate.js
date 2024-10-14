@@ -4,7 +4,7 @@ import SubCategories from "../components/SubCategory";
 import QuickMenu from "../components/QuickMenu";
 import ChatBot from "../components/ChatBot";
 
-const BoardUpdate = () => {
+const FaqUpdate = () => {
   const { boardId } = useParams(); // URL에서 boardId 가져오기 (선택적)
   const navigate = useNavigate();
   const location = useLocation();
@@ -17,10 +17,10 @@ const BoardUpdate = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    fetchBoardDetail();
+    fetchFaqDetail();
   }, [boardId]);
 
-  const fetchBoardDetail = async () => {
+  const fetchFaqDetail = async () => {
     try {
       const response = await fetch(`/api/board/detail?boardId=${boardId}`);
       const data = await response.json();
@@ -184,4 +184,4 @@ const BoardUpdate = () => {
   );
 };
 
-export default BoardUpdate;
+export default FaqUpdate;

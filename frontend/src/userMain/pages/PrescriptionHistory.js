@@ -4,7 +4,7 @@ import QuickMenu from "../components/QuickMenu";
 import SubCategories from "../components/SubCategory";
 import ChatBot from "../components/ChatBot";
 
-const Faq = () => {
+const PrescriptionHistory = () => {
   const { subcategory } = useParams();
   const { page } = useParams();
   const location = useLocation();
@@ -20,15 +20,6 @@ const Faq = () => {
   useEffect(() => {
     fetchFaqs();
   }, []);
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
-  // URL에서 page가 변경될 때 currentPage 업데이트
-  useEffect(() => {
-    setCurrentPage(Number(page) || 1);
-  }, [page]);
 
   // FAQ 정보 호출
   const fetchFaqs = async () => {
@@ -92,16 +83,6 @@ const Faq = () => {
                       <hr className="border-t border-sky-200 mb-4 mt-4" />{" "}
                       {/* 구분선 추가 */}
                       <p className="text-gray-600">{faq.answer}</p>
-                      <Link
-                        to={`/faq/update`} // 목록 페이지로 돌아가기
-                        state={{ selectCategory, selectSubCategory }}
-                      >
-                        <div className="flex justify-end">
-                          <button className="px-4 mt-8 hover:bg-sky-200 hover:font-bold py-2 border rounded-md bg-white text-blue-500 disabled:text-gray-300">
-                            수정하기
-                          </button>
-                        </div>
-                      </Link>
                     </>
                   )}
                 </div>
@@ -162,4 +143,4 @@ const Faq = () => {
   );
 };
 
-export default Faq;
+export default PrescriptionHistory;

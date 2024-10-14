@@ -22,5 +22,13 @@ public class FaqService {
         return faqMapper.selectAllFaq();
     }
 
+    public List<Faq> selectFaq(int faqId) {
+        return faqMapper.selectFaq(faqId);
+    }
+    public void insertFaq(Faq faq) {
+        faqMapper.insertFaq(faq); // 게시글 업데이트 호출
+    }
+
+
 
 }

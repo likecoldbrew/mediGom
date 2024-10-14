@@ -10,5 +10,8 @@ import java.util.List;
 @Mapper
 public interface FaqMapper {
     List<Faq> selectAllFaq();
+    List<Faq> selectFaq(int faqId);
+    void insertFaq(Faq faq);
+
 }
 

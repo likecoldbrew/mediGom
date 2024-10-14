@@ -49,6 +49,7 @@
                 b.user_no = u.user_no
         WHERE b.board_id=#{boardId}
     </select>
+
     <!-- 게시글 등록 -->
     <insert id="insertBoard" parameterType="kr.or.nextit.backend.model.Community">
         INSERT INTO board (user_no, title, content, create_at, views, status)
@@ -67,7 +68,6 @@
             SET
                 b.title = #{title},
                 b.content = #{content},
-                b.create_at = NOW(),
                 b.update_at = NOW(),
                 b.views = #{views},
                 u.user_id = #{userId}

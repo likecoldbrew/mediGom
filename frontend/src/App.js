@@ -30,6 +30,8 @@ import CommunityDetail from "./userMain/pages/CommunityDetail";
 import BoardRegist from "./userMain/pages/BoardRegist";
 import BoardUpdate from "./userMain/pages/BoardUpdate";
 import Faq from "./userMain/pages/Faq";
+import CategoryContainer from "./userMain/container/CategoryContainer";
+import BoardContainer from "./userMain/container/BoardContainer";
 
 function App() {
   return (
@@ -37,15 +39,13 @@ function App() {
       <Routes>
         <Route path="/" element={<UserMain />}>
           <Route index element={<MainPage />} />
-          <Route path="mediInfo" element={<DoctorInfo />} />
-          <Route path="department" element={<DepartmentInfo />} />
-          <Route path="hospitalInfo" element={<HospitalInfo />} />
-          <Route path="subcategory" element={<SubCategories />} />
-          <Route path="community/:page?" element={<Community />} />
-          <Route path="board/:boardId" element={<CommunityDetail />} />
-          <Route path="board/regist" element={<BoardRegist />} />
-          <Route path="board/update/:boardId" element={<BoardUpdate />} />
-          <Route path="faq/:page?" element={<Faq />} />
+          <Route path="board/:boardId" element={<BoardContainer />} />
+          <Route path="board/:action/:boardId" element={<BoardContainer />} />
+          <Route path=":urlName/:page?" element={<CategoryContainer />} />
+          <Route
+            path=":urlName/:action?/:page?"
+            element={<CategoryContainer />}
+          />
         </Route>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/empLogin" element={<EmployLogin />} />
