@@ -1,14 +1,14 @@
 import React from "react";
 import { useParams, useLocation } from "react-router-dom";
-import SubCategories from "../components/SubCategory";
-import DoctorInfo from "../pages/DoctorInfo";
-import DepartmentInfo from "../pages/DepartmentInfo";
-import HospitalInfo from "../pages/HospitalInfo";
-import Community from "../pages/Community";
+import SubCategories from "../../components/SubCategory";
+import DoctorInfo from "../DoctorInfo";
+import DepartmentInfo from "../DepartmentInfo";
+import HospitalInfo from "../HospitalInfo";
+import Community from "../Community";
 
-import Faq from "../pages/Faq";
-import FaqRegist from "../pages/FaqRegist";
-import FaqUpdate from "../pages/FaqUpdate";
+import Faq from "../Faq";
+import FaqRegist from "../FaqRegist";
+import FaqUpdate from "../FaqUpdate";
 
 const CategoryContainer = () => {
   const { urlName, page, action, faqId } = useParams();
