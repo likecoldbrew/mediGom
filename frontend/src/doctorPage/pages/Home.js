@@ -71,7 +71,7 @@ export const Home = () => {
                         <button onClick={prevMonth} className="p-2 rounded-full hover:bg-gray-200">
                             <ChevronLeft size={20}/>
                         </button>
-                    <h2 className="text-xl font-bold">진료일정 {currentMonth.getMonth() + 1}월</h2>
+                        <h2 className="text-xl font-bold">진료일정 {currentMonth.getMonth() + 1}월</h2>
                         <button onClick={nextMonth} className="p-2 rounded-full hover:bg-gray-200">
                             <ChevronRight size={20}/>
                         </button>
