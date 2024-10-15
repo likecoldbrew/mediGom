@@ -71,7 +71,7 @@ const Community = () => {
   // 페이지 변경 핸들러
   const handlePageChange = (pageNumber) => {
     // 페이지 번호와 함께 selectCategory와 selectSubCategory를 state로 전달
-    navigate(`/community/${pageNumber}`, {
+    navigate(`/notification/page/${pageNumber}`, {
       state: { selectCategory, selectSubCategory },
     });
   };
@@ -134,7 +134,7 @@ const Community = () => {
                       </td>
                       <td className="px-4 py-2 text-center h-12">
                         <Link
-                          to={`/board/${board.boardId}`} // 제목 클릭 시 이동할 경로
+                          to={`/notification/board/${board.boardId}`} // 제목 클릭 시 이동할 경로
                           state={{ selectCategory, selectSubCategory }} // 카테고리 값 넘겨주기
                           className="text-blue-500 hover:underline"
                         >
@@ -159,7 +159,7 @@ const Community = () => {
             </div>
             <div className="flex justify-end">
               <Link
-                to={`/board/regist`} // 목록 페이지로 돌아가기
+                to={`/notification/regist`}
                 state={{ selectCategory, selectSubCategory }}
                 className="text-sky-600 hover:underline mr-4"
               >
