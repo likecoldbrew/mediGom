@@ -45,7 +45,6 @@ function App() {
             path=":urlName/:action?/:page?"
             element={<CategoryContainer />}
           />
-          {/*<Route path=":urlName/:page" element={<CategoryContainer />} />*/}
         </Route>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/empLogin" element={<EmployLogin />} />
