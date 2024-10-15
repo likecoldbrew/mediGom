@@ -6,19 +6,19 @@ import {
   useLocation,
   Route,
 } from "react-router-dom";
-import SubCategories from "../components/SubCategory";
-import QuickMenu from "../components/QuickMenu";
-import ChatBot from "../components/ChatBot";
-import UserMain from "../index";
-import MainPage from "../pages/MainPage";
-import DoctorInfo from "../pages/DoctorInfo";
-import DepartmentInfo from "../pages/DepartmentInfo";
-import HospitalInfo from "../pages/HospitalInfo";
-import Community from "../pages/Community";
-import CommunityDetail from "../pages/CommunityDetail";
-import BoardRegist from "../pages/BoardRegist";
-import BoardUpdate from "../pages/BoardUpdate";
-import Faq from "../pages/Faq";
+import SubCategories from "../../components/SubCategory";
+import QuickMenu from "../../components/QuickMenu";
+import ChatBot from "../../components/ChatBot";
+import UserMain from "../../index";
+import MainPage from "../MainPage";
+import DoctorInfo from "../DoctorInfo";
+import DepartmentInfo from "../DepartmentInfo";
+import HospitalInfo from "../HospitalInfo";
+import Community from "../Community";
+import CommunityDetail from "../CommunityDetail";
+import BoardRegist from "../BoardRegist";
+import BoardUpdate from "../BoardUpdate";
+import Faq from "../Faq";
 
 const BoardContainer = () => {
   const { boardId, action } = useParams();

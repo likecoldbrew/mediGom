@@ -53,7 +53,7 @@ const Faq = () => {
   const totalPages = Math.ceil(faqs.length / itemsPerPage);
 
   const handlePageChange = (pageNumber) => {
-    navigate(`/faq/${pageNumber}`, {
+    navigate(`/faq/page/${pageNumber}`, {
       state: { selectCategory, selectSubCategory },
     });
   };

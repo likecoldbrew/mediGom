@@ -30,8 +30,8 @@ import CommunityDetail from "./userMain/pages/CommunityDetail";
 import BoardRegist from "./userMain/pages/BoardRegist";
 import BoardUpdate from "./userMain/pages/BoardUpdate";
 import Faq from "./userMain/pages/Faq";
-import CategoryContainer from "./userMain/container/CategoryContainer";
-import BoardContainer from "./userMain/container/BoardContainer";
+import CategoryContainer from "./userMain/pages/list/CategoryContainer";
+import BoardContainer from "./userMain/pages/list/BoardContainer";
 
 function App() {
   return (
@@ -41,11 +41,11 @@ function App() {
           <Route index element={<MainPage />} />
           <Route path="board/:boardId" element={<BoardContainer />} />
           <Route path="board/:action/:boardId" element={<BoardContainer />} />
-          <Route path=":urlName/:page?" element={<CategoryContainer />} />
           <Route
             path=":urlName/:action?/:page?"
             element={<CategoryContainer />}
           />
+          {/*<Route path=":urlName/:page" element={<CategoryContainer />} />*/}
         </Route>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/empLogin" element={<EmployLogin />} />
