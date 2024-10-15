@@ -21,5 +21,9 @@ public class InquiriesController {
     public List<Inquiries> getAllBoards() {
         return inquiriesService.allInquiries();
     }
-
+    //특정 문의글
+    @GetMapping("/detail")
+    public List<Inquiries> selectInquiries(int inquirieId) {
+        return inquiriesService.selectInquiries(inquirieId);
+    }
 }

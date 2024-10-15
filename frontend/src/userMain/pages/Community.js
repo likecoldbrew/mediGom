@@ -164,7 +164,7 @@ const Community = () => {
                 className="text-sky-600 hover:underline mr-4"
               >
                 <button className="px-4 hover:bg-sky-200 hover:font-bold py-2 border rounded-md bg-white  text-blue-500 disabled:text-gray-300">
-                  후기 등록하기
+                  후기 등록
                 </button>
               </Link>
             </div>

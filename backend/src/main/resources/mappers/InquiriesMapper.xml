@@ -34,4 +34,23 @@
             ON
                 i.user_no = u.user_no
     </select>
+    <!-- 특정 문의글 조회  -->
+    <select id="selectInquiries" parameterType="int" resultMap="InquiriesResultMap">
+        SELECT
+            i.inquirie_id,
+            i.type,
+            i.title,
+            i.content,
+            i.create_at,
+            i.status,
+            i.answer,
+            u.user_id
+        FROM
+            inquiries i
+                JOIN
+            users u
+            ON
+                i.user_no = u.user_no
+        WHERE inquirie_id=#{inquirieId}
+    </select>
 </mapper>

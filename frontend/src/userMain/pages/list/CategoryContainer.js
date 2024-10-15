@@ -17,6 +17,7 @@ import NotificationDetail from "../NotificationDetail";
 import NotificationUpdate from "../NotificationUpdate";
 import Inquiries from "../Inquiries";
 import InquiriesDetail from "../InquiriesDetail";
+import InquiriesRegist from "../InquiriesRegist";
 
 const CategoryContainer = () => {
   const { urlName, page, action } = useParams();
@@ -63,7 +64,10 @@ const CategoryContainer = () => {
       return <Notification page={page} />;
     case "inquiry":
       if (action === "detail") {
-        return <InquiriesDetail boardId={page} />;
+        return <InquiriesDetail inquirieId={page} />;
+      }
+      if (action === "register") {
+        return <InquiriesRegist inquirieId={page} />;
       }
       return <Inquiries page={page} />;
     default:

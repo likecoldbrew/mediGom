@@ -143,8 +143,10 @@ const Inquiries = () => {
                     <td className="px-4 py-2 text-center h-12">
                       {inquiries.type}
                     </td>
-                    <td className="px-4 py-2 text-center h-12">
+                    <td className="px-4 py-2 text-center  h-12">
+                      <div className="bg-red-100 rounded-[10px] inline-block px-4 py-1" >
                       {inquiries.status==="WAIT"? "대기중":"답변완료"}
+                      </div>
                     </td>
                     <td className="px-4 py-2 text-center h-12">
                       {inquiries.createAt}
@@ -161,7 +163,7 @@ const Inquiries = () => {
                 className="text-sky-600 hover:underline mr-4"
               >
                 <button className="px-4 hover:bg-sky-200 hover:font-bold py-2 border rounded-md bg-white  text-blue-500 disabled:text-gray-300">
-                  1대1 문의 등록하기
+                  1대1 문의 등록
                 </button>
               </Link>
             </div>

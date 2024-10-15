@@ -9,6 +9,7 @@ import java.util.List;
 @Data
 public class DoctorInfoDTO {
     private String userName;        // 의사 이름
+    private String userNo;        // 의사 번호
     private List<String> userNames; // 의사 이름 리스트
     private String departmentName;  // 진료과 이름
     private List<String> treatments; // 진료 분야 리스트

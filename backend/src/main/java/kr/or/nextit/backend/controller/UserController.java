@@ -47,7 +47,6 @@ public class UserController {
     @GetMapping("/{id}")
     public Map<String, Object> getUserById(@PathVariable("id") int userNo) {
         Map<String, Object> response = new HashMap<>();
-
         User user = userService.getUserById(userNo);
         response.put("user", user);
 
@@ -55,7 +54,6 @@ public class UserController {
             response.put("education", doctorInfoService.getDoctorEducation(userNo));
             response.put("career", doctorInfoService.getDoctorCareer(userNo));
         }
-
         return response;
     }
 

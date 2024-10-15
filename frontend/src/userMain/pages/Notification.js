@@ -102,7 +102,7 @@ const Notification = () => {
                     </th>
                     <th
                       className="px-4 py-2 text-center h-12"
-                      style={{ width: "300px" }}
+                      style={{ width: "500px" }}
                     >
                       제목
                     </th>
@@ -146,7 +146,7 @@ const Notification = () => {
                 className="text-sky-600 hover:underline mr-4"
               >
                 <button className="px-4 hover:bg-sky-200 hover:font-bold py-2 border rounded-md bg-white  text-blue-500 disabled:text-gray-300">
-                  공지사항 등록하기
+                  공지사항 등록
                 </button>
               </Link>
             </div>

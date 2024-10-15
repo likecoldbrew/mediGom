@@ -20,4 +20,9 @@ public class InquiriesService {
     public List<Inquiries> allInquiries() {
         return inquiriesMapper.allInquiries();
     }
+    //특정 문의글 조회
+    public List<Inquiries> selectInquiries(int inquirieId) {
+        return inquiriesMapper.selectInquiries(inquirieId);
+    }
+
 }
