@@ -16,7 +16,7 @@ const Inquiries = () => {
   // API 호출
   useEffect(() => {
     fetchInquiries();
-  }, []);
+  }, [currentPage]);
 
   //페이지 이동시 화면 맨위로 이동
   useEffect(() => {
@@ -33,13 +33,12 @@ const Inquiries = () => {
     try {
       const response = await fetch("/api/inquiries/all");
       const data = await response.json();
-
+      console.log("1대1문의",data)
       // 날짜 포맷 변환
       const formattedData = data.map((inquiries) => ({
         ...inquiries,
         createAt: formatDate(inquiries.createAt), // 날짜 포맷 변경
       }));
-
       setInquiries(formattedData); // 변환된 데이터로 상태 업데이트
       setLoading(false); // 로딩 완료
     } catch (error) {
@@ -58,7 +57,7 @@ const Inquiries = () => {
   };
 
   //한 페이지당 게시글 수
-  const itemsPerPage = 2; // 페이지당 항목 수
+  const itemsPerPage = 10; // 페이지당 항목 수
 
   // 현재 페이지에 해당하는 항목 계산
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -71,7 +70,7 @@ const Inquiries = () => {
   // 페이지 변경 핸들러
   const handlePageChange = (pageNumber) => {
     // 페이지 번호와 함께 selectCategory와 selectSubCategory를 state로 전달
-    navigate(`/inquiries/page/${pageNumber}`, {
+    navigate(`/inquiry/page/${pageNumber}`, {
       state: { selectCategory, selectSubCategory },
     });
   };
@@ -98,31 +97,31 @@ const Inquiries = () => {
                     className="px-4 py-2 text-center h-12"
                     style={{ width: "80px" }}
                   >
-                    문의 번호
+                    번호
                   </th>
                   <th
                     className="px-4 py-2 text-center h-12"
-                    style={{ width: "300px" }}
+                    style={{ width: "500px" }}
                   >
                     제목
                   </th>
                   <th
                     className="px-4 py-2 text-center h-12"
-                    style={{ width: "80px" }}
+                    style={{ width: "300px" }}
                   >
-                    문의 유형
+                    유형
                   </th>
                   <th
                     className="px-4 py-2 text-center h-12"
-                    style={{ width: "300px" }}
+                    style={{ width: "150px" }}
                   >
                     답변 상태
                   </th>
                   <th
                     className="px-4 py-2 text-center h-12"
-                    style={{ width: "120px" }}
+                    style={{ width: "150px" }}
                   >
-                    작성일자
+                    작성일
                   </th>
                 </tr>
                 </thead>
@@ -145,10 +144,10 @@ const Inquiries = () => {
                       {inquiries.type}
                     </td>
                     <td className="px-4 py-2 text-center h-12">
-                      {inquiries.status}
+                      {inquiries.status==="WAIT"? "대기중":"답변완료"}
                     </td>
                     <td className="px-4 py-2 text-center h-12">
-                      {inquiries.createdAt}
+                      {inquiries.createAt}
                     </td>
                   </tr>
                 ))}
@@ -157,7 +156,7 @@ const Inquiries = () => {
             </div>
             <div className="flex justify-end">
               <Link
-                to={`/inquiries/register`} // 목록 페이지로 돌아가기
+                to={`/inquiries/register`}
                 state={{ selectCategory, selectSubCategory }}
                 className="text-sky-600 hover:underline mr-4"
               >

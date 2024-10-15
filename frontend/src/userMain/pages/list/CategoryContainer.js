@@ -16,6 +16,7 @@ import NotificationRegist from "../NotificationRegist";
 import NotificationDetail from "../NotificationDetail";
 import NotificationUpdate from "../NotificationUpdate";
 import Inquiries from "../Inquiries";
+import InquiriesDetail from "../InquiriesDetail";
 
 const CategoryContainer = () => {
   const { urlName, page, action } = useParams();
@@ -61,15 +62,9 @@ const CategoryContainer = () => {
       }
       return <Notification page={page} />;
     case "inquiry":
-      // if (action === "register") {
-      //   return <NotificationRegist />;
-      // }
-      // if (action === "detail") {
-      //   return <NotificationDetail boardId={page} />;
-      // }
-      // if (action === "update") {
-      //   return <NotificationUpdate boardId={page} />;
-      // }
+      if (action === "detail") {
+        return <InquiriesDetail boardId={page} />;
+      }
       return <Inquiries page={page} />;
     default:
       return <div>Category not found</div>;

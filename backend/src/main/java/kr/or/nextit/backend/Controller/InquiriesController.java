@@ -15,7 +15,6 @@ import java.util.List;
 @RequestMapping("/api/inquiries")
 @RequiredArgsConstructor
 public class InquiriesController {
-
     private final InquiriesService inquiriesService;
     //전체 문의사항
     @GetMapping("/all")

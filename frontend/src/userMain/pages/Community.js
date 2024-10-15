@@ -159,7 +159,7 @@ const Community = () => {
             </div>
             <div className="flex justify-end">
               <Link
-                to={`/board/register`} // 목록 페이지로 돌아가기
+                to={`/board/register`}
                 state={{ selectCategory, selectSubCategory }}
                 className="text-sky-600 hover:underline mr-4"
               >

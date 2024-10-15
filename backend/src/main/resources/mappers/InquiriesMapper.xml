@@ -11,7 +11,7 @@
         <result property="content" column="content"/>
         <result property="createAt" column="create_at"/>
         <result property="status" column="status"/>
-        <result property="answer " column="answer "/>
+        <result property="answer " column="answer"/>
         <result property="userId" column="user_id"/>
         <result property="admin" column="admin"/>
     </resultMap>

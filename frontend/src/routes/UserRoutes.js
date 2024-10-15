@@ -13,7 +13,6 @@ function UserRoutes() {
       <Routes>
         <Route path="/" element={<UserMain />}>
           <Route index element={<MainPage />} />
-          <Route path="/:urlName" element={<CategoryContainer />} />
           <Route
             path=":urlName/:action?/:page?"
             element={<CategoryContainer />}
