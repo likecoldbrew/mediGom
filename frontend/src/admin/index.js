@@ -1,13 +1,11 @@
 import React from "react";
 import SidebarAndNavbar from "./components/Sidebar";
 
-const Admin = () => {
+function Admin()  {
   return (
-    <>
       <div>
         <SidebarAndNavbar />
       </div>
-    </>
   );
 };
 

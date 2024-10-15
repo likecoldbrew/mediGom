@@ -9,8 +9,8 @@ function AppRoutes() {
   return (
     <Routes>
       <Route path="/*" element={<UserRoutes />} />
-      <Route path="/*" element={<AdminRoutes />} />
-      <Route path="/*" element={<DoctorRoutes />} />
+      <Route path="/admin/*" element={<AdminRoutes />} />
+      <Route path="/doctor/*" element={<DoctorRoutes />} />
       <Route path="/payment" element={<Payment />} />
     </Routes>
   );

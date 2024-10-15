@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Routes } from "react-router-dom"; // Routes도 import
+import { Route, Routes } from "react-router-dom";
 import UserMain from "../userMain/index";
 import MainPage from "../userMain/pages/MainPage";
 import DoctorInfo from "../userMain/pages/DoctorInfo";

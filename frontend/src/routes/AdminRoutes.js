@@ -8,7 +8,7 @@ import DetailContainer from "../admin/components/DetailContainer";
 function AdminRoutes() {
   return (
     <Routes>
-    <Route path="/admin" element={<Admin />}>
+    <Route path="/" element={<Admin />}>
       <Route index element={<Home />} />
       <Route path="list/:type" element={<ListContainer />} />
       <Route path="users/:userNo" element={<DetailContainer />} />
