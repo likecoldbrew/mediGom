@@ -3,7 +3,6 @@ package kr.or.nextit.backend.service;
 
 import kr.or.nextit.backend.mapper.DoctorInfoMapper;
 import kr.or.nextit.backend.model.DoctorInfoDTO;
-import kr.or.nextit.backend.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
