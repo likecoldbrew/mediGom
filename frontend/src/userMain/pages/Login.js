@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "../style/tailwind.css";
+import Footer from "../components/Footer";
 
 export default function LoginPage() {
   const [formData, setFormData] = useState({
@@ -26,24 +27,28 @@ export default function LoginPage() {
     <div className="flex flex-col min-h-screen bg-gray-100">
       <header className="w-full bg-sky-100 py-2 border-y border-sky-200">
         <div className="container mx-auto px-4 flex items-center">
+          <Link to="/" className="h-24">
           <img
             src="/images/userMain/logo.png"
             className="h-16 mr-2"
             alt="logo"
           />
+          </Link>
           <p className="text-lg font-bold">
             medi<span className="text-yellow-500">Gom</span>
           </p>
         </div>
       </header>
-      <div className="flex flex-col lg:flex-row justify-center items-center py-12 sm:px-6 lg:px-8">
+      <div className="flex-grow flex flex-col lg:flex-row justify-center items-center py-12 sm:px-6 lg:px-8">
         <div className="lg:w-1/4 mb-8 lg:mb-0 lg:pr-8">
           <div className="bg-green-100 rounded-full p-8 max-w-md mx-auto relative">
+            <Link to="/" className="h-24">
             <img
               src="/images/userMain/logo.png"
               alt="logo"
               className="w-full h-auto"
             />
+            </Link>
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="bg-sky-100 bg-opacity-75 px-4 py-2 rounded-lg">
                 <p className="text-xl font-bold ttext-blue-900 text-center">
@@ -149,19 +154,7 @@ export default function LoginPage() {
           </div>
         </div>
       </div>
-      <footer className="w-full bg-sky-100 text-sky-800 py-4 mt-auto">
-        <div className="container mx-auto px-4 flex items-center justify-center">
-          <img
-            src="/images/userMain/logo.png"
-            className="h-16 mr-4"
-            alt="logo"
-          />
-          <div className="text-center">
-            <p>주소주소 대표전화: 1555-1234</p>
-            <p>&copy; 2024 mediGom. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
+        <Footer/>
     </div>
   );
 }

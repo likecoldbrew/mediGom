@@ -23,7 +23,9 @@ const Footer = () => {
   return (
     <footer className=" bg-sky-100 text-sky-800 py-4 mt-1">
       <div className="container mx-auto px-4 flex items-center justify-center">
+        <Link to="/" className="h-24">
         <img src="/images/userMain/logo.png" className="h-24 mr-4" alt="logo" />
+        </Link>
         <div className="text-center">
           {hospital.length > 0 ? (
             <p className="inline-block mr-3">
