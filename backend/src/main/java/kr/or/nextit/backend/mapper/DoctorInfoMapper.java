@@ -13,5 +13,10 @@ public interface DoctorInfoMapper {
     List<DoctorInfoDTO> searchDoctors(String searchTerm); //이름으로 의사 조회
     List<DoctorInfoDTO> searchDepartment(String departmentName); // 진료과 이름으로 의사 조회
 
+    // 의사 경력 조회
+    List<DoctorInfoDTO> getDoctorCareer(int userNo);
+
+    // 의사 학력 조회
+    List<DoctorInfoDTO> getDoctorEducation(int userNo);
 }
 

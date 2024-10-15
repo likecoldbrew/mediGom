@@ -2,8 +2,10 @@ package kr.or.nextit.backend.service;
 
 import kr.or.nextit.backend.mapper.AdminCategoryMapper;
 import kr.or.nextit.backend.model.AdminCategory;
+import kr.or.nextit.backend.model.Category;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
@@ -21,5 +23,4 @@ public class AdminCategoryService {
         }
         return topCategories;
     }
-
 }
