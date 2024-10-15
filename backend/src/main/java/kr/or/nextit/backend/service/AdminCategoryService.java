@@ -4,7 +4,6 @@ import kr.or.nextit.backend.mapper.AdminCategoryMapper;
 import kr.or.nextit.backend.model.AdminCategory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service

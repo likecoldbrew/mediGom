@@ -96,7 +96,7 @@ const PharmacyMap = () => {
     <Map
       center={hospitalCoords || { lat: 37.566826, lng: 126.9786567 }} // 병원 좌표가 없으면 기본값 사용
       style={{
-        width: "80%",
+        width: "100%",
         height: "450px",
       }}
       level={3}

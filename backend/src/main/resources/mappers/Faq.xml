@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.nextit.backend.mapper.FaqMapper">
+    <!-- 전체 FAQ 조회 -->
+    <select id="selectAllFaq" resultType="kr.or.nextit.backend.model.Faq">
+        SELECT faq_id, question, answer, status
+        FROM faq_board;
+    </select>
+
+    <!-- 특젇 FAQ 조회 -->
+    <select id="selectFaq" parameterType="int" resultType="kr.or.nextit.backend.model.Faq">
+        SELECT faq_id, question, answer, status
+        FROM faq_board;
+        WHERE  faq_id=#{faqId}
+    </select>
+
+
+    <!-- FAQ 등록 -->
+    <select id="insertFaq" parameterType="kr.or.nextit.backend.model.Faq">
+        INSERT INTO faq_board (faq_id, question, answer, status)
+        VALUES (#{faqId}, #{question}, #{answer}, 'Y');
+    </select>
+
+
+</mapper>

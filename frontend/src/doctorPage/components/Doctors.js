@@ -3,24 +3,14 @@ import {
   Calendar,
   FileText,
   Folder,
-  Users,
   Mail,
-  Map,
-  PieChart,
   Settings as FeatherSettings,
-  File,
-  Anchor,
   User,
-  Aperture,
   FolderPlus,
-  MinusCircle,
-  LogIn,
   LogOut,
-  UserCheck,
   Smile,
-  UserX,
 } from "react-feather";
-import { Settings, MessageSquare, Bell, Menu } from "lucide-react";
+import { MessageSquare, Bell, Menu } from "lucide-react";
 import { Home } from "../pages/Home";
 
 const SidebarAndNavbar = () => {
