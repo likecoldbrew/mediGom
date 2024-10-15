@@ -28,6 +28,7 @@ const Faq = () => {
   // URL에서 page가 변경될 때 currentPage 업데이트
   useEffect(() => {
     setCurrentPage(Number(page) || 1);
+    setExpandedIndex(null); // 페이지 변경 시 expandedIndex 초기화
   }, [page]);
 
   // FAQ 정보 호출
@@ -53,7 +54,7 @@ const Faq = () => {
   const totalPages = Math.ceil(faqs.length / itemsPerPage);
 
   const handlePageChange = (pageNumber) => {
-    navigate(`/faq/${pageNumber}`, {
+    navigate(`/faq/page/${pageNumber}`, {
       state: { selectCategory, selectSubCategory },
     });
   };

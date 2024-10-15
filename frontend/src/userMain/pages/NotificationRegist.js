@@ -4,7 +4,7 @@ import SubCategories from "../components/SubCategory";
 import QuickMenu from "../components/QuickMenu";
 import ChatBot from "../components/ChatBot";
 
-const BoardRegist = () => {
+const NotificationRegist = () => {
   const { boardId } = useParams(); // URL에서 boardId 가져오기 (선택적)
   const navigate = useNavigate();
   const location = useLocation();
@@ -64,7 +64,7 @@ const BoardRegist = () => {
       if (response.ok) {
         // 게시글 등록 성공 시
         alert("게시글이 등록되었습니다.");
-        navigate("/community",  {
+        navigate("/notice", {
           state: {
             selectCategory,
             selectSubCategory
@@ -134,7 +134,7 @@ const BoardRegist = () => {
             </div>
             <div className="flex justify-end items-center">
               <Link
-                to={`/community/1`} // 목록 페이지로 돌아가기
+                to={`/notice`} // 목록 페이지로 돌아가기
                 state={{ selectCategory, selectSubCategory }}
                 className="text-sky-600 hover:underline mr-4"
               >
@@ -159,4 +159,4 @@ const BoardRegist = () => {
   );
 };
 
-export default BoardRegist;
+export default NotificationRegist;

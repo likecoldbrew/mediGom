@@ -17,17 +17,26 @@ import java.util.List;
 public class CommunityController {
 
     private final CommunityService communityService;
-
+    //전체 후기글
     @GetMapping("/all")
     public List<Community> getAllBoards() {
         return communityService.getAllBoardsWithUser();
     }
-
+    //특정 후기글
     @GetMapping("/detail")
     public List<Community> selectBoard(int boardId) {
         return communityService.selectBoard(boardId);
     }
-
+    //전체 공지사항
+    @GetMapping("/allNotice")
+    public List<Community> getAllNotices() {
+        return communityService.getAllBoardsWithAdmin();
+    }
+    //특정 공지사항
+    @GetMapping("/detailNotice")
+    public List<Community> selectNotice(int boardId) {
+        return communityService.selectNotice(boardId);
+    }
     // 게시글 등록
     @PostMapping(value = "/register", consumes = "multipart/form-data")
     public ResponseEntity<String> registerBoard(@RequestParam("title") String title,

@@ -41,7 +41,12 @@ const FaqRegist = () => {
       if (response.ok) {
         // 게시글 등록 성공 시
         alert("게시글이 등록되었습니다.");
-        navigate("/faq"); // 목록 페이지로 이동
+        navigate("/faq", {
+          state: {
+            selectCategory,
+              selectSubCategory
+          }
+        }); // 목록 페이지로 이동
       } else {
         // 에러 처리
         const errorText = await response.text(); // 에러 메시지 받아오기

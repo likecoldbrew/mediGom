@@ -5,7 +5,6 @@ import MainPage from "../userMain/pages/MainPage";
 import LoginPage from "../userMain/pages/Login";
 import EmployLogin from "../userMain/pages/employLogin";
 import SignUpPage from "../userMain/pages/signUp";
-import BoardContainer from "../userMain/pages/list/BoardContainer";
 import CategoryContainer from "../userMain/pages/list/CategoryContainer";
 
 function UserRoutes() {
@@ -14,9 +13,7 @@ function UserRoutes() {
       <Routes>
         <Route path="/" element={<UserMain />}>
           <Route index element={<MainPage />} />
-          <Route path="board/:boardId" element={<BoardContainer />} />
-          <Route path="board/:action/:boardId" element={<BoardContainer />} />
-          <Route path=":urlName/:page?" element={<CategoryContainer />} />
+          <Route path="/:urlName" element={<CategoryContainer />} />
           <Route
             path=":urlName/:action?/:page?"
             element={<CategoryContainer />}
