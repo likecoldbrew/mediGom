@@ -1,5 +1,5 @@
 import React,{useState} from 'react';
-import { Calendar, Clock, AlertCircle, FileText,ChevronLeft, ChevronRight } from 'lucide-react';
+import { Calendar, Clock, AlertCircle, FileText,ChevronLeft, ChevronRight,List } from 'lucide-react';
 // import ScrollableContent from './ScrollableContent';
 
 export const Home = () => {
@@ -64,9 +64,10 @@ export const Home = () => {
             });
         };
 
+
         return (
             <div className="doctor-paper-schedule bg-white p-4 rounded-lg shadow">
-                <div className="flex justify-center items-center mb-4">
+                <div className="flex justify-center items-center ">
                     <div className="flex space-x-2">
                         <button onClick={prevMonth} className="p-2 rounded-full hover:bg-gray-200">
                             <ChevronLeft size={20}/>
@@ -77,7 +78,7 @@ export const Home = () => {
                         </button>
                     </div>
                 </div>
-                <div className="overflow-x-auto p-1">
+                <div className="overflow-x-auto p-1.5">
                     <table className=" w-full border-collapse">
                         <thead>
                         <tr>
@@ -102,8 +103,8 @@ export const Home = () => {
     };
 
     return (
-        <div className="p-4 bg-gray-100">
-            <h1 className="text-2xl font-semibold mb-6">메인 대시보드</h1>
+        <div className="p-8 bg-gray-100">
+            <h1 className="text-2xl font-semibold mb-1">Home</h1>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* DoctorSchedule 컴포넌트 추가 */}
                 <DoctorSchedule/>
@@ -123,15 +124,17 @@ export const Home = () => {
                 {/* Weather/Menu Section */}
                 <div className="bg-white p-4 rounded-lg shadow">
                     <h2 className="text-xl font-semibold mb-4 flex items-center">
-                        <Clock className="mr-2"/> 식단
+                        <List className="mr-2"/> 식단
                     </h2>
-                    <p>점심 식단: 불고기덮밥, 미역국, 김치, 샐러드</p>
+                    <p><strong>아침 식단 :</strong> 불고기덮밥, 미역국, 김치, 샐러드</p>
+                    <p><strong>점심 식단 :</strong> 불고기덮밥, 미역국, 김치, 샐러드</p>
+                    <p><strong>저녁 식단 :</strong> 불고기덮밥, 미역국, 김치, 샐러드</p>
                 </div>
 
                 {/* Personal Alerts Section */}
                 <div className="bg-white p-4 rounded-lg shadow">
                     <h2 className="text-xl font-semibold mb-4 flex items-center">
-                        <FileText className="mr-2" /> 개인알람
+                        <Clock className="mr-2" /> 개인알람
                     </h2>
                     <ul className="space-y-2">
                         <li>• 14:00 - 김OO 환자 상담</li>

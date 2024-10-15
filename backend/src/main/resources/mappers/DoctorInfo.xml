@@ -74,5 +74,26 @@
         md.department_name;  <!-- 진료과명으로 그룹화 -->
     </select>
 
+    <!-- 의사 경력 조회 -->
+    <select id="getDoctorCareer" resultType="kr.or.nextit.backend.model.DoctorInfoDTO">
+        SELECT * FROM doctors d
+        INNER JOIN users u
+        ON u.user_no = d.doctor_user_no
+        INNER JOIN medical_department md
+        ON d.department = md.department_no
+        INNER JOIN doctors_career dc
+        ON d.doctor_no = dc.doctor_no
+        AND u.user_no = #{userNo}
+    </select>
+
+    <!-- 의사 학력 조회 -->
+    <select id="getDoctorEducation" resultType="kr.or.nextit.backend.model.DoctorInfoDTO">
+        SELECT * FROM doctors d
+        INNER JOIN users u
+        ON u.user_no = d.doctor_user_no
+        INNER JOIN doctors_education de
+        ON d.doctor_no = de.doctor_no
+        AND u.user_no = #{userNo}
+    </select>
 
 </mapper>
