@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 import "../style/tailwind.css";
 
 const Header = () => {
   const [hoveredCategory, setHoveredCategory] = useState(null);
   const [categories, setCategories] = useState([]);
+  /*선택한 카테고리 명*/
   const [selectCategory, setSelectCategory] = useState(null);
   const [selectSubCategory, setSelectSubCategory] = useState(null);
-
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -16,9 +17,10 @@ const Header = () => {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
+        console.log("Categories fetched:", data);
         setCategories(data);
       } catch (error) {
-        console.error("Error fetching categories:", error); // 에러 로깅 추가
+        console.error("Error fetching categories:", error);
       }
     };
 
@@ -29,7 +31,6 @@ const Header = () => {
     setSelectCategory(categoryName);
     setSelectSubCategory(subCategoryName);
   };
-
   return (
     <header className="bg-white shadow-sm">
       <div className="container mx-auto px-4 py-4">
@@ -38,22 +39,18 @@ const Header = () => {
             <img src="/images/userMain/logo.png" className="h-24" alt="logo" />
           </Link>
           <nav className="hidden md:flex space-x-10">
-            <Link to="/login">
-              <button className="text-sky-600 hover:text-sky-800 hover:font-bold transition-colors">
-                로그인
-              </button>
-            </Link>
-            <Link to="/signUp">
-              <button className="text-sky-600 hover:text-sky-800 hover:font-bold transition-colors">
-                회원가입
-              </button>
-            </Link>
+            <button className="text-sky-600 hover:text-sky-800 hover:font-bold transition-colors">
+              로그인
+            </button>
+            <button className="text-sky-600 hover:text-sky-800 hover:font-bold transition-colors">
+              회원가입
+            </button>
           </nav>
         </div>
         <nav className="mt-4 flex-1 flex flex-wrap justify-center gap-12 sm:gap-6 lg:gap-28">
-          {categories.map((category) => (
+          {categories.map((category, index) => (
             <div
-              key={category.id} // category의 고유 ID 사용
+              key={index}
               className="relative"
               onMouseEnter={() => setHoveredCategory(category.name)}
             >
@@ -70,8 +67,8 @@ const Header = () => {
                   >
                     {category.subcategories.map((sub) => (
                       <Link
-                        key={sub.categoryId} // sub의 고유 ID 사용
-                        to={`/${sub.urlName}`}
+                        key={sub.categoryId}
+                        to={`/${sub.categoryId}`}
                         state={{
                           selectCategory: category.name,
                           selectSubCategory: sub.name,
@@ -80,7 +77,7 @@ const Header = () => {
                           handleSubCategorySelect(category.name, sub.name)
                         }
                       >
-                        <div className="px-3 py-1 sm:px-2 sm:py-1 lg:px-4 lg:py-2 hover:bg-sky-100 cursor-pointer hover:font-bold z-50">
+                        <div className="px-3 py-1 sm:px-2 sm:py-1 lg:px-4 lg:py-2 hover:bg-sky-100 cursor-pointer hover:font-bold">
                           {sub.name}
                         </div>
                       </Link>

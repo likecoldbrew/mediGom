@@ -8,21 +8,15 @@ import SubCategories from "../userMain/components/SubCategory";
 import LoginPage from "../userMain/pages/Login";
 import EmployLogin from "../userMain/pages/employLogin";
 import SignUpPage from "../userMain/pages/signUp";
-import BoardContainer from "../userMain/pages/list/BoardContainer";
-import CategoryContainer from "../userMain/pages/list/CategoryContainer";
 
 function UserRoutes() {
   return (
     <Routes>
       <Route path="/" element={<UserMain />}>
         <Route index element={<MainPage />} />
-        <Route path="board/:boardId" element={<BoardContainer />} />
-        <Route path="board/:action/:boardId" element={<BoardContainer />} />
-        <Route path=":urlName/:page?" element={<CategoryContainer />} />
-        <Route
-          path=":urlName/:action?/:page?"
-          element={<CategoryContainer />}
-        />
+        <Route path="101" element={<DoctorInfo />} />
+        <Route path="102" element={<DepartmentInfo />} />
+        <Route path="subcategory" element={<SubCategories />} />
       </Route>
       <Route path="/login" element={<LoginPage />} />
       <Route path="/empLogin" element={<EmployLogin />} />
