@@ -1,5 +1,5 @@
 import React from "react";
-import { Route } from "react-router-dom";
+import { Route, Routes } from "react-router-dom"; // Routes도 import
 import UserMain from "../userMain/index";
 import MainPage from "../userMain/pages/MainPage";
 import DoctorInfo from "../userMain/pages/DoctorInfo";
@@ -11,7 +11,7 @@ import SignUpPage from "../userMain/pages/signUp";
 
 function UserRoutes() {
   return (
-    <>
+    <Routes>
       <Route path="/" element={<UserMain />}>
         <Route index element={<MainPage />} />
         <Route path="101" element={<DoctorInfo />} />
@@ -21,7 +21,7 @@ function UserRoutes() {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/empLogin" element={<EmployLogin />} />
       <Route path="/signUp" element={<SignUpPage />} />
-    </>
+    </Routes>
   );
 }
 

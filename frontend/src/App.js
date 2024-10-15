@@ -1,17 +1,12 @@
 import React from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import AppRoutes from "./routes/AppRoutes";
-import Payment from "./components/Payment";
 
 function App() {
   return (
-    <BrowserRouter >
-      <Routes>
+    <BrowserRouter>
       <AppRoutes />
-      <Route path="/payment" element={<Payment />} />
-      </Routes>
-    </BrowserRouter >
-
+    </BrowserRouter>
   );
 }
 
