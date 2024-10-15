@@ -11,7 +11,7 @@ const Header = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch("/api/categories/main");
+        const response = await fetch("/api/category/main");
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }

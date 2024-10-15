@@ -5,7 +5,6 @@ import DoctorInfo from "../DoctorInfo";
 import DepartmentInfo from "../DepartmentInfo";
 import HospitalInfo from "../HospitalInfo";
 import Community from "../Community";
-
 import Faq from "../Faq";
 import FaqRegist from "../FaqRegist";
 import FaqUpdate from "../FaqUpdate";
@@ -16,6 +15,7 @@ import CommunityDetail from "../CommunityDetail";
 import NotificationRegist from "../NotificationRegist";
 import NotificationDetail from "../NotificationDetail";
 import NotificationUpdate from "../NotificationUpdate";
+import Inquiries from "../Inquiries";
 
 const CategoryContainer = () => {
   const { urlName, page, action } = useParams();
@@ -60,6 +60,17 @@ const CategoryContainer = () => {
         return <NotificationUpdate boardId={page} />;
       }
       return <Notification page={page} />;
+    case "inquiry":
+      // if (action === "register") {
+      //   return <NotificationRegist />;
+      // }
+      // if (action === "detail") {
+      //   return <NotificationDetail boardId={page} />;
+      // }
+      // if (action === "update") {
+      //   return <NotificationUpdate boardId={page} />;
+      // }
+      return <Inquiries page={page} />;
     default:
       return <div>Category not found</div>;
   }
