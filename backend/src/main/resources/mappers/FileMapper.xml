@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.or.nextit.backend.mapper.BoardFilesMapper">
+    <!-- 게시글의 첨부파일 조회 -->
+    <select id="selectFile" parameterType="int" resultType="kr.or.nextit.backend.model.BoardFiles">
+        SELECT
+            bf.file_id,
+            bf.file_name,
+            bf.file_original_name,
+            bf.file_path,
+            bf.file_type,
+            bf.file_size,
+            bf.uploaded_at
+        FROM
+            board_files bf
+        WHERE
+            bf.file_id = #{fileId};
+    </select>
+</mapper>

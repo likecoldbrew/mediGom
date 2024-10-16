@@ -31,7 +31,7 @@
             users u
             ON
                 b.user_no = u.user_no
-        where u.admin=0
+        where u.admin=0 and b.status='Y'
     </select>
 
     <!-- 공지사항글 조회  -->
@@ -97,9 +97,12 @@
     </insert>
 
     <!-- 첨부파일 삽입 -->
-    <insert id="insertBoardFiles" parameterType="kr.or.nextit.backend.model.BoardFiles">
-        INSERT INTO board_files (board_id, file_name, file_original_name, file_path, file_type, file_size, uploaded_at)
-        VALUES (#{boardId}, #{fileName}, #{fileOriginalName}, #{filePath}, #{fileType}, #{fileSize}, NOW());
+    <insert id="insertBoardFiles" parameterType="list">
+        INSERT INTO board_files
+        <foreach collection="list"  item="f" separator="union all"> (board_id, file_name, file_original_name, file_path, file_type, file_size, uploaded_at)
+        SELECT (#{boardId}, #{fileName}, #{fileOriginalName}, #{filePath}, #{fileType}, #{fileSize}, NOW());
+        FROM DUAL
+        </foreach>
     </insert>
 
     <!-- 게시글 업데이트 -->
@@ -115,6 +118,18 @@
         WHERE
             b.board_id = #{boardId};
     </update>
+
+
+    <!-- 게시글 삭제 -->
+    <update id="updateBoard" parameterType="kr.or.nextit.backend.model.Community">
+        UPDATE board b
+            JOIN users u ON b.user_no = u.user_no
+            SET
+                b.status='N'
+        WHERE
+            b.board_id = #{boardId};
+    </update>
+
     <!-- 게시글의 첨부파일 조회 -->
     <select id="selectBoardFiles" parameterType="int" resultType="kr.or.nextit.backend.model.BoardFiles">
         SELECT
@@ -131,4 +146,8 @@
             bf.board_id = #{boardId};
     </select>
 
+    <delete id="deleteBoardFiles">
+        DELETE FROM board_files
+        WHERE board_id = #{boardId}
+    </delete>
 </mapper>

@@ -29,6 +29,7 @@ public class CommunityController {
 
     private final CommunityService communityService;
     private final FileStorage fileStorage; // FileStorage 주입
+
     public String getUploadDir() {
         return fileStorage.getUploadDir(); // 메소드로 접근
     }
@@ -64,12 +65,20 @@ public class CommunityController {
         boardDTO.setContent(content);
         boardDTO.setUserNo(userNo);
         // 파일 처리 로직
-        if (files != null && files.length > 0) {
-            List<BoardFiles> boardFilesList = new ArrayList<>();
+        List<BoardFiles> boardFilesList = new ArrayList<>();
+        if (files != null) {
             for (MultipartFile file : files) {
-
+                if (!file.isEmpty()) {
+                    String filePath = getUploadDir() + "/" + file.getOriginalFilename(); // 업로드 경로 설정
+                    BoardFiles boardFiles = new BoardFiles();
+                    boardFiles.setFileName(file.getOriginalFilename());
+                    boardFiles.setFileOriginalName(file.getOriginalFilename());
+                    boardFiles.setFilePath(filePath);
+                    boardFiles.setFileSize((int) file.getSize());
+                    boardFilesList.add(boardFiles);
+                }
+            }
             boardDTO.setFiles(boardFilesList);
-        }
         }
         communityService.registerBoard(boardDTO);
         return ResponseEntity.ok("게시글이 등록되었습니다.");
@@ -89,13 +98,21 @@ public class CommunityController {
         boardDTO.setTitle(title);
         boardDTO.setContent(content);
         boardDTO.setUserId(userId);
-
         // 첨부파일 처리 (업로드, DB에 저장 등)
-        if (files != null &&  files.length > 0) {
+        List<BoardFiles> boardFilesList = new ArrayList<>();
+        if (files != null) {
             for (MultipartFile file : files) {
-                // 파일 처리 로직
-                // 예: 파일 저장, DB에 정보 추가 등
+                if (!file.isEmpty()) {
+                    String filePath = getUploadDir() + "/" + file.getOriginalFilename(); // 업로드 경로 설정
+                    BoardFiles boardFiles = new BoardFiles();
+                    boardFiles.setFileName(file.getOriginalFilename());
+                    boardFiles.setFileOriginalName(file.getOriginalFilename());
+                    boardFiles.setFilePath(filePath);
+                    boardFiles.setFileSize((int) file.getSize());
+                    boardFilesList.add(boardFiles);
+                }
             }
+            boardDTO.setFiles(boardFilesList);
         }
         communityService.updateBoard(boardDTO); // 게시글 업데이트 호출
         return ResponseEntity.ok("게시글이 업데이트되었습니다.");
