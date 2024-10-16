@@ -19,12 +19,16 @@ public interface CommunityMapper {
     List<Community> selectNotice(int boardId);
     // 게시글 등록
     int insertBoard(Community boardDTO);
+    // 게시글 수정
+    int updateBoard(Community boardDTO);
+    //조회수
+    void updateViews(int boardId);
     // 첨부파일 삽입
     int insertBoardFiles(List<BoardFiles> boardFiles);
-    // 게시글 수정
-    void updateBoard(Community boardDTO);
     // 게시글의 첨부파일 조회
     List<BoardFiles> selectBoardFiles(int boardId);
+    //게시글 삭제
+    int deleteBoard(int boardId);
     //첨부파일삭제
     int deleteBoardFiles(int boardId);
 }

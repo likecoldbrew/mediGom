@@ -50,7 +50,7 @@
             users u
             ON
                 b.user_no = u.user_no
-        where u.admin=2
+        where u.admin=2 and b.status='Y'
     </select>
 
     <!-- 특정 게시글 조회 -->
@@ -119,12 +119,19 @@
             b.board_id = #{boardId};
     </update>
 
+    <!-- 조회수 업데이트  -->
+    <update id="updateViews" parameterType="int">
+        update
+            board
+        set
+            views = views +1
+        where
+            board_id=#{boardId}
+    </update>
 
     <!-- 게시글 삭제 -->
-    <update id="updateBoard" parameterType="kr.or.nextit.backend.model.Community">
+    <update id="deleteBoard" parameterType="kr.or.nextit.backend.model.Community">
         UPDATE board b
-            JOIN users u ON b.user_no = u.user_no
-            SET
                 b.status='N'
         WHERE
             b.board_id = #{boardId};

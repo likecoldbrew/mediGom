@@ -84,7 +84,6 @@ public class CommunityController {
         return ResponseEntity.ok("게시글이 등록되었습니다.");
     }
 
-
     // 게시글 업데이트
     @PutMapping("/update/{boardId}")
     public ResponseEntity<String> updateBoard(
@@ -117,4 +116,15 @@ public class CommunityController {
         communityService.updateBoard(boardDTO); // 게시글 업데이트 호출
         return ResponseEntity.ok("게시글이 업데이트되었습니다.");
     }
+    // 게시글 삭제
+    @DeleteMapping("/delete/{boardId}")
+    public ResponseEntity<String> deleteBoard(@PathVariable int boardId) {
+        int deletedRows = communityService.deleteBoard(boardId);
+        if (deletedRows > 0) {
+            return ResponseEntity.ok("게시글이 삭제되었습니다.");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("게시글이 존재하지 않습니다.");
+        }
+    }
+
 }

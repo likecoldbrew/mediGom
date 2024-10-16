@@ -36,16 +36,6 @@ public class CommunityService {
     public List<Community> selectNotice(int boardId) {
         return communityMapper.selectNotice(boardId);
     }
-
-    // 게시글 업데이트 호출
-    public void updateBoard(Community community) {
-        communityMapper.updateBoard(community);
-    }
-
-    public List<BoardFiles> getBoardFiles(int boardId) {
-        return communityMapper.selectBoardFiles(boardId); // 첨부파일 조회 호출
-    }
-
     //게시글 등록(첨부파일 트랜잭션)
     @Transactional
     public int registerBoard(Community boardDTO) {
@@ -58,5 +48,33 @@ public class CommunityService {
                 communityMapper.insertBoardFiles(fileList);
             }
         } return retValue;
+    }
+
+    // 게시글 업데이트
+    public int updateBoard(Community board) {
+        int result=communityMapper.updateBoard(board);
+        if(result>0) {
+            int boardId = board.getBoardId();
+            communityMapper.deleteBoardFiles(boardId);
+            List<BoardFiles> fileList=board.getFiles();
+            if (fileList != null && !fileList.isEmpty()) {
+                for (BoardFiles file : fileList) {
+                    file.setBoardId(boardId); //boardId가 BoardNo가 됨
+                }
+                return communityMapper.insertBoardFiles(fileList);
+            }
+            return result;
+        }
+        return 0;
+    }
+
+    //게시글 삭제
+    public int deleteBoard(int boardId) {
+        return communityMapper.deleteBoard(boardId);
+    }
+
+    //첨부파일 조회
+    public List<BoardFiles> getBoardFiles(int boardId) {
+        return communityMapper.selectBoardFiles(boardId); // 첨부파일 조회 호출
     }
 }
