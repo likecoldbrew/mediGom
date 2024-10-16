@@ -4,7 +4,7 @@ import SubCategories from "../components/SubCategory";
 import QuickMenu from "../components/QuickMenu";
 import ChatBot from "../components/ChatBot";
 
-const BoardUpdate = ({ boardId }) => {
+const NotificationUpdate = ({ boardId }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { selectCategory, selectSubCategory } = location.state || {};
@@ -21,7 +21,7 @@ const BoardUpdate = ({ boardId }) => {
 
   const fetchBoardDetail = async () => {
     try {
-      const response = await fetch(`/api/board/detail?boardId=${boardId}`);
+      const response = await fetch(`/api/board/detailNotice?boardId=${boardId}`);
       const data = await response.json();
       if (data.length > 0) {
         const formattedData = {
@@ -76,7 +76,7 @@ const BoardUpdate = ({ boardId }) => {
 
       if (response.ok) {
         alert("게시글이 수정되었습니다.");
-        navigate("/community", {
+        navigate("/notice", {
           state: { selectCategory, selectSubCategory },
         });
       } else {
@@ -113,15 +113,7 @@ const BoardUpdate = ({ boardId }) => {
                   className="w-full border border-gray-300 p-2 rounded-md"
                 />
               </div>
-              <div className="mb-4">
-                <label className="block mb-2 text-gray-600">작성자</label>
-                <input
-                  type="text"
-                  value={board.userId} // 작성자 정보 표시
-                  readOnly
-                  className="w-full border border-gray-300 p-2 rounded-md bg-gray-100"
-                />
-              </div>
+
               <div className="mb-4">
                 <label className="block mb-2 text-gray-600">내용</label>
                 <textarea
@@ -183,4 +175,4 @@ const BoardUpdate = ({ boardId }) => {
   );
 };
 
-export default BoardUpdate;
+export default NotificationUpdate;

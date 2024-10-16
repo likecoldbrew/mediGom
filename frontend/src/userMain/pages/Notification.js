@@ -4,7 +4,7 @@ import QuickMenu from "../components/QuickMenu";
 import SubCategories from "../components/SubCategory";
 import ChatBot from "../components/ChatBot";
 
-const Community = () => {
+const Notification = () => {
   const { subcategory } = useParams(); // URL에서 subcategory 가져오기
   const { page } = useParams(); // URL에서 page만 가져오기
   const location = useLocation(); // 현재 location 가져오기
@@ -31,7 +31,7 @@ const Community = () => {
   // 게시글 정보 가져오기
   const fetchBoards = async () => {
     try {
-      const response = await fetch("/api/board/all");
+      const response = await fetch("/api/board/allNotice");
       const data = await response.json();
 
       // 날짜 포맷 변환
@@ -58,7 +58,7 @@ const Community = () => {
   };
 
   //한 페이지당 게시글 수
-  const itemsPerPage = 2; // 페이지당 항목 수
+  const itemsPerPage = 10; // 페이지당 항목 수
 
   // 현재 페이지에 해당하는 항목 계산
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -71,7 +71,7 @@ const Community = () => {
   // 페이지 변경 핸들러
   const handlePageChange = (pageNumber) => {
     // 페이지 번호와 함께 selectCategory와 selectSubCategory를 state로 전달
-    navigate(`/community/page/${pageNumber}`, {
+    navigate(`/community/${pageNumber}`, {
       state: { selectCategory, selectSubCategory },
     });
   };
@@ -102,21 +102,9 @@ const Community = () => {
                     </th>
                     <th
                       className="px-4 py-2 text-center h-12"
-                      style={{ width: "300px" }}
+                      style={{ width: "500px" }}
                     >
                       제목
-                    </th>
-                    <th
-                      className="px-4 py-2 text-center h-12"
-                      style={{ width: "120px" }}
-                    >
-                      작성자
-                    </th>
-                    <th
-                      className="px-4 py-2 text-center h-12"
-                      style={{ width: "80px" }}
-                    >
-                      조회수
                     </th>
                     <th
                       className="px-4 py-2 text-center h-12"
@@ -134,18 +122,12 @@ const Community = () => {
                       </td>
                       <td className="px-4 py-2 text-center h-12">
                         <Link
-                          to={`/board/detail/${board.boardId}`} // 제목 클릭 시 이동할 경로
+                          to={`/notice/detail/${board.boardId}`} // 제목 클릭 시 이동할 경로
                           state={{ selectCategory, selectSubCategory }} // 카테고리 값 넘겨주기
                           className="text-blue-500 hover:underline"
                         >
                           {board.title}
                         </Link>
-                      </td>
-                      <td className="px-4 py-2 text-center h-12">
-                        {board.userId}
-                      </td>
-                      <td className="px-4 py-2 text-center h-12">
-                        {board.views}
                       </td>
                       <td className="px-4 py-2 text-center h-12">
                         {board.updateAt
@@ -159,12 +141,12 @@ const Community = () => {
             </div>
             <div className="flex justify-end">
               <Link
-                to={`/board/register`}
+                to={`/notice/register`} // 등록 페이지
                 state={{ selectCategory, selectSubCategory }}
                 className="text-sky-600 hover:underline mr-4"
               >
                 <button className="px-4 hover:bg-sky-200 hover:font-bold py-2 border rounded-md bg-white  text-blue-500 disabled:text-gray-300">
-                  후기 등록
+                  공지사항 등록
                 </button>
               </Link>
             </div>
@@ -210,4 +192,4 @@ const Community = () => {
   );
 };
 
-export default Community;
+export default Notification;

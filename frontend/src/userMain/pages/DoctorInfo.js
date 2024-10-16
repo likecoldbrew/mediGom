@@ -7,6 +7,8 @@ import SubCategories from "../components/SubCategory";
 import ChatBot from "../components/ChatBot";
 import axios from "axios";
 import debounce from "lodash.debounce";
+import Modal from "../components/DepartmentModal";
+import DoctorInfoModal from "../components/DoctorInfoModal";
 
 const DoctorInfo = () => {
   const { subcategory } = useParams(); // URL에서 subcategory 가져오기
@@ -14,6 +16,10 @@ const DoctorInfo = () => {
   const [searchTerm, setSearchTerm] = useState(""); // 검색어 상태 추가
   const [loading, setLoading] = useState(false); // 로딩 상태 추가
   const [error, setError] = useState(null); // 에러 상태 추가
+  const [selectedDoctor, setSelectedDoctor] = useState(null); // 선택된 의사
+  const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태
+  const [education, setEducation] = useState([]); // 학력
+  const [career, setCareer] = useState([]); // 경력
   const icon = "🔍";
 
   // API 호출
@@ -31,6 +37,18 @@ const DoctorInfo = () => {
       setDoctors(data);
     } catch (error) {
       console.error("Error fetching doctor info:", error);
+    }
+  };
+
+  const fetchDetail = async (userNo) => {
+    try {
+      const response = await fetch(`/api/users/${userNo}`); // Spring Boot 서버에서 데이터 가져오기
+      const data = await response.json();
+      setSelectedDoctor(data.user); // 상태 업데이트
+      setEducation(data.education); // 상태 업데이트
+      setCareer(data.career); // 상태 업데이트
+    } catch (error) {
+      console.error("Error fetching users:", error);
     }
   };
 
@@ -79,6 +97,11 @@ const DoctorInfo = () => {
       handleSearch(searchTerm); // 즉시 검색 수행
     }
   };
+const handleDoctorClick=(doctor)=>{
+  fetchDetail(doctor.userNo);
+  setIsModalOpen(true); // 모달 열기
+  console.log("모", doctor);
+}
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -110,7 +133,7 @@ const DoctorInfo = () => {
           <div className="flex-col min-h-full space-y-4 items-center justify-center">
             {doctors.length > 0 ? ( // 데이터가 있을 때만 표시
               doctors.map((doctor, index) => (
-                <div key={index} className="bg-white p-4 rounded shadow">
+                <div key={index}  onClick={() => handleDoctorClick(doctor)} className="bg-white p-4 rounded shadow">
                   <h2 className="text-xl font-semibold mt-4">
                     {doctor.userName}
                   </h2>{" "}
@@ -135,6 +158,13 @@ const DoctorInfo = () => {
           <ChatBot />
         </div>
       </div>
+      <DoctorInfoModal
+        isOpen={isModalOpen} // 모달 상태
+        onClose={() => setIsModalOpen(false)} // 모달 닫기 핸들러
+        doctor={selectedDoctor} // 선택된 의사
+        education={education}                 // 학력 정보
+        career={career}                       // 경력 정보
+      />
     </div>
   );
 };
