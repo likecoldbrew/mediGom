@@ -15,5 +15,6 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class BoardFilesController {
     private final BoardFilesService boardFilesService;
-    private final FileStorage fileStorage;}
+    private final FileStorage fileStorage;
+}
 

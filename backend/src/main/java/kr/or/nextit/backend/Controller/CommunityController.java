@@ -14,6 +14,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -21,6 +22,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/board")
@@ -69,13 +71,13 @@ public class CommunityController {
         if (files != null) {
             for (MultipartFile file : files) {
                 if (!file.isEmpty()) {
-                    String fileName = file.getOriginalFilename();
+                    // UUID를 사용하여 랜덤한 파일 이름 생성
+                    String randomFileName = UUID.randomUUID().toString();
                     String uploadDir = getUploadDir();
-                    String filePath = uploadDir + "/" + fileName;
-
+                    String filePath = uploadDir + "/" + randomFileName+"_"+file.getOriginalFilename();
                     try {
                         // 파일을 서버에 저장
-                        Files.copy(file.getInputStream(), Paths.get(filePath), StandardCopyOption.REPLACE_EXISTING);
+                        file.transferTo(new File(filePath));
                     } catch (IOException e) {
                         e.printStackTrace();
                         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -83,8 +85,8 @@ public class CommunityController {
                     }
 
                     BoardFiles boardFiles = new BoardFiles();
-                    boardFiles.setFileName(fileName);
-                    boardFiles.setFileOriginalName(fileName);
+                    boardFiles.setFileName(randomFileName);
+                    boardFiles.setFileOriginalName(file.getOriginalFilename());
                     boardFiles.setFilePath(filePath);
                     boardFiles.setFileSize((int) file.getSize());
                     boardFiles.setFileType(file.getContentType());
@@ -117,7 +119,9 @@ public class CommunityController {
                 if (!file.isEmpty()) {
                     String filePath = getUploadDir() + "/" + file.getOriginalFilename(); // 업로드 경로 설정
                     BoardFiles boardFiles = new BoardFiles();
-                    boardFiles.setFileName(file.getOriginalFilename());
+                    // UUID를 사용하여 랜덤한 파일 이름 생성
+                    String randomFileName = UUID.randomUUID().toString();
+                    boardFiles.setFileName(randomFileName);
                     boardFiles.setFileOriginalName(file.getOriginalFilename());
                     boardFiles.setFilePath(filePath);
                     boardFiles.setFileSize((int) file.getSize());
