@@ -55,9 +55,10 @@ export default function SignUpPage() {
       /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     if (!formData.password) {
       newErrors.password = "비밀번호는 필수 입력입니다.";
-    } else if (!passwordRegex.test(formData.password)) {
-      newErrors.password =
-        "비밀번호는 최소 8자리 이상이며, 영문, 숫자, 특수문자를 포함해야 합니다.";
+
+    // } else if (!passwordRegex.test(formData.password)) {
+    //   newErrors.password =
+    //     "비밀번호는 최소 8자리 이상이며, 영문, 숫자, 특수문자를 포함해야 합니다.";
     } else if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = "비밀번호가 일치하지 않습니다.";
     }
@@ -116,11 +117,13 @@ export default function SignUpPage() {
   };
 
   const [isIdAvailable, setIsIdAvailable] = useState(null);
-
   // 아이디 중복 확인 함수
   const checkIdAvailability = async () => {
     try {
-      const response = await axios.get(`/api/users/check-id/${formData.id}`);
+      const response = await axios.get(
+
+        `/api/users/check-id/${formData.id}`
+      );
       setIsIdAvailable(response.data); // 응답이 true/false로 온다고 가정
       console.log(response);
     } catch (error) {
@@ -133,6 +136,7 @@ export default function SignUpPage() {
     }
   };
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const validationErrors = validateForm();
@@ -140,6 +144,7 @@ export default function SignUpPage() {
     if (Object.keys(validationErrors).length > 0) {
       setErrorMessages(validationErrors);
     } else {
+
       const userData = {
         userId: formData.id,
         userPass: formData.password,
@@ -169,7 +174,6 @@ export default function SignUpPage() {
       }
     }
   };
-
   return (
     <div className="min-h-screen bg-gray-100">
       <div className="w-full bg-sky-100 py-2 border-y border-sky-200">
@@ -224,29 +228,31 @@ export default function SignUpPage() {
                     type="text"
                     placeholder="영문과 숫자만 입력해주세요."
                     required
-                    className="appearance-none block w-3/4 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-sky-200 focus:border-sky-500 sm:text-sm"
-                    value={formData.id}
+                    className="appearance-none block w-3/4 px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                     onChange={handleChange}
                   />
                   <button
                     type="button"
+                    className="ml-3 inline-flex items-center justify-center w-1/4 px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-sky-500 hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                     onClick={checkIdAvailability}
-                    className="w-1/4 px-4 py-2 border border-gray-300 rounded-md bg-sky-500 text-white hover:bg-sky-600 focus:outline-none"
                   >
-                    확인
+                    중복 확인
                   </button>
                 </div>
                 {errorMessages.id && (
-                  <p className="mt-1 text-red-600 text-sm">{errorMessages.id}</p>
+                  <p className="text-red-600 text-sm">{errorMessages.id}</p>
                 )}
-                {isIdAvailable === false && (
-                  <p className="mt-1 text-red-600 text-sm">
-                    해당 아이디는 이미 사용 중입니다.
-                  </p>
-                )}
-                {isIdAvailable === true && (
-                  <p className="mt-1 text-green-600 text-sm">
-                    해당 아이디는 사용 가능합니다.
+                {isIdAvailable !== null && (
+                  <p
+                    className={
+                      isIdAvailable
+                        ? "text-red-600 text-sm"
+                        : "text-green-600 text-sm"
+                    }
+                  >
+                    {isIdAvailable
+                      ? "사용 중인 아이디입니다."
+                      : "사용 가능한 아이디입니다."}
                   </p>
                 )}
               </div>
@@ -258,18 +264,22 @@ export default function SignUpPage() {
                 >
                   비밀번호
                 </label>
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  required
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-sky-200 focus:border-sky-500 sm:text-sm"
-                  value={formData.password}
-                  onChange={handleChange}
-                />
-                {errorMessages.password && (
-                  <p className="mt-1 text-red-600 text-sm">{errorMessages.password}</p>
-                )}
+                <div className="mt-1">
+                  <input
+                    id="password"
+                    name="password"
+                    type="password"
+                    placeholder="8자 이상, 영문+숫자+특수문자 포함해주세요."
+                    required
+                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    onChange={handleChange}
+                  />
+                  {errorMessages.password && (
+                    <p className="text-red-600 text-sm">
+                      {errorMessages.password}
+                    </p>
+                  )}
+                </div>
               </div>
 
               <div>
@@ -279,18 +289,21 @@ export default function SignUpPage() {
                 >
                   비밀번호 확인
                 </label>
-                <input
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  type="password"
-                  required
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-sky-200 focus:border-sky-500 sm:text-sm"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                />
-                {errorMessages.confirmPassword && (
-                  <p className="mt-1 text-red-600 text-sm">{errorMessages.confirmPassword}</p>
-                )}
+                <div className="mt-1">
+                  <input
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    type="password"
+                    required
+                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    onChange={handleChange}
+                  />
+                  {errorMessages.confirmPassword && (
+                    <p className="text-red-600 text-sm">
+                      {errorMessages.confirmPassword}
+                    </p>
+                  )}
+                </div>
               </div>
 
               <div>
@@ -300,55 +313,68 @@ export default function SignUpPage() {
                 >
                   이름
                 </label>
-                <input
-                  id="name"
-                  name="name"
-                  type="text"
-                  required
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-sky-200 focus:border-sky-500 sm:text-sm"
-                  value={formData.name}
-                  onChange={handleChange}
-                />
-                {errorMessages.name && (
-                  <p className="mt-1 text-red-600 text-sm">{errorMessages.name}</p>
-                )}
+                <div className="mt-1">
+                  <input
+                    id="name"
+                    name="name"
+                    type="text"
+                    placeholder="이름을 입력해주세요 (한글/영문 가능)"
+                    required
+                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    onChange={handleChange}
+                  />
+                  {errorMessages.name && (
+                    <p className="text-red-600 text-sm">{errorMessages.name}</p>
+                  )}
+                </div>
               </div>
 
-              <div>
-                <label
-                  htmlFor="rrn1"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  주민등록번호
-                </label>
-                <div className="flex space-x-2">
-                  <input
-                    id="rrn1"
-                    name="rrn1"
-                    type="text"
-                    placeholder="앞 6자리"
-                    required
-                    maxLength="6"
-                    className="appearance-none block w-1/2 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-sky-200 focus:border-sky-500 sm:text-sm"
-                    value={formData.rrn1}
-                    onChange={handleChange}
-                  />
-                  <input
-                    id="rrn2"
-                    name="rrn2"
-                    type="text"
-                    placeholder="뒤 7자리"
-                    required
-                    maxLength="7"
-                    className="appearance-none block w-1/2 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-sky-200 focus:border-sky-500 sm:text-sm"
-                    value={formData.rrn2}
-                    onChange={handleChange}
-                  />
+              <div className="flex space-x-2">
+                <div className="w-1/2">
+                  <label
+                    htmlFor="rrn1"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    주민등록번호 앞자리
+                  </label>
+                  <div className="mt-1">
+                    <input
+                      id="rrn1"
+                      name="rrn1"
+                      type="text"
+                      placeholder="6자리"
+                      required
+                      maxLength="6" // 최대 길이 설정
+                      className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      onChange={handleChange}
+                    />
+                  </div>
                 </div>
-                {errorMessages.rrn && (
-                  <p className="mt-1 text-red-600 text-sm">{errorMessages.rrn}</p>
-                )}
+
+                <div className="w-1/2">
+                  <label
+                    htmlFor="rrn2"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    주민등록번호 뒷자리
+                  </label>
+                  <div className="mt-1">
+                    <input
+                      id="rrn2"
+                      name="rrn2"
+                      type="text"
+                      placeholder="7자리"
+                      required
+                      maxLength="7" // 최대 길이 설정
+                      className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                      onChange={handleChange}
+                    />
+                  </div>
+                </div>
               </div>
+              {errorMessages.rrn && (
+                <p className="text-red-600 text-sm">{errorMessages.rrn}</p>
+              )}
 
               <div>
                 <label
@@ -357,19 +383,23 @@ export default function SignUpPage() {
                 >
                   전화번호
                 </label>
-                <input
-                  id="phone"
-                  name="phone"
-                  type="text"
-                  placeholder="010XXXXXXXX"
-                  required
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-sky-200 focus:border-sky-500 sm:text-sm"
-                  value={formData.phone}
-                  onChange={handleChange}
-                />
-                {errorMessages.phone && (
-                  <p className="mt-1 text-red-600 text-sm">{errorMessages.phone}</p>
-                )}
+                <div className="mt-1">
+                  <input
+                    id="phone"
+                    name="phone"
+                    type="text"
+                    placeholder="01012345678 형식으로 입력해주세요."
+                    required
+                    maxLength="11" // 최대 길이 설정
+                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    onChange={handleChange}
+                  />
+                  {errorMessages.phone && (
+                    <p className="text-red-600 text-sm">
+                      {errorMessages.phone}
+                    </p>
+                  )}
+                </div>
               </div>
 
               <div>
@@ -379,18 +409,22 @@ export default function SignUpPage() {
                 >
                   이메일
                 </label>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  required
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-sky-200 focus:border-sky-500 sm:text-sm"
-                  value={formData.email}
-                  onChange={handleChange}
-                />
-                {errorMessages.email && (
-                  <p className="mt-1 text-red-600 text-sm">{errorMessages.email}</p>
-                )}
+                <div className="mt-1">
+                  <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    placeholder="example@domain.com 형식으로 입력해주세요."
+                    required
+                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    onChange={handleChange}
+                  />
+                  {errorMessages.email && (
+                    <p className="text-red-600 text-sm">
+                      {errorMessages.email}
+                    </p>
+                  )}
+                </div>
               </div>
 
               <div>
@@ -400,15 +434,22 @@ export default function SignUpPage() {
                 >
                   주소
                 </label>
-                <input
-                  id="add"
-                  name="add"
-                  type="text"
-                  placeholder="주소를 입력하세요"
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-sky-200 focus:border-sky-500 sm:text-sm"
-                  value={formData.add}
-                  onChange={handleChange}
-                />
+                <div className="mt-1 flex rounded-md shadow-sm">
+                  <input
+                    id="add"
+                    name="add"
+                    type="text"
+                    required
+                    className="appearance-none w-3/4 block px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    onChange={handleChange}
+                  />
+                  <button
+                    type="button"
+                    className="ml-3 inline-flex items-center justify-center w-1/4 px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-sky-500 hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  >
+                    찾기
+                  </button>
+                </div>
               </div>
 
               <div>
@@ -418,15 +459,15 @@ export default function SignUpPage() {
                 >
                   상세주소
                 </label>
-                <input
-                  id="add2"
-                  name="add2"
-                  type="text"
-                  placeholder="상세주소를 입력하세요"
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-sky-200 focus:border-sky-500 sm:text-sm"
-                  value={formData.add2}
-                  onChange={handleChange}
-                />
+                <div className="mt-1">
+                  <input
+                    id="add2"
+                    name="add2"
+                    type="text"
+                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    onChange={handleChange}
+                  />
+                </div>
               </div>
 
               <div>
@@ -434,7 +475,7 @@ export default function SignUpPage() {
                   type="submit"
                   className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-sky-600 hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500"
                 >
-                  가입하기
+                  회원가입
                 </button>
               </div>
             </form>

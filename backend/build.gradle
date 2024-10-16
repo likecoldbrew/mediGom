@@ -53,9 +53,11 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
-    // 데이터베이스 및 결제 모듈
+    // 데이터베이스 및 모듈
     runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
     implementation 'com.github.iamport:iamport-rest-client-java:0.2.21' // 결제 모듈
+    implementation 'kr.dogfoot:hwplib:1.1.7' // hwplib
+
 
     // JAXB (Java XML 처리용)
     implementation 'javax.xml.bind:jaxb-api:2.3.1'

@@ -1,18 +1,19 @@
 package kr.or.nextit.backend.controller;
 
 import com.siot.IamportRestClient.exception.IamportResponseException;
-import kr.or.nextit.backend.model.PaymentDto;
+import kr.or.nextit.backend.model.PaymentDTO;
 import kr.or.nextit.backend.service.PaymentService;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 
 @Controller
+@RequestMapping("/verify")
 public class PaymentController {
+
     private final PaymentService paymentService;
 
     public PaymentController(PaymentService paymentService) {
@@ -20,10 +21,25 @@ public class PaymentController {
     }
 
     @ResponseBody
-    @RequestMapping("/verify/{imp_uid}") // https://URL/verify/{거래고유번호}
-    public PaymentDto paymentByImpUid(@PathVariable("imp_uid") String imp_uid,
-                                      @RequestParam("userNo") int userNo) // userNo 추가
-            throws IamportResponseException, IOException {
-        return paymentService.verifyPayment(imp_uid, userNo); // 결제 검증 및 DB 값 삽입
+    @PostMapping("/{imp_uid}")
+    public PaymentDTO verifyAndInsertPayment(
+            @PathVariable("imp_uid") String imp_uid,
+            @RequestParam("userNo") int userNo,
+            @RequestBody PaymentDTO paymentDTO) throws IamportResponseException, IOException {
+        try {
+            boolean isPaymentValid = paymentService.verifyPayment(imp_uid, userNo);
+
+            if (!isPaymentValid) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Payment is invalid or already processed.");
+            }
+
+            paymentDTO.setImpuid(imp_uid);
+            paymentService.insertPayment(paymentDTO);
+
+            return paymentDTO;
+
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
     }
 }

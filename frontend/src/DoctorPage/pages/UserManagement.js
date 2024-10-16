@@ -126,7 +126,7 @@ const UserManagement = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await fetch('/api/users/allPatient'); // userNo는 필요한 값으로 변경
+      const response = await fetch('/api/users/patients'); // userNo는 필요한 값으로 변경
       const data = await response.json();
       setUsers(data); // 받아온 데이터를 상태로 저장
       console.log(data);

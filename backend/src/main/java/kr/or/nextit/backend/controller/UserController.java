@@ -53,7 +53,6 @@ public class UserController {
     }
 
     @GetMapping("/patients")
-    @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR')") // ADMIN 및 DOCTOR 역할만 접근 허용
     public ResponseEntity<List<User>> getPatientList() {
         return ResponseEntity.ok(userService.getPatientList());
     }
