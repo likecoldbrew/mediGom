@@ -9,8 +9,8 @@ function DoctorRoutes() {
   return (
     <Routes>
     <Route path="/" element={<Doctors />}>
-      <Route path="userStateChange" element={<UserStateChange />} />
-      <Route path="userClinicCheck" element={<UserClinicCheck />} />
+      <Route path="/s" element={<UserStateChange />} />
+      <Route path="/a" element={<UserClinicCheck />} />
       <Route path="userReservationCheck" element={<UserReservationCheck />} />
     </Route>
     </Routes>

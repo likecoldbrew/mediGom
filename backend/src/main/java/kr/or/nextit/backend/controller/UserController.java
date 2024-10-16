@@ -1,16 +1,15 @@
 package kr.or.nextit.backend.controller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import kr.or.nextit.backend.model.DoctorInfoDTO;
-import kr.or.nextit.backend.service.DoctorInfoService;
-import org.springframework.web.bind.annotation.*;
 import kr.or.nextit.backend.model.User;
 import kr.or.nextit.backend.service.UserService;
+import kr.or.nextit.backend.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
@@ -18,66 +17,70 @@ import lombok.RequiredArgsConstructor;
 public class UserController {
 
     private final UserService userService;
-    private final DoctorInfoService doctorInfoService;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
-    @GetMapping("/all")
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
-    }
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody User user) {
+        // 사용자가 입력한 ID로 사용자 조회
+        User existingUser = userService.getUserById(user.getUserId());
 
-    // 사용자(환자) 목록
-    @GetMapping("/patient")
-    public List<User> getPatientList() {
-        return userService.getPatientList();
-    }
-
-    // 의사(직원) 목록
-    @GetMapping("/doctor")
-    public List<User> getDoctorList() {
-        return userService.getDoctorList();
-    }
-
-    // 관리자 목록
-    @GetMapping("/admin")
-    public List<User> getAdminList() {
-        return userService.getAdminList();
-    }
-
-    // 조회
-    @GetMapping("/{id}")
-    public Map<String, Object> getUserById(@PathVariable("id") int userNo) {
-        Map<String, Object> response = new HashMap<>();
-
-        User user = userService.getUserById(userNo);
-        response.put("user", user);
-
-        if (userNo > 1000) {
-            response.put("education", doctorInfoService.getDoctorEducation(userNo));
-            response.put("career", doctorInfoService.getDoctorCareer(userNo));
+        if (existingUser == null || !passwordEncoder.matches(user.getUserPass(), existingUser.getUserPass())) {
+            return ResponseEntity.status(401).body("Invalid credentials");
         }
 
-        return response;
+        // JWT 토큰 생성
+        String token = jwtUtil.generateToken(existingUser.getUserId());
+        return ResponseEntity.ok(token);
     }
 
     @PostMapping("/register")
-    public void insertUser(@RequestBody User user) {
+    public ResponseEntity<Void> registerUser(@RequestBody User user) {
         userService.insertUser(user);
-    }
-
-    @PutMapping("/{id}")
-    public void updateUser(@PathVariable("id") int userNo, @RequestBody User user) {
-        user.setUserNo(userNo);
-        userService.updateUser(user);
-    }
-
-    @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable("id") int userNo) {
-        userService.deleteUser(userNo);
+        return ResponseEntity.status(201).build();
     }
 
     @GetMapping("/check-id/{id}")
     public boolean checkId(@PathVariable("id") String userId) {
         return userService.checkIdExists(userId);
     }
+
+    @GetMapping("/all")
+    @PreAuthorize("hasAnyRole('ADMIN')") // ADMIN 역할만 접근 허용
+    public ResponseEntity<List<User>> getAllUsers() {
+        return ResponseEntity.ok(userService.getAllUsers());
+    }
+
+    @GetMapping("/patients")
+    @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR')") // ADMIN 및 DOCTOR 역할만 접근 허용
+    public ResponseEntity<List<User>> getPatientList() {
+        return ResponseEntity.ok(userService.getPatientList());
+    }
+
+    @GetMapping("/doctors")
+    @PreAuthorize("hasRole('ADMIN')") // ADMIN 역할만 접근 허용
+    public ResponseEntity<List<User>> getDoctorList() {
+        return ResponseEntity.ok(userService.getDoctorList());
+    }
+
+    @GetMapping("/admins")
+    @PreAuthorize("hasRole('ADMIN')") // ADMIN 역할만 접근 허용
+    public ResponseEntity<List<User>> getAdminList() {
+        return ResponseEntity.ok(userService.getAdminList());
+    }
+
+    @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR')") // ADMIN 및 DOCTOR 역할만 접근 허용
+    public ResponseEntity<User> getUserById(@PathVariable int id) {
+        return ResponseEntity.ok(userService.getUserByNo(id));
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')") // ADMIN 역할만 접근 허용
+    public ResponseEntity<Void> deleteUser(@PathVariable int id) {
+        userService.deleteUser(id);
+        return ResponseEntity.noContent().build();
+    }
+
 
 }
