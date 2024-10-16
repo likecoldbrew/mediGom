@@ -158,7 +158,7 @@ const Inquiries = () => {
             </div>
             <div className="flex justify-end">
               <Link
-                to={`/inquiries/register`}
+                to={`/inquiry/register`}
                 state={{ selectCategory, selectSubCategory }}
                 className="text-sky-600 hover:underline mr-4"
               >

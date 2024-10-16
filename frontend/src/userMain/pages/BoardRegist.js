@@ -15,7 +15,7 @@ const BoardRegist = () => {
   const [loading, setLoading] = useState(false);
 
   // 유저 정보를 저장할 state
-  const [username, setUsername] = useState("test");
+  const [username, setUsername] = useState("user10");
 
   // 로그인한 유저의 정보를 가져오기 위한 useEffect
   // useEffect(() => {
@@ -47,7 +47,7 @@ const BoardRegist = () => {
     const formData = new FormData();
     formData.append("title", title);
     formData.append("content", content);
-    formData.append("userNo", 1); // 예시로 userNo 추가
+    formData.append("userNo", 10); // 예시로 userNo 추가
 
     // 파일이 존재할 경우에만 formData에 추가
     if (files.length > 0) {
@@ -108,7 +108,7 @@ const BoardRegist = () => {
               <label className="block mb-2 text-gray-600">작성자</label>
               <input
                 type="text"
-                value="test" // 임의의 값
+                value={username} // 임의의 값
                 readOnly
                 className="w-full border border-gray-300 p-2 rounded-md bg-gray-100"
               />

@@ -1,14 +1,25 @@
 package kr.or.nextit.backend.controller;
 
+import kr.or.nextit.backend.model.BoardFiles;
 import kr.or.nextit.backend.model.Community;
 import kr.or.nextit.backend.model.DoctorInfoDTO;
+import kr.or.nextit.backend.model.FileStorage;
 import kr.or.nextit.backend.service.CommunityService;
 import kr.or.nextit.backend.service.DoctorInfoService;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -17,6 +28,10 @@ import java.util.List;
 public class CommunityController {
 
     private final CommunityService communityService;
+    private final FileStorage fileStorage; // FileStorage 주입
+    public String getUploadDir() {
+        return fileStorage.getUploadDir(); // 메소드로 접근
+    }
     //전체 후기글
     @GetMapping("/all")
     public List<Community> getAllBoards() {
@@ -50,10 +65,11 @@ public class CommunityController {
         boardDTO.setUserNo(userNo);
         // 파일 처리 로직
         if (files != null && files.length > 0) {
+            List<BoardFiles> boardFilesList = new ArrayList<>();
             for (MultipartFile file : files) {
-                // 각 파일을 처리하는 로직 추가
-                // 예: communityService.saveFile(file, boardDTO.getBoardId());
-            }
+
+            boardDTO.setFiles(boardFilesList);
+        }
         }
         communityService.registerBoard(boardDTO);
         return ResponseEntity.ok("게시글이 등록되었습니다.");

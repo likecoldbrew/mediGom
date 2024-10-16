@@ -13,9 +13,11 @@ const InquiriesRegist = () => {
   const [content, setContent] = useState("");
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [isAccordionOpen, setIsAccordionOpen] = useState(false);
+  const [selectedType, setSelectedType] = useState("");
 
   // 유저 정보를 저장할 state
-  const [username, setUsername] = useState("test");
+  const [username, setUsername] = useState("user10");
 
   // 로그인한 유저의 정보를 가져오기 위한 useEffect
   // useEffect(() => {
@@ -47,7 +49,7 @@ const InquiriesRegist = () => {
     const formData = new FormData();
     formData.append("title", title);
     formData.append("content", content);
-    formData.append("userNo", 1); // 예시로 userNo 추가
+    formData.append("userNo", 10); // 예시로 userNo 추가
 
     // 파일이 존재할 경우에만 formData에 추가
     if (files.length > 0) {
@@ -84,12 +86,18 @@ const InquiriesRegist = () => {
     }
   };
 
+  // 유형 선택 처리 함수
+  const handleSelectType = (type) => {
+    setSelectedType(type);
+    setIsAccordionOpen(false); // 선택 후 아코디언 닫기
+  };
+
   return (
     <div className="flex flex-col min-h-screen">
       <SubCategories />
       <div className="container mx-auto px-4 py-8 flex flex-grow">
         <main className="flex-grow pr-8">
-          <h2 className="text-2xl font-bold mb-4">게시글 등록</h2>
+          <h2 className="text-2xl font-bold mb-4">문의 등록</h2>
           <form
             onSubmit={handleSubmit}
             className="w-full bg-white p-6 rounded-md shadow-lg"
@@ -105,13 +113,60 @@ const InquiriesRegist = () => {
               />
             </div>
             <div className="mb-4">
-              <label className="block mb-2 text-gray-600">작성자</label>
-              <input
-                type="text"
-                value="test" // 임의의 값
-                readOnly
-                className="w-full border border-gray-300 p-2 rounded-md bg-gray-100"
-              />
+              <label className="block mb-2 text-gray-600">유형</label>
+              <div className="border border-gray-300 rounded-md">
+                <div
+                  className="p-2 cursor-pointer hover:bg-sky-100 hover:font-bold"
+                  onClick={() => setIsAccordionOpen(!isAccordionOpen)}
+                >
+                  {selectedType ? selectedType : "유형을 선택하세요"}
+                </div>
+                {isAccordionOpen && (
+                  <div className="border-t border-sky-200">
+                    <p
+                      className="p-2 cursor-pointer hover:bg-sky-100 hover:font-bold"
+                      onClick={() => handleSelectType("건의 및 제안")}
+                    >
+                      건의 및 제안
+                    </p>
+                    <hr className="border-t border-sky-200 mb-1 mt-1" />
+                    <p
+                      className="p-2 cursor-pointer hover:bg-sky-100 hover:font-bold"
+                      onClick={() => handleSelectType("불편")}
+                    >
+                      불편
+                    </p>
+                    <hr className="border-t border-sky-200 mb-1 mt-1" />
+                    <p
+                      className="p-2 cursor-pointer hover:bg-sky-100 hover:font-bold"
+                      onClick={() => handleSelectType("예약")}
+                    >
+                      예약
+                    </p>
+                    <hr className="border-t border-sky-200 mb-1 mt-1" />
+                    <p
+                      className="p-2 cursor-pointer hover:bg-sky-100 hover:font-bold"
+                      onClick={() => handleSelectType("진료")}
+                    >
+                      진료
+                    </p>
+                    <hr className="border-t border-sky-200 mb-1 mt-1" />
+                    <p
+                      className="p-2 cursor-pointer hover:bg-sky-100 hover:font-bold"
+                      onClick={() => handleSelectType("수납")}
+                    >
+                      수납
+                    </p>
+                    <hr className="border-t border-sky-200 mb-1 mt-1" />
+                    <p
+                      className="p-2 cursor-pointer hover:bg-sky-100 hover:font-bold"
+                      onClick={() => handleSelectType("기타")}
+                    >
+                      기타
+                    </p>
+                  </div>
+                )}
+              </div>
             </div>
             <div className="mb-4">
               <label className="block mb-2 text-gray-600">내용</label>
@@ -145,7 +200,7 @@ const InquiriesRegist = () => {
                 disabled={loading}
                 className="px-4 py-2 hover:bg-sky-200 hover:font-bold border rounded-md bg-white text-blue-500 disabled:text-gray-300"
               >
-                {loading ? "등록 중..." : "게시글 등록"}
+                {loading ? "등록 중..." : "문의 등록"}
               </button>
             </div>
           </form>

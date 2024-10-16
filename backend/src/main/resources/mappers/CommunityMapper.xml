@@ -91,7 +91,7 @@
     </select>
 
     <!-- 게시글 등록 -->
-    <insert id="insertBoard" parameterType="kr.or.nextit.backend.model.Community">
+    <insert id="insertBoard" parameterType="kr.or.nextit.backend.model.Community" useGeneratedKeys="true" keyProperty="boardId">
         INSERT INTO board (user_no, title, content, create_at, views, status)
         VALUES (#{userNo}, #{title}, #{content}, NOW(), 0, 'Y');
     </insert>
@@ -101,6 +101,7 @@
         INSERT INTO board_files (board_id, file_name, file_original_name, file_path, file_type, file_size, uploaded_at)
         VALUES (#{boardId}, #{fileName}, #{fileOriginalName}, #{filePath}, #{fileType}, #{fileSize}, NOW());
     </insert>
+
     <!-- 게시글 업데이트 -->
     <update id="updateBoard" parameterType="kr.or.nextit.backend.model.Community">
         UPDATE board b
