@@ -6,7 +6,11 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
+<<<<<<< HEAD
+//@Table(name = "users")  // 테이블 이름을 명시
+=======
 @Table(name = "users")
+>>>>>>> main
 @Data
 public class User {
 
@@ -34,6 +38,11 @@ public class User {
 
     // admin: 0 = 환자, 1 = 의사, 2 = 관리자
     private int admin;
+<<<<<<< HEAD
+    private String deleteYn;
+    private String departmentName;
+    private String rank;
+=======
 
     private String deleteYn; // 삭제 여부 ('Y', 'N')
 
@@ -55,4 +64,5 @@ public class User {
         }
     }
 
+>>>>>>> main
 }

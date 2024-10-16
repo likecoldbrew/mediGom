@@ -55,9 +55,15 @@ export default function SignUpPage() {
       /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     if (!formData.password) {
       newErrors.password = "비밀번호는 필수 입력입니다.";
+<<<<<<< HEAD
+    } else if (!passwordRegex.test(formData.password)) {
+      newErrors.password =
+        "비밀번호는 최소 8자리 이상이며, 영문, 숫자, 특수문자를 포함해야 합니다.";
+=======
     // } else if (!passwordRegex.test(formData.password)) {
     //   newErrors.password =
     //     "비밀번호는 최소 8자리 이상이며, 영문, 숫자, 특수문자를 포함해야 합니다.";
+>>>>>>> main
     } else if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = "비밀번호가 일치하지 않습니다.";
     }
@@ -120,7 +126,11 @@ export default function SignUpPage() {
   const checkIdAvailability = async () => {
     try {
       const response = await axios.get(
+<<<<<<< HEAD
+        `http://localhost:8080/api/users/check-id/${formData.id}`
+=======
         `/api/users/check-id/${formData.id}`
+>>>>>>> main
       );
       setIsIdAvailable(response.data); // 응답이 true/false로 온다고 가정
       console.log(response);
@@ -134,13 +144,23 @@ export default function SignUpPage() {
     }
   };
 
+<<<<<<< HEAD
+  const handleSubmit = (e) => {
+=======
   const handleSubmit = async (e) => {
+>>>>>>> main
     e.preventDefault();
     const validationErrors = validateForm();
 
     if (Object.keys(validationErrors).length > 0) {
       setErrorMessages(validationErrors);
     } else {
+<<<<<<< HEAD
+      console.log("Form submitted:", formData);
+    }
+  };
+
+=======
       const userData = {
         userId: formData.id,
         userPass: formData.password,
@@ -170,6 +190,7 @@ export default function SignUpPage() {
       }
     }
   };
+>>>>>>> main
   return (
     <div className="min-h-screen bg-gray-100">
       <div className="w-full bg-sky-100 py-2 border-y border-sky-200">
