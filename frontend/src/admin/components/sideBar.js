@@ -1,6 +1,30 @@
 import React, { useState, useEffect } from "react";
 import { Outlet, Link } from "react-router-dom";
 import {
+<<<<<<< HEAD
+    Calendar,
+    FileText,
+    Folder,
+    Users,
+    Mail,
+    Map,
+    PieChart,
+    Settings as FeatherSettings,
+    File,
+    Anchor,
+    User,
+    Aperture,
+    FolderPlus,
+    MinusCircle,
+    LogIn,
+    LogOut,
+    UserCheck,
+    Smile,
+    UserX
+} from 'react-feather';
+import { Settings, MessageSquare, Bell, Menu } from 'lucide-react';
+import { Home } from '../pages/Home';
+=======
   Calendar,
   FileText,
   Folder,
@@ -13,6 +37,7 @@ import {
   Smile,
 } from "react-feather";
 import { MessageSquare, Bell, Menu } from "lucide-react";
+>>>>>>> main
 
 const SidebarAndNavbar = () => {
   const [isOpen, setIsOpen] = useState(true);

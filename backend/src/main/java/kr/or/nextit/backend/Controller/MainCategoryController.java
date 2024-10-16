@@ -1,13 +1,7 @@
 package kr.or.nextit.backend.controller;
 
-<<<<<<<< HEAD:backend/src/main/java/kr/or/nextit/backend/Controller/MainCategoryController.java
 import kr.or.nextit.backend.model.MainCategory;
 import kr.or.nextit.backend.service.MainCategoryService;
-========
-import kr.or.nextit.backend.model.AdminCategory;
-import kr.or.nextit.backend.service.AdminCategoryService;
-import kr.or.nextit.backend.mapper.AdminCategoryMapper;
->>>>>>>> main:backend/src/main/java/kr/or/nextit/backend/controller/AdminCategoryController.java
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/category")
+@RequestMapping("/api/categories")
 @RequiredArgsConstructor
-<<<<<<<< HEAD:backend/src/main/java/kr/or/nextit/backend/Controller/MainCategoryController.java
 public class MainCategoryController {
 
     private final MainCategoryService mainCategoryService;
@@ -27,16 +20,6 @@ public class MainCategoryController {
     public ResponseEntity<List<MainCategory>> getAllCategories() {
         try {
             List<MainCategory> categories = mainCategoryService.getAllCategories();
-========
-public class AdminCategoryController {
-
-    private final AdminCategoryService adminCategoryService;
-
-    @GetMapping("/admin")
-    public ResponseEntity<List<AdminCategory>> getAllCategories() {
-        try {
-            List<AdminCategory> categories = adminCategoryService.getAllCategories();
->>>>>>>> main:backend/src/main/java/kr/or/nextit/backend/controller/AdminCategoryController.java
             return ResponseEntity.ok(categories);
         } catch (Exception e) {
             // 오류 로그 추가
@@ -46,7 +29,6 @@ public class AdminCategoryController {
         }
     }
 
-<<<<<<<< HEAD:backend/src/main/java/kr/or/nextit/backend/Controller/MainCategoryController.java
     @GetMapping("/{urlName}")
     public MainCategory getCategory(@PathVariable String urlName) {
         return mainCategoryService.getCategoryWithParent(urlName);
@@ -55,6 +37,4 @@ public class AdminCategoryController {
 
 
 
-========
->>>>>>>> main:backend/src/main/java/kr/or/nextit/backend/controller/AdminCategoryController.java
 }
