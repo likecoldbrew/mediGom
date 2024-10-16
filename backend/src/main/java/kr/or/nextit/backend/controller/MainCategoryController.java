@@ -1,4 +1,4 @@
-        package kr.or.nextit.backend.controller;
+package kr.or.nextit.backend.controller;
 
 import kr.or.nextit.backend.model.MainCategory;
 import kr.or.nextit.backend.service.MainCategoryService;
@@ -7,10 +7,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-        import java.util.List;
+import java.util.List;
 
 @RestController
-@RequestMapping("/api/category")
+@RequestMapping("/api/categories")
 @RequiredArgsConstructor
 public class MainCategoryController {
 
