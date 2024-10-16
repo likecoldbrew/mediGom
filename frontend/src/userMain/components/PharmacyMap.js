@@ -8,10 +8,13 @@ const PharmacyMap = () => {
   const [map, setMap] = useState(null);
   const [hospitalCoords, setHospitalCoords] = useState(null);
 
+
+
   // 병원 데이터 가져오기
   const fetchHospitalData = async () => {
     try {
       const response = await fetch("/api/hospital/all");
+
       if (!response.ok) {
         throw new Error("Network response was not ok: " + response.statusText);
       }
@@ -31,6 +34,7 @@ const PharmacyMap = () => {
   // 주소를 좌표로 변환
   const geocodeAddress = (address) => {
     const geocoder = new kakao.maps.services.Geocoder();
+
     geocoder.addressSearch(address, (result, status) => {
       if (status === kakao.maps.services.Status.OK) {
         const coords = {

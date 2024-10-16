@@ -12,9 +12,10 @@
         <result property="views" column="views"/>
         <result property="userNo" column="user_no"/>
         <result property="userId" column="user_id"/>
+        <result property="admin" column="admin"/>
     </resultMap>
 
-    <!-- 전체 게시글 조회 -->
+    <!-- 전체 게시글 조회  -->
     <select id="selectAllBoardsWithUser" resultMap="BoardUserResultMap">
         SELECT
             b.board_id,
@@ -30,7 +31,28 @@
             users u
             ON
                 b.user_no = u.user_no
+        where u.admin=0
     </select>
+
+    <!-- 공지사항글 조회  -->
+    <select id="selectAllBoardsWithAdmin" resultMap="BoardUserResultMap">
+        SELECT
+            b.board_id,
+            b.title,
+            b.content,
+            b.create_at,
+            b.update_at,
+            b.views,
+            u.user_id
+        FROM
+            board b
+                JOIN
+            users u
+            ON
+                b.user_no = u.user_no
+        where u.admin=2
+    </select>
+
     <!-- 특정 게시글 조회 -->
     <select id="selectBoard" parameterType="int" resultMap="BoardUserResultMap">
         SELECT
@@ -47,11 +69,29 @@
             users u
             ON
                 b.user_no = u.user_no
-        WHERE b.board_id=#{boardId}
+        WHERE u.admin=0 and b.board_id=#{boardId}
+    </select>
+    <!-- 특정 공지사항 조회 -->
+    <select id="selectNotice" parameterType="int" resultMap="BoardUserResultMap">
+        SELECT
+            b.board_id,
+            b.title,
+            b.content,
+            b.create_at,
+            b.update_at,
+            b.views,
+            u.user_id
+        FROM
+            board b
+                JOIN
+            users u
+            ON
+                b.user_no = u.user_no
+        WHERE u.admin=2 and b.board_id=#{boardId}
     </select>
 
     <!-- 게시글 등록 -->
-    <insert id="insertBoard" parameterType="kr.or.nextit.backend.model.Community">
+    <insert id="insertBoard" parameterType="kr.or.nextit.backend.model.Community" useGeneratedKeys="true" keyProperty="boardId">
         INSERT INTO board (user_no, title, content, create_at, views, status)
         VALUES (#{userNo}, #{title}, #{content}, NOW(), 0, 'Y');
     </insert>
@@ -61,6 +101,7 @@
         INSERT INTO board_files (board_id, file_name, file_original_name, file_path, file_type, file_size, uploaded_at)
         VALUES (#{boardId}, #{fileName}, #{fileOriginalName}, #{filePath}, #{fileType}, #{fileSize}, NOW());
     </insert>
+
     <!-- 게시글 업데이트 -->
     <update id="updateBoard" parameterType="kr.or.nextit.backend.model.Community">
         UPDATE board b

@@ -12,14 +12,16 @@ const Modal = ({ isOpen, onClose, department }) => {
         <p className="text-gray-600">
           진료분야: {department.treatments.join(", ")}
         </p>
-        <p className="mt-4">담당 의사: {department.userNames}</p>{" "}
+        <p className="mt-4">담당 의사:<span className="text-sky-500">  {department.userNames.join("  |  ")}</span></p>{" "}
         {/* 의사 이름 표시 */}
+        <div className="flex justify-end">
         <button
           onClick={onClose}
-          className="mt-4 bg-blue-500 text-white px-4 py-2 rounded"
+          className="mt-4 bg-sky-200 hover:font-bold px-4 py-2 rounded"
         >
           닫기
         </button>
+        </div>
       </div>
     </div>
   );

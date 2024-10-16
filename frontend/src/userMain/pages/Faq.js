@@ -28,6 +28,7 @@ const Faq = () => {
   // URL에서 page가 변경될 때 currentPage 업데이트
   useEffect(() => {
     setCurrentPage(Number(page) || 1);
+    setExpandedIndex(null); // 페이지 변경 시 expandedIndex 초기화
   }, [page]);
 
   // FAQ 정보 호출
@@ -53,7 +54,7 @@ const Faq = () => {
   const totalPages = Math.ceil(faqs.length / itemsPerPage);
 
   const handlePageChange = (pageNumber) => {
-    navigate(`/faq/${pageNumber}`, {
+    navigate(`/faq/page/${pageNumber}`, {
       state: { selectCategory, selectSubCategory },
     });
   };
@@ -80,7 +81,7 @@ const Faq = () => {
               <p>Loading...</p>
             ) : faqs.length > 0 ? (
               currentItems.map((faq, index) => (
-                <div key={index} className="bg-white p-4 rounded shadow">
+                <div key={index} className="bg-white p-4 rounded shadow ">
                   <p
                     className="font-semibold cursor-pointer"
                     onClick={() => toggleAnswer(index)} // Toggle answer on click
@@ -91,13 +92,13 @@ const Faq = () => {
                     <>
                       <hr className="border-t border-sky-200 mb-4 mt-4" />{" "}
                       {/* 구분선 추가 */}
-                      <p className="text-gray-600">{faq.answer}</p>
+                      <p className="text-gray-600 w-[850px]">{faq.answer}</p>
                       <Link
                         to={`/faq/update`} // 목록 페이지로 돌아가기
                         state={{ selectCategory, selectSubCategory }}
                       >
                         <div className="flex justify-end">
-                          <button className="px-4 mt-8 hover:bg-sky-200 hover:font-bold py-2 border rounded-md bg-white text-blue-500 disabled:text-gray-300">
+                          <button className="px-4 mt-8 hover:bg-sky-200 hover:font-bold py-1 border rounded-md bg-white text-blue-500 disabled:text-gray-300">
                             수정하기
                           </button>
                         </div>
@@ -116,7 +117,7 @@ const Faq = () => {
                 className="text-sky-600 hover:underline mr-4"
               >
                 <button className="px-4 hover:bg-sky-200 hover:font-bold py-2 border rounded-md bg-white text-blue-500 disabled:text-gray-300">
-                  Faq 등록하기
+                  Faq 등록
                 </button>
               </Link>
             </div>
@@ -153,7 +154,7 @@ const Faq = () => {
             </div>
           </div>
         </main>
-        <div className="flex flex-col space-y-4">
+        <div className="flex flex-col space-y-4 overflow-hidden">
           <QuickMenu />
           <ChatBot />
         </div>

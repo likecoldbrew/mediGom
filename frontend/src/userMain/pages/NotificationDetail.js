@@ -4,7 +4,7 @@ import QuickMenu from "../components/QuickMenu";
 import SubCategories from "../components/SubCategory";
 import ChatBot from "../components/ChatBot";
 
-const BoardDetail = ({ boardId }) => {
+const NotificationDetail = ({ boardId }) => {
   const location = useLocation();
   const { selectCategory, selectSubCategory } = location.state || {};
   const [board, setBoard] = useState(null);
@@ -17,7 +17,7 @@ const BoardDetail = ({ boardId }) => {
 
   const fetchBoardDetail = async () => {
     try {
-      const response = await fetch(`/api/board/detail?boardId=${boardId}`);
+      const response = await fetch(`/api/board/detailNotice?boardId=${boardId}`);
       const data = await response.json();
       if (data.length > 0) {
         const formattedData = {
@@ -72,11 +72,7 @@ const BoardDetail = ({ boardId }) => {
               </div>
               <div className="text-gray-600">작성일: {board.createAt}</div>
             </div>
-            <hr className="border-t border-sky-200 mb-4" />
-            <div className="flex justify-between items-center mb-4">
-              <div className="text-gray-600">작성자: {board.userId}</div>
-              <div className="text-gray-600">조회수: {board.views}</div>
-            </div>
+
             <hr className="border-t border-sky-200  mb-6" />
             <div className="mt-4 h-[450px]">
               <p>{board.content}</p>
@@ -84,14 +80,14 @@ const BoardDetail = ({ boardId }) => {
           </div>
           <div className="flex justify-end items-center">
             <Link
-              to={`/community/1`} // 목록 페이지로 돌아가기
+              to={`/notice`} // 목록 페이지로 돌아가기
               state={{ selectCategory, selectSubCategory }}
               className="text-sky-600 hover:underline mr-4"
             >
               목록으로 돌아가기
             </Link>
             <Link
-              to={`/board/update/${boardId}`}
+              to={`/notice/update/${boardId}`}
               state={{ selectCategory, selectSubCategory }}
               className="text-sky-600 hover:underline mr-4"
             >
@@ -110,4 +106,4 @@ const BoardDetail = ({ boardId }) => {
   );
 };
 
-export default BoardDetail;
+export default NotificationDetail;

@@ -40,6 +40,7 @@ public class UserController {
         return ResponseEntity.status(201).build();
     }
 
+
     @GetMapping("/check-id/{id}")
     public boolean checkId(@PathVariable("id") String userId) {
         return userService.checkIdExists(userId);

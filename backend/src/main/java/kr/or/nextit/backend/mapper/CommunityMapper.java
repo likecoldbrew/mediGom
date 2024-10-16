@@ -9,8 +9,14 @@ import java.util.List;
 
 @Mapper
 public interface CommunityMapper {
+    //게시글 전체 조회
     List<Community> selectAllBoardsWithUser();
+    //공지사항 전체 조회
+    List<Community> selectAllBoardsWithAdmin();
+    //특정 게시글 조회
     List<Community> selectBoard(int boardId);
+    //특정 공지사항 조회
+    List<Community> selectNotice(int boardId);
     // 게시글 등록
     void insertBoard(Community boardDTO);
     // 첨부파일 삽입
