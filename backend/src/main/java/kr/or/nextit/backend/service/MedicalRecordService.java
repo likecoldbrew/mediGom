@@ -2,6 +2,7 @@ package kr.or.nextit.backend.service;
 
 import kr.or.nextit.backend.mapper.MedicalRecordMapper;
 import kr.or.nextit.backend.model.MedicalRecord;
+import kr.or.nextit.backend.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,4 +17,6 @@ public class MedicalRecordService {
     public List<MedicalRecord> getMedicalRecordList(int doctorNo) {
         return medicalRecordMapper.getMedicalRecordList(doctorNo);
     }
+
+    public List<MedicalRecord> getAllPatientList() { return medicalRecordMapper.getAllPatientList(); }
 }

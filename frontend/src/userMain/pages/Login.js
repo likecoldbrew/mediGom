@@ -1,9 +1,5 @@
 import React, { useState } from "react";
-<<<<<<< HEAD
-import { Link } from "react-router-dom";
-=======
 import { Link, useNavigate } from "react-router-dom";
->>>>>>> main
 import "../style/tailwind.css";
 import Footer from "../components/Footer";
 
@@ -12,11 +8,8 @@ export default function LoginPage() {
     id: "",
     password: "",
   });
-<<<<<<< HEAD
-=======
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
->>>>>>> main
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -26,14 +19,6 @@ export default function LoginPage() {
     }));
   };
 
-<<<<<<< HEAD
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Handle login logic here
-    console.log("Login attempted with:", formData);
-  };
-
-=======
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -67,17 +52,16 @@ export default function LoginPage() {
     }
   };
 
->>>>>>> main
   return (
     <div className="flex flex-col min-h-screen bg-gray-100">
       <header className="w-full bg-sky-100 py-2 border-y border-sky-200">
         <div className="container mx-auto px-4 flex items-center">
           <Link to="/" className="h-24">
-          <img
-            src="/images/userMain/logo.png"
-            className="h-16 mr-2"
-            alt="logo"
-          />
+            <img
+              src="/images/userMain/logo.png"
+              className="h-16 mr-2"
+              alt="logo"
+            />
           </Link>
           <p className="text-lg font-bold">
             medi<span className="text-yellow-500">Gom</span>
@@ -88,19 +72,15 @@ export default function LoginPage() {
         <div className="lg:w-1/4 mb-8 lg:mb-0 lg:pr-8">
           <div className="bg-green-100 rounded-full p-8 max-w-md mx-auto relative">
             <Link to="/" className="h-24">
-            <img
-              src="/images/userMain/logo.png"
-              alt="logo"
-              className="w-full h-auto"
-            />
+              <img
+                src="/images/userMain/logo.png"
+                alt="logo"
+                className="w-full h-auto"
+              />
             </Link>
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="bg-sky-100 bg-opacity-75 px-4 py-2 rounded-lg">
-<<<<<<< HEAD
-                <p className="text-xl font-bold ttext-blue-900 text-center">
-=======
                 <p className="text-xl font-bold text-blue-900 text-center">
->>>>>>> main
                   편리한 의료 서비스 <br />
                   메디곰에 오신 걸 환영합니다.
                 </p>
@@ -114,12 +94,9 @@ export default function LoginPage() {
             <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
               로그인
             </h2>
-<<<<<<< HEAD
-=======
             {errorMessage && (
               <div className="text-red-600 text-center mb-4">{errorMessage}</div>
             )}
->>>>>>> main
             <form className="space-y-6 mt-8" onSubmit={handleSubmit}>
               <div>
                 <label
@@ -200,11 +177,7 @@ export default function LoginPage() {
                 계정이 없으신가요?
               </div>
               <Link
-<<<<<<< HEAD
                 to="/signUp"
-=======
-                to="/frontend/src/userMain/pages/Signup"
->>>>>>> main
                 className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-sky-600 bg-white hover:bg-gray-50"
               >
                 회원가입
@@ -213,7 +186,7 @@ export default function LoginPage() {
           </div>
         </div>
       </div>
-        <Footer/>
+      <Footer />
     </div>
   );
 }

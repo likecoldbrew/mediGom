@@ -5,11 +5,28 @@
 
     <!-- 예약 목록 조회 -->
     <select id="getMedicalRecordList" resultType="kr.or.nextit.backend.model.MedicalRecord">
-        SELECT * FROM medical_records mr
-        INNER JOIN doctors d
-        ON mr.doctor_no = d.doctor_no
-        INNER JOIN users u
-        ON mr.user_no = u.user_no
-        AND d.doctor_no = #{doctorNo}
+        SELECT *
+        FROM medical_records mr
+                 INNER JOIN doctors d
+                            ON mr.doctor_no = d.doctor_no
+                 INNER JOIN users u
+                            ON mr.user_no = u.user_no
+                 INNER JOIN medical_department md
+                            ON d.department = md.department_no
+                                AND d.doctor_no = #{doctorNo}
+    </select>
+
+    <!-- 닥터 페이지-환자 전체 목록(+담당의 etc) 조회  -->
+    <select id="getAllPatientList" resultType="kr.or.nextit.backend.model.MedicalRecord">
+        SELECT *
+        FROM medical_records mr
+                 JOIN doctors d
+                      ON mr.doctor_no = d.doctor_no
+                 JOIN users u
+                      ON d.doctor_no = u.user_no
+                 JOIN medical_department md
+                      ON d.department = md.department_no
+                          AND u.admin = 1
+        ORDER BY u.delete_yn, u.user_no;
     </select>
 </mapper>

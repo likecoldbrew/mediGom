@@ -8,32 +8,7 @@
     <select id="getAllUsers" resultType="kr.or.nextit.backend.model.User">
         SELECT * FROM users
         ORDER BY delete_yn, user_no;
-<<<<<<< HEAD
-    </select>
 
-    <!-- 환자 목록 조회 -->
-    <select id="getPatientList" resultType="kr.or.nextit.backend.model.User">
-        SELECT * FROM users WHERE admin = 0
-        ORDER BY delete_yn, user_no
-    </select>
-
-    <!-- 의사 목록 조회 -->
-    <select id="getDoctorList" resultType="kr.or.nextit.backend.model.User">
-        SELECT * FROM doctors d
-        INNER JOIN users u
-        ON u.user_no = d.doctor_user_no
-        INNER JOIN medical_department md
-        ON d.department = md.department_no
-        AND u.admin = 1
-        ORDER BY delete_yn, user_no
-    </select>
-
-    <!-- 관리자 목록 조회 -->
-    <select id="getAdminList" resultType="kr.or.nextit.backend.model.User">
-        SELECT * FROM users WHERE admin = 2
-        ORDER BY delete_yn, user_no
-=======
->>>>>>> main
     </select>
 
     <!-- 환자 목록 조회 -->

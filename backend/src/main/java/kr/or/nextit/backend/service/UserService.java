@@ -4,10 +4,7 @@ import kr.or.nextit.backend.mapper.UserMapper;
 import kr.or.nextit.backend.model.User;
 import kr.or.nextit.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-<<<<<<< HEAD
-=======
 import org.springframework.security.crypto.password.PasswordEncoder;
->>>>>>> main
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,8 +17,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-<<<<<<< HEAD
-=======
+
     public void insertUser(User user) {
         user.setUserPass(passwordEncoder.encode(user.getUserPass())); // 비밀번호 암호화
         userRepository.save(user);
@@ -34,7 +30,6 @@ public class UserService {
         }
         userRepository.save(user);
     }
->>>>>>> main
     // 목록 조회
     public List<User> getAllUsers() {
         return userMapper.getAllUsers();
@@ -52,22 +47,6 @@ public class UserService {
         return userMapper.getAdminList();
     }
 
-    // 유저 한 명 조회
-<<<<<<< HEAD
-    public User getUserById(int userNo) {
-        return userMapper.getUserById(userNo);
-    }
-
-    // 유저 등록
-    public void insertUser(User user) {
-        userMapper.insertUser(user);
-    }
-
-    // 유저 수정
-    public void updateUser(User user) {
-        userMapper.updateUser(user);
-    }
-=======
     public User getUserByNo(int userNo) {
         return userMapper.getUserByNo(userNo);
     }
@@ -76,7 +55,6 @@ public class UserService {
         return userMapper.getUserById(userId);
     }
 
->>>>>>> main
 
     // 유저 삭제
     public void deleteUser(int userNo) {
