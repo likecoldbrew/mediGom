@@ -7,7 +7,11 @@ import DepartmentInfo from "../userMain/pages/DepartmentInfo";
 import SubCategories from "../userMain/components/SubCategory";
 import LoginPage from "../userMain/pages/Login";
 import EmployLogin from "../userMain/pages/employLogin";
+<<<<<<< HEAD
 import SignUpPage from "../userMain/pages/signUp";
+=======
+import SignUpPage from "../userMain/pages/Signup";
+>>>>>>> main
 
 function UserRoutes() {
   return (

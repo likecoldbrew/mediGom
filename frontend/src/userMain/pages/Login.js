@@ -1,5 +1,9 @@
 import React, { useState } from "react";
+<<<<<<< HEAD
 import { Link } from "react-router-dom";
+=======
+import { Link, useNavigate } from "react-router-dom";
+>>>>>>> main
 import "../style/tailwind.css";
 
 export default function LoginPage() {
@@ -7,6 +11,11 @@ export default function LoginPage() {
     id: "",
     password: "",
   });
+<<<<<<< HEAD
+=======
+  const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
+>>>>>>> main
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -16,12 +25,48 @@ export default function LoginPage() {
     }));
   };
 
+<<<<<<< HEAD
   const handleSubmit = (e) => {
     e.preventDefault();
     // Handle login logic here
     console.log("Login attempted with:", formData);
   };
 
+=======
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // 로그인 요청을 위한 API 호출
+    try {
+      const response = await fetch("/api/users/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: formData.id,
+          userPass: formData.password,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text(); // 응답을 텍스트로 읽기
+        setErrorMessage(errorText); // 텍스트를 직접 에러 메시지로 설정
+        return;
+      }
+
+      const token = await response.text();
+      // JWT 토큰을 로컬 스토리지에 저장
+      localStorage.setItem("token", token);
+      // 로그인 성공 후 대시보드 또는 원하는 페이지로 이동
+      navigate("/");
+    } catch (error) {
+      console.error("로그인 중 오류 발생:", error);
+      setErrorMessage("로그인 중 오류가 발생했습니다.");
+    }
+  };
+
+>>>>>>> main
   return (
     <div className="flex flex-col min-h-screen bg-gray-100">
       <header className="w-full bg-sky-100 py-2 border-y border-sky-200">
@@ -46,7 +91,11 @@ export default function LoginPage() {
             />
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="bg-sky-100 bg-opacity-75 px-4 py-2 rounded-lg">
+<<<<<<< HEAD
                 <p className="text-xl font-bold ttext-blue-900 text-center">
+=======
+                <p className="text-xl font-bold text-blue-900 text-center">
+>>>>>>> main
                   편리한 의료 서비스 <br />
                   메디곰에 오신 걸 환영합니다.
                 </p>
@@ -60,6 +109,12 @@ export default function LoginPage() {
             <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
               로그인
             </h2>
+<<<<<<< HEAD
+=======
+            {errorMessage && (
+              <div className="text-red-600 text-center mb-4">{errorMessage}</div>
+            )}
+>>>>>>> main
             <form className="space-y-6 mt-8" onSubmit={handleSubmit}>
               <div>
                 <label
@@ -140,7 +195,11 @@ export default function LoginPage() {
                 계정이 없으신가요?
               </div>
               <Link
+<<<<<<< HEAD
                 to="/signUp"
+=======
+                to="/frontend/src/userMain/pages/Signup"
+>>>>>>> main
                 className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-sky-600 bg-white hover:bg-gray-50"
               >
                 회원가입

@@ -1,15 +1,25 @@
 package kr.or.nextit.backend.mapper;
 
-import java.util.List;
-import org.apache.ibatis.annotations.Mapper;
 import kr.or.nextit.backend.model.User;
+<<<<<<< HEAD
 import org.apache.ibatis.annotations.Param;
 
+=======
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+
+>>>>>>> main
 @Mapper
 public interface UserMapper {
-    // 모든 유저 조회
-    List<User> getAllUsers();
 
+    List<User> getAllUsers();
+    List<User> getPatientList();
+    List<User> getDoctorList();
+    List<User> getAdminList();
+
+<<<<<<< HEAD
     // 환자 목록 조회
     List<User> getPatientList();
 
@@ -21,20 +31,16 @@ public interface UserMapper {
 
     // 특정 유저 조회
     User getUserById(int userNo);
+=======
+    User getUserByNo(int userNo);
+    User getUserById(String userId);
+>>>>>>> main
 
-    // 유저 추가
     void insertUser(User user);
-
-    // 유저 수정
     void updateUser(User user);
-
-    // 유저 삭제
     void deleteUser(int userNo);
 
-    // 의사 이름 조회
     List<User> getDoctorsName();
 
-    // ID 중복 확인 메서드
     boolean checkIdExists(@Param("userId") String userId);
-
 }
