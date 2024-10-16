@@ -1,12 +1,24 @@
 package kr.or.nextit.backend.model;
 
-import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
-@Data
+import java.io.File;
+
+
 @Component
-@ConfigurationProperties(prefix = "file")
 public class FileStorage {
-    private String uploadDir;
+    // 사용자 파일 업로드 경로
+    private final String uploadDir = "public/userFile";
+
+    public String getUploadDir() {
+        // 디렉토리가 존재하지 않으면 생성
+        File directory = new File(uploadDir);
+        if (!directory.exists()) {
+            boolean created = directory.mkdirs(); // 디렉토리 생성
+            if (!created) {
+                throw new RuntimeException("업로드 디렉토리 생성 실패: " + uploadDir);
+            }
+        }
+        return uploadDir;
+    }
 }

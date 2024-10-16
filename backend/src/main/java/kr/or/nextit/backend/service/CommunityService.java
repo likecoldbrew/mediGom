@@ -28,8 +28,8 @@ public class CommunityService {
     }
 
     //병원후기글 하나 선택
-    public List<Community> selectBoard(int boardId) {
-        return communityMapper.selectBoard(boardId);
+    public Community selectBoard(int boardId) {
+        return communityMapper.selectBoardWithFiles(boardId);
     }
 
     //공지사항 하나 선택
@@ -40,14 +40,15 @@ public class CommunityService {
     @Transactional
     public int registerBoard(Community boardDTO) {
         int retValue = communityMapper.insertBoard(boardDTO);
-        if (boardDTO.getFiles() != null) {
+        if (boardDTO.getFiles() != null && !boardDTO.getFiles().isEmpty()) {
             int boardId = boardDTO.getBoardId(); // 방금 등록한 게시글 ID
-            List<BoardFiles> fileList=boardDTO.getFiles();
+            List<BoardFiles> fileList = boardDTO.getFiles();
             for (BoardFiles file : fileList) {
                 file.setBoardId(boardId); // 파일의 board_id 설정
-                communityMapper.insertBoardFiles(fileList);
             }
-        } return retValue;
+            communityMapper.insertBoardFiles(fileList); // 리스트 전체를 한 번에 삽입
+        }
+        return retValue;
     }
 
     // 게시글 업데이트

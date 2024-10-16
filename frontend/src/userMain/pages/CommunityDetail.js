@@ -19,11 +19,13 @@ const BoardDetail = ({ boardId }) => {
     try {
       const response = await fetch(`/api/board/detail?boardId=${boardId}`);
       const data = await response.json();
-      if (data.length > 0) {
+      console.log("게시글데이터", data); // 데이터 확인
+      if (!data.isEmpty) {
         const formattedData = {
-          ...data[0],
-          createAt: formatDate(data[0].createAt),
-          updateAt: data[0].updateAt ? formatDate(data[0].updateAt) : null,
+          ...data,
+          createAt: formatDate(data.createAt),
+          updateAt: data.updateAt ? formatDate(data.updateAt) : null,
+          files: data.files || [] // files가 없을 경우 빈 배열로 초기화
         };
         setBoard(formattedData);
       } else {
@@ -35,7 +37,7 @@ const BoardDetail = ({ boardId }) => {
       setLoading(false);
     }
   };
-
+  console.log("ㅂ호두", board);
   const formatDate = (timestamp) => {
     const date = new Date(timestamp);
     const year = date.getFullYear();
@@ -81,6 +83,18 @@ const BoardDetail = ({ boardId }) => {
             <div className="mt-4 h-[450px]">
               <p>{board.content}</p>
             </div>
+            <div className="flex items-center mb-4">
+              <span className="mr-2">첨부파일:</span>
+              {board.files && board.files.length > 0 ? (
+                board.files.map((file) => (
+                  <a key={file.id} href={`/file/download/${file.id}`} className="text-blue-500 hover:underline mr-2">
+                    {file.fileOriginalName}
+                  </a>
+                ))
+              ) : (
+                <span>첨부파일이 없습니다.</span> // 파일이 없을 때 표시할 내용
+              )}
+            </div>
           </div>
           <div className="flex justify-end items-center">
             <Link
@@ -95,7 +109,8 @@ const BoardDetail = ({ boardId }) => {
               state={{ selectCategory, selectSubCategory }}
               className="text-sky-600 hover:underline mr-4"
             >
-              <button className="px-4 py-2  hover:bg-sky-200 hover:font-bold border rounded-md bg-white  text-blue-500 disabled:text-gray-300">
+              <button
+                className="px-4 py-2  hover:bg-sky-200 hover:font-bold border rounded-md bg-white  text-blue-500 disabled:text-gray-300">
                 수정하기
               </button>
             </Link>

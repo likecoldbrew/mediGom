@@ -31,5 +31,13 @@ public interface CommunityMapper {
     int deleteBoard(int boardId);
     //첨부파일삭제
     int deleteBoardFiles(int boardId);
+
+    // 특정 게시글 조회와 첨부파일 포함
+    default Community selectBoardWithFiles(int boardId) {
+        Community board = selectBoard(boardId).get(0); // 게시글 정보 가져오기
+        List<BoardFiles> files = selectBoardFiles(boardId); // 첨부파일 정보 가져오기
+        board.setFiles(files); // 게시글에 첨부파일 추가
+        return board; // 게시글과 첨부파일 정보를 포함한 Community 객체 반환
+    }
 }
 

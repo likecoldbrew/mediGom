@@ -52,6 +52,7 @@ const BoardRegist = () => {
     // 파일이 존재할 경우에만 formData에 추가
     if (files.length > 0) {
       files.forEach((file) => {
+        console.log(`Uploading file: ${file.name}`); // 디버깅용 로그
         formData.append("file", file);
       });
     }

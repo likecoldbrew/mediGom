@@ -40,7 +40,7 @@ public class CommunityController {
     }
     //특정 후기글
     @GetMapping("/detail")
-    public List<Community> selectBoard(int boardId) {
+    public Community selectBoard(@RequestParam int boardId) {
         return communityService.selectBoard(boardId);
     }
     //전체 공지사항
@@ -69,12 +69,25 @@ public class CommunityController {
         if (files != null) {
             for (MultipartFile file : files) {
                 if (!file.isEmpty()) {
-                    String filePath = getUploadDir() + "/" + file.getOriginalFilename(); // 업로드 경로 설정
+                    String fileName = file.getOriginalFilename();
+                    String uploadDir = getUploadDir();
+                    String filePath = uploadDir + "/" + fileName;
+
+                    try {
+                        // 파일을 서버에 저장
+                        Files.copy(file.getInputStream(), Paths.get(filePath), StandardCopyOption.REPLACE_EXISTING);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                                .body("파일 업로드 중 오류가 발생했습니다." + e.getMessage());
+                    }
+
                     BoardFiles boardFiles = new BoardFiles();
-                    boardFiles.setFileName(file.getOriginalFilename());
-                    boardFiles.setFileOriginalName(file.getOriginalFilename());
+                    boardFiles.setFileName(fileName);
+                    boardFiles.setFileOriginalName(fileName);
                     boardFiles.setFilePath(filePath);
                     boardFiles.setFileSize((int) file.getSize());
+                    boardFiles.setFileType(file.getContentType());
                     boardFilesList.add(boardFiles);
                 }
             }

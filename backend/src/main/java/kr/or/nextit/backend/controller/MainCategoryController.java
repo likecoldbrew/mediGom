@@ -1,4 +1,4 @@
-package kr.or.nextit.backend.controller;
+package kr.or.nextit.backend.Controller;
 
 import kr.or.nextit.backend.model.MainCategory;
 import kr.or.nextit.backend.service.MainCategoryService;

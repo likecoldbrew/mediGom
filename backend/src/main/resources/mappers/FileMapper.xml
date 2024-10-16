@@ -2,19 +2,32 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.or.nextit.backend.mapper.BoardFilesMapper">
+    <!-- 테이블 전체 컬럼   -->
+    <sql id="fileColumns">
+        file_id
+        , board_id, file_name, file_original_name, file_path, file_type, file_size, uploaded_at
+    </sql>
+    <!-- 첨부파일 저장    -->
+    <insert id="saveAll" parameterType="list">
+        INSERT INTO board_files(
+        <include refid="fileColumns"/>
+        )VALUES
+        <foreach item="file" collection="list" separator=",">
+            (#{boardId}, #{fileName}, #{fileOriginalName}, #{filePath}, #{fileType}, #{fileSize}, NOW()
+            )
+        </foreach>
+    </insert>
+
     <!-- 게시글의 첨부파일 조회 -->
     <select id="selectFile" parameterType="int" resultType="kr.or.nextit.backend.model.BoardFiles">
-        SELECT
-            bf.file_id,
-            bf.file_name,
-            bf.file_original_name,
-            bf.file_path,
-            bf.file_type,
-            bf.file_size,
-            bf.uploaded_at
-        FROM
-            board_files bf
-        WHERE
-            bf.file_id = #{fileId};
+        SELECT bf.file_id,
+               bf.file_name,
+               bf.file_original_name,
+               bf.file_path,
+               bf.file_type,
+               bf.file_size,
+               bf.uploaded_at
+        FROM board_files bf
+        WHERE bf.file_id = #{fileId};
     </select>
 </mapper>
