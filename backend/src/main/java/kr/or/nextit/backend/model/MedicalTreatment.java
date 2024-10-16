@@ -5,7 +5,7 @@ import lombok.Data;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "medical_treatment")  // 테이블 이름을 명시
+//@Table(name = "medical_treatment")  // 테이블 이름을 명시
 @Data
 public class MedicalTreatment {
     @Id

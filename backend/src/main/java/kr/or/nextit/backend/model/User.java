@@ -22,7 +22,8 @@ public class User {
     private String userAdd2;
     private Timestamp createAt;
     private Timestamp updateAt;
+    private int admin;
+    private String deleteYn;
     private String departmentName;
-    private String diagnosis;
-    private String doctorName;
+    private String rank;
 }

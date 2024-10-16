@@ -7,7 +7,6 @@ import jakarta.persistence.Table;
 import lombok.Data;
 
 @Entity
-@Table(name = "hospital_info")  // 테이블 이름을 명시
 @Data
 public class Hospital {
     @Id
