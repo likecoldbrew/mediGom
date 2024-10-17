@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.or.nextit.backend.mapper.CertificateMapper">
+
+    <insert id="insertCertificate" parameterType="kr.or.nextit.backend.model.Certificate">
+        INSERT INTO certificates (user_no, doctor_no, certificate_type, disease, content, outbreak_at, treatment_at, create_at, valid_until, status)
+        VALUES (#{userNo}, #{doctorNo}, #{certificateType}, #{disease}, #{content}, #{outbreakAt}, #{treatmentAt}, #{createAt}, #{validUntil}, #{status})
+    </insert>
+
+    <select id="selectCertificateById" resultType="kr.or.nextit.backend.model.Certificate">
+        SELECT * FROM certificates WHERE certificate_id = #{certificateId}
+    </select>
+
+    <select id="selectAllCertificates" resultType="kr.or.nextit.backend.model.Certificate">
+        SELECT * FROM certificates
+    </select>
+
+    <update id="updateCertificate" parameterType="kr.or.nextit.backend.model.Certificate">
+        UPDATE certificates
+        SET user_no = #{userNo}, doctor_no = #{doctorNo}, certificate_type = #{certificateType}, disease = #{disease},
+            content = #{content}, outbreak_at = #{outbreakAt}, treatment_at = #{treatmentAt},
+            create_at = #{createAt}, valid_until = #{validUntil}, status = #{status}
+        WHERE certificate_id = #{certificateId}
+    </update>
+
+    <delete id="deleteCertificate" parameterType="int">
+        DELETE FROM certificates WHERE certificate_id = #{certificateId}
+    </delete>
+
+</mapper>

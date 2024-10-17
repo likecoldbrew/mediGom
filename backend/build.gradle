@@ -37,6 +37,8 @@ dependencies {
 
     // MyBatis 관련 의존성
     implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
     testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.3'
 
     // Hibernate ORM & Hibernate Search
@@ -56,8 +58,7 @@ dependencies {
     // 데이터베이스 및 모듈
     runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
     implementation 'com.github.iamport:iamport-rest-client-java:0.2.21' // 결제 모듈
-    implementation 'kr.dogfoot:hwplib:1.1.7' // hwplib
-
+    implementation group: 'kr.dogfoot', name: 'hwplib', version: '1.1.7' //hwplib
 
     // JAXB (Java XML 처리용)
     implementation 'javax.xml.bind:jaxb-api:2.3.1'

@@ -40,7 +40,6 @@ public class UserController {
         return ResponseEntity.status(201).build();
     }
 
-
     @GetMapping("/check-id/{id}")
     public boolean checkId(@PathVariable("id") String userId) {
         return userService.checkIdExists(userId);
@@ -82,5 +81,27 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
+    // 현재 로그인한 사용자 정보 가져오기
+    @GetMapping("/me")
+    public ResponseEntity<User> getCurrentUser(@RequestHeader("Authorization") String token) {
+        // "Bearer " 접두사 제거
+        String jwt = token.substring(7);
+
+        // JWT에서 사용자 ID 추출
+        String userId = jwtUtil.getUserIdFromToken(jwt);
+
+        if (userId == null) {
+            return ResponseEntity.status(401).body(null); // JWT가 유효하지 않으면 401 응답
+        }
+
+        // 사용자 ID로 사용자 정보 조회
+        User user = userService.getUserById(userId);
+
+        if (user == null) {
+            return ResponseEntity.status(404).body(null); // 사용자 정보가 없으면 404 응답
+        }
+
+        return ResponseEntity.ok(user); // 사용자 정보 반환
+    }
 
 }

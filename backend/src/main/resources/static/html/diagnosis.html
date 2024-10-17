@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+  <meta charset="utf-8" />
+</head>
+
+<body style="margin: 0;">
+
+<div id="p1" style="overflow: hidden; position: relative; background-color: white; width: 909px; height: 1284px;">
+
+  <!-- Begin shared CSS values -->
+  <style class="shared-css" type="text/css" >
+      .t {
+          transform-origin: bottom left;
+          z-index: 2;
+          position: absolute;
+          white-space: pre;
+          overflow: visible;
+          line-height: 1.5;
+      }
+      .text-container {
+          white-space: pre;
+      }
+      @supports (-webkit-touch-callout: none) {
+          .text-container {
+              white-space: normal;
+          }
+      }
+  </style>
+  <!-- End shared CSS values -->
+
+
+  <!-- Begin inline CSS -->
+  <style type="text/css" >
+
+      #t1_1{left:86px;bottom:1156px;letter-spacing:0.22px;word-spacing:2.59px;}
+      #t2_1{left:352px;bottom:1087px;}
+      #t3_1{left:444px;bottom:1087px;}
+      #t4_1{left:535px;bottom:1087px;}
+      #t5_1{left:686px;bottom:1106px;letter-spacing:0.26px;}
+      #t6_1{left:787px;bottom:1106px;}
+      #t7_1{left:91px;bottom:1055px;letter-spacing:-0.12px;word-spacing:2.84px;}
+      #t8_1{left:91px;bottom:1015px;letter-spacing:-0.12px;word-spacing:2.78px;}
+      #t9_1{left:332px;bottom:1015px;letter-spacing:-0.17px;}
+      #ta_1{left:466px;bottom:1015px;letter-spacing:-0.09px;}
+      #tb_1{left:106px;bottom:955px;letter-spacing:-0.18px;word-spacing:2.68px;}
+      #tc_1{left:285px;bottom:955px;letter-spacing:-0.1px;}
+      #td_1{left:412px;bottom:955px;letter-spacing:-0.15px;}
+      #te_1{left:485px;bottom:955px;letter-spacing:-0.13px;}
+      #tf_1{left:475px;bottom:955px;letter-spacing:-0.12px;}
+      #tg_1{left:535px;bottom:965px;letter-spacing:-0.15px;}
+      #th_1{left:535px;bottom:945px;letter-spacing:-0.15px;}
+      #ti_1{left:600px;bottom:955px;letter-spacing:-0.09px;}
+      #tj_1{left:717px;bottom:965px;}
+      #tk_1{left:717px;bottom:945px;}
+      #tl_1{left:770px;bottom:955px;letter-spacing:-0.1px;}
+      #tm_1{left:106px;bottom:902px;letter-spacing:-0.18px;word-spacing:2.68px;}
+      #tn_1{left:240px;bottom:902px;letter-spacing:-0.09px;}
+      #to_1{left:591px;bottom:902px;letter-spacing:-0.11px;word-spacing:2.77px;}
+      #tp_1{left:102px;bottom:845px;}
+      #tq_1{left:186px;bottom:845px;}
+      #tr_1{left:99px;bottom:785px;letter-spacing:-0.17px;word-spacing:2.66px;}
+      #ts_1{left:99px;bottom:745px;letter-spacing:-0.17px;word-spacing:2.67px;}
+      #tt_1{left:692px;bottom:865px;letter-spacing:-0.18px;word-spacing:2.81px;}
+      #tu_1{left:692px;bottom:845px;letter-spacing:-0.18px;word-spacing:2.81px;}
+      #tv_1{left:111px;bottom:678px;}
+      #tw_1{left:144px;bottom:678px;}
+      #tx_1{left:178px;bottom:678px;}
+      #ty_1{left:312px;bottom:678px;}
+      #tz_1{left:362px;bottom:678px;}
+      #t10_1{left:412px;bottom:678px;}
+      #t11_1{left:475px;bottom:678px;letter-spacing:-0.12px;word-spacing:2.72px;}
+      #t12_1{left:663px;bottom:678px;}
+      #t13_1{left:713px;bottom:678px;}
+      #t14_1{left:763px;bottom:678px;}
+      #t15_1{left:106px;bottom:589px;}
+      #t16_1{left:182px;bottom:589px;}
+      #t17_1{left:106px;bottom:569px;}
+      #t18_1{left:182px;bottom:569px;}
+      #t19_1{left:106px;bottom:549px;}
+      #t1a_1{left:182px;bottom:549px;}
+      #t1b_1{left:111px;bottom:452px;}
+      #t1c_1{left:178px;bottom:452px;}
+      #t1d_1{left:548px;bottom:452px;letter-spacing:-0.13px;word-spacing:2.63px;}
+      #t1e_1{left:398px;bottom:358px;letter-spacing:0.28px;word-spacing:3.06px;}
+      #t1f_1{left:127px;bottom:299px;}
+      #t1g_1{left:182px;bottom:299px;}
+      #t1h_1{left:237px;bottom:299px;letter-spacing:0.14px;word-spacing:3.06px;}
+      #t1i_1{left:363px;bottom:299px;letter-spacing:0.05px;}
+      #t1j_1{left:448px;bottom:299px;}
+      #t1k_1{left:530px;bottom:299px;}
+      #t1l_1{left:622px;bottom:299px;}
+      #t1m_1{left:127px;bottom:270px;letter-spacing:0.26px;word-spacing:3.05px;}
+      #t1n_1{left:127px;bottom:241px;letter-spacing:0.25px;word-spacing:3.06px;}
+      #t1o_1{left:127px;bottom:212px;letter-spacing:0.22px;word-spacing:3.04px;}
+      #t1p_1{left:127px;bottom:182px;letter-spacing:0.22px;word-spacing:3.06px;}
+      #t1q_1{left:256px;bottom:182px;}
+      #t1r_1{left:384px;bottom:182px;}
+      #t1s_1{left:457px;bottom:182px;letter-spacing:0.25px;}
+      #t1t_1{left:695px;bottom:182px;}
+
+      .s0{font-size:15px;font-family:Gulim_j;color:#FFF;}
+      .s1{font-size:31px;font-family:Gulim_j;color:#000;-webkit-text-stroke:0.6px #000;text-stroke:0.6px #000;}
+      .s2{font-size:18px;font-family:Gulim_j;color:#000;-webkit-text-stroke:0.4px #000;text-stroke:0.4px #000;}
+      .s3{font-size:18px;font-family:HaansoftDotum_p;color:#000;-webkit-text-stroke:0.4px #000;text-stroke:0.4px #000;}
+      .s4{font-size:17px;font-family:Gulim_j;color:#000;}
+  </style>
+  <!-- End inline CSS -->
+
+  <!-- Begin embedded font definitions -->
+  <style id="fonts1" type="text/css" >
+
+
+
+  </style>
+  <!-- End embedded font definitions -->
+
+  <!-- Begin page background -->
+  <div id="pg1Overlay" style="width:100%; height:100%; position:absolute; z-index:1; background-color:rgba(0,0,0,0); -webkit-user-select: none;"></div>
+  <svg viewBox="0 0 909 1284" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <style>
+          .g0{fill:none;stroke:#000;stroke-width:0.55;stroke-miterlimit:10;}
+          .g1{fill:none;stroke:#000;stroke-width:1.648;stroke-miterlimit:10;}
+      </style>
+    </defs>
+    <path d="M674.5 147.1V275.8M816.7 147.1V275.8M674.3 147.1H817M674.3 179.8H817m-142.7 96H817m-.3-128.7V275.8M674.5 147.1V275.8m-.2 0H817M674.3 147.1H817" class="g0"/>
+    <path d="M88.7 289.4v855.4" class="g1"/>
+    <path d="M216.6 289.4V853.8M400.7 289.4v52.1m55.9-52.1v52.1m.6 225.3V619m68.3-329.6v52.1M526.6 784v69.8m32.4-287V619m19.3-329.6v52.1M611.1 784v69.8m48.7-459.3V566.8m49.9-277.4v52.1M741 289.4v52.1" class="g0"/>
+    <path d="M817 289.4v855.4M88 289.4H818" class="g1"/>
+    <path d="M88 341.5H818m-730 53H818M88 566.8H818M88 619H818M88 784H818M88 853.8H818" class="g0"/>
+    <path d="M88 1144.8H818m-1-855.4v855.4M88.7 289.4v855.4m-.7 0H818M88 289.4H818" class="g1"/>
+  </svg>
+  <!-- End page background -->
+
+
+  <!-- Begin text definitions (Positioned/styled in CSS) -->
+  <div class="text-container">
+    <span id="t2_1" class="t s1">진 </span>
+    <span id="t3_1" class="t s1">단 </span>
+    <span id="t4_1" class="t s1">서 </span>
+    <span id="t5_1" class="t s2">원부대조필 </span>
+    <span id="t6_1" class="t s3"> </span>
+    <span id="t7_1" class="t s4">병록번호 <span th:text="${recordNum}">123456</span></span>
+    <span id="t8_1" class="t s4">연 번 호 <span th:text="${serialNum}">000-001</span></span>
+    <span id="t9_1" class="t s4">주민등록번호 </span>
+    <span id="ta_1" class="t s4" th:text="${Rrn}">XXXX-XXXXXX</span>
+    <span id="tb_1" class="t s4">환자의 성명 </span>
+    <span id="tc_1" class="t s4" th:text="${name}">홍길동</span>
+    <span id="td_1" class="t s4">성별 </span>
+    <span id="te_1" class="t s4" th:text="${gen}">남</span>
+    <span id="tg_1" class="t s4">생년 </span>
+    <span id="th_1" class="t s4">월일 </span>
+    <span id="ti_1" class="t s4" th:text="${Birth}">1990-01-01</span>
+    <span id="tj_1" class="t s4">연 </span>
+    <span id="tk_1" class="t s4">령 </span>
+    <span id="tl_1" class="t s4" th:text="${age}">30</span>
+    <span id="tm_1" class="t s4">환자의 주소 </span>
+    <span id="tn_1" class="t s4" th:text="${address}">서울시 강남구</span>
+    <span id="to_1" class="t s4">전 화 : <span th:text="${phone}">010-1234-5678</span></span>
+    <span id="tp_1" class="t s4">병 </span>
+    <span id="tq_1" class="t s4">명 </span>
+    <span id="tr_1" class="t s4">□ 임상적추정 </span>
+    <span id="ts_1" class="t s4">□ 최종진단 </span>
+    <span id="tt_1" class="t s4">한 국 질 병 </span>
+    <span id="tu_1" class="t s4">분 류 번 호 </span>
+    <span id="tv_1" class="t s4">발 </span>
+    <span id="tw_1" class="t s4">병 </span>
+    <span id="tx_1" class="t s4">일 </span>
+    <span id="ty_1" class="t s4">년 </span>
+    <span id="tz_1" class="t s4">월 </span>
+    <span id="t10_1" class="t s4">일 </span>
+    <span id="t11_1" class="t s4">진 단 일 </span>
+    <span id="t12_1" class="t s4">년 </span>
+    <span id="t13_1" class="t s4">월 </span>
+    <span id="t14_1" class="t s4">일 </span>
+    <span id="t15_1" class="t s4">향 </span>
+    <span id="t16_1" class="t s4">후 </span>
+    <span id="t17_1" class="t s4">치 </span>
+    <span id="t18_1" class="t s4">료 </span>
+    <span id="t19_1" class="t s4">의 </span>
+    <span id="t1a_1" class="t s4">견 </span>
+    <span id="t1b_1" class="t s4">비 </span>
+    <span id="t1c_1" class="t s4">고 </span>
+    <span id="t1d_1" class="t s4">용 도 </span>
+    <span id="t1e_1" class="t s2">위와 같이 진단함 </span>
+    <span id="t1f_1" class="t s2">발 </span>
+    <span id="t1g_1" class="t s2">행 </span>
+    <span id="t1h_1" class="t s2">일 : </span>
+    <span id="t1i_1" class="t s2">20 </span>
+    <span id="t1j_1" class="t s2">년 </span>
+    <span id="t1k_1" class="t s2">월 </span>
+    <span id="t1l_1" class="t s2">일 </span>
+    <span id="t1m_1" class="t s2">의 료 기 관 명 : ○○ 대학병원 </span>
+    <span id="t1n_1" class="t s2">주 소 및 명 칭 : ○○시 ○○구 ○○동 ○○ - ○○ </span>
+    <span id="t1o_1" class="t s2">전 화 및 FAX : </span>
+    <span id="t1p_1" class="t s2">면 허 번 호 </span>
+    <span id="t1q_1" class="t s2">제 </span>
+    <span id="t1r_1" class="t s2">호 </span>
+    <span id="t1s_1" class="t s2">의사성명 </span>
+    <span id="t1t_1" class="t s3"> </span>
+  </div>
+</body>
+</html>
