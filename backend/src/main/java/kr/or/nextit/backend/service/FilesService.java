@@ -69,4 +69,23 @@ public class FilesService {
         }
         return savedFiles; // 저장된 파일의 목록 반환
     }
+    // 게시글 ID로 모든 파일 조회
+    public List<Files> selectAllFiles(int boardId) {
+        return filesMapper.selectAllFiles(boardId); // 매퍼를 통해 게시글 ID에 연결된 모든 파일 조회
+    }
+
+    // 게시글 ID로 파일 삭제
+    public void deleteFiles(List<Integer> fileIds) {
+        if (fileIds != null && !fileIds.isEmpty()) {
+            // 각 파일 ID에 대해 실제 파일 시스템에서 삭제
+            for (int fileId : fileIds) {
+                Files file = filesMapper.selectFile(fileId);
+                if (file != null) {
+                    // 파일 시스템에서 파일 삭제
+                    fileStorage.deleteFile(file.getFilePath());
+                }
+            }
+            filesMapper.deleteFiles(fileIds); // DB에서 파일 삭제
+        }
+    }
 }

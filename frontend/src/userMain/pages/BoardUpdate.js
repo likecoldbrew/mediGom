@@ -23,16 +23,18 @@ const BoardUpdate = ({ boardId }) => {
     try {
       const response = await fetch(`/api/board/detail?boardId=${boardId}`);
       const data = await response.json();
-      if (data.length > 0) {
+      console.log(data)
+      console.log(data.length)
+      if (!data.isEmpty) {
         const formattedData = {
-          ...data[0],
-          createAt: formatDate(data[0].createAt),
-          updateAt: data[0].updateAt ? formatDate(data[0].updateAt) : null,
+          ...data,
+          createAt: formatDate(data.createAt),
+          updateAt: data.updateAt ? formatDate(data.updateAt) : null,
         };
         setBoard(formattedData);
         setUserId(formattedData.userId);
         setTitle(formattedData.title); // 제목 초기화
-        setContent(formattedData.content); // 내용 초기화
+        setContent(formattedData.content); // 내용 초기화\
         setFiles(formattedData.files || []); // 기존 파일 초기화
       } else {
         console.log("No data found for this board.");
@@ -55,6 +57,9 @@ const BoardUpdate = ({ boardId }) => {
   const handleFileChange = (event) => {
     setFiles(Array.from(event.target.files));
   };
+  const handleFileRemove = (index) => {
+    setFiles((prevFiles) => prevFiles.filter((_, i) => i !== index)); // 선택된 파일 제거
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -73,7 +78,6 @@ const BoardUpdate = ({ boardId }) => {
         method: "PUT", // HTTP 메서드 PUT으로 변경
         body: formData,
       });
-
       if (response.ok) {
         alert("게시글이 수정되었습니다.");
         navigate("/community", {
@@ -137,8 +141,15 @@ const BoardUpdate = ({ boardId }) => {
                 {files.length > 0 ? (
                   <ul className="list-disc pl-5">
                     {files.map((file, index) => (
-                      <li key={index} className="text-gray-600">
-                        {file.name}
+                      <li key={index} className="text-gray-600 flex justify-between items-center">
+                        {file.fileOriginalName}
+                        <button
+                          type="button"
+                          onClick={() => handleFileRemove(index)}
+                          className="ml-2 text-red-600 hover:underline"
+                        >
+                          x
+                        </button>
                       </li>
                     ))}
                   </ul>

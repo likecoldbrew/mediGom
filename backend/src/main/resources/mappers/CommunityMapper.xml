@@ -80,7 +80,7 @@
             b.create_at,
             b.update_at,
             b.views,
-            u.user_id
+            u.user_id,
         FROM
             board b
                 JOIN
@@ -96,14 +96,6 @@
         VALUES (#{userNo}, #{title}, #{content}, NOW(), 0, 'Y');
     </insert>
 
-    <!-- 첨부파일 삽입 -->
-    <insert id="insertBoardFiles" parameterType="list">
-        INSERT INTO board_files (board_id, file_name, file_original_name, file_path, file_type, file_size, uploaded_at)
-        VALUES
-        <foreach collection="list" item="f" separator=",">
-            (#{f.boardId}, #{f.fileName}, #{f.fileOriginalName}, #{f.filePath}, #{f.fileType}, #{f.fileSize}, NOW())
-        </foreach>
-    </insert>
 
     <!-- 게시글 업데이트 -->
     <update id="updateBoard" parameterType="kr.or.nextit.backend.model.Community">
@@ -124,7 +116,7 @@
         update
             board
         set
-            views = views +1
+            views = views +1,
         where
             board_id=#{boardId}
     </update>
@@ -132,31 +124,9 @@
     <!-- 게시글 삭제 -->
     <update id="deleteBoard" parameterType="kr.or.nextit.backend.model.Community">
         UPDATE board b
-        SET b.status = 'N'
+        SET b.status = 'N',
         WHERE b.board_id = #{boardId};
     </update>
-
-
-    <!-- 게시글의 첨부파일 조회 -->
-    <select id="selectBoardFiles" parameterType="int" resultType="kr.or.nextit.backend.model.Files">
-        SELECT
-            bf.file_id,
-            bf.file_name,
-            bf.file_original_name,
-            bf.file_path,
-            bf.file_type,
-            bf.file_size,
-            bf.uploaded_at
-        FROM
-            board_files bf
-        WHERE
-            bf.board_id = #{boardId};
-    </select>
-
-    <delete id="deleteBoardFiles">
-        DELETE FROM board_files
-        WHERE board_id = #{boardId}
-    </delete>
 
 
 

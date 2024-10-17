@@ -43,4 +43,17 @@ public class FileStorage {
         }
         return fileName; // 저장된 파일의 랜덤 이름 반환
     }
+
+    // 파일 삭제 메소드 추가
+    public void deleteFile(String filePath) {
+        File fileToDelete = new File(filePath);
+        if (fileToDelete.exists()) {
+            boolean deleted = fileToDelete.delete();
+            if (!deleted) {
+                throw new RuntimeException("파일 삭제 실패: " + filePath);
+            }
+        } else {
+            throw new RuntimeException("파일이 존재하지 않습니다: " + filePath);
+        }
+    }
 }

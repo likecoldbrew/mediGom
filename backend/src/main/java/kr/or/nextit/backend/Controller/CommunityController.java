@@ -47,6 +47,7 @@ public class CommunityController {
     public List<Community> selectNotice(int boardId) {
         return communityService.selectNotice(boardId);
     }
+
     // 게시글 등록
     @PostMapping(value = "/register", consumes = "multipart/form-data")
     public ResponseEntity<String> registerBoard(@RequestParam("title") String title,
@@ -78,33 +79,33 @@ public class CommunityController {
             @RequestParam("title") String title,
             @RequestParam("content") String content,
             @RequestParam("userId") String userId,
-            @RequestParam(value = "files", required = false) MultipartFile[] files) {
-        Community boardDTO = new Community();
-        boardDTO.setBoardId(boardId);
-        boardDTO.setTitle(title);
-        boardDTO.setContent(content);
-        boardDTO.setUserId(userId);
-        // 첨부파일 처리 (업로드, DB에 저장 등)
-        List<Files> filesList = new ArrayList<>();
-        if (files != null) {
-            for (MultipartFile file : files) {
-                if (!file.isEmpty()) {
-                    String filePath = getUploadDir() + "/" + file.getOriginalFilename(); // 업로드 경로 설정
-                    Files boardFiles = new Files();
-                    // UUID를 사용하여 랜덤한 파일 이름 생성
-                    String randomFileName = UUID.randomUUID().toString();
-                    boardFiles.setFileName(randomFileName+"/"+file.getOriginalFilename());
-                    boardFiles.setFileOriginalName(file.getOriginalFilename());
-                    boardFiles.setFilePath(filePath);
-                    boardFiles.setFileSize((int) file.getSize());
-                    filesList.add(boardFiles);
-                }
-            }
-            boardDTO.setFiles(filesList);
+            @RequestParam(value = "files", required = false) MultipartFile[] files,
+            @RequestParam(value = "deletedFileIds", required = false) List<Integer> deletedFileIds) {
+        // 1. 기존 게시글을 조회
+        Community existingBoard = communityService.selectBoard(boardId);
+        if (existingBoard == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("게시글을 찾을 수 없습니다.");
         }
-        communityService.updateBoard(boardDTO); // 게시글 업데이트 호출
+        // 2. 게시글 데이터 수정
+        existingBoard.setTitle(title);
+        existingBoard.setContent(content);
+        existingBoard.setUserId(userId);
+
+        // 3. 게시글 업데이트
+        int  updateResult= communityService.updateBoard(existingBoard, deletedFileIds); // 업데이트 서비스 메서드 호출
+        if (updateResult == 0) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("게시글 업데이트에 실패했습니다.");
+        }
+        // 4. 새로 업로드할 파일 처리
+        if (files != null && files.length > 0) {
+            List<Files> filesList = filesService.uploadAndGetFiles(files, boardId); // 업로드한 파일을 게시글 ID와 연관지음
+            existingBoard.setFiles(filesList); // 파일 정보를 DTO에 추가
+        }
+
         return ResponseEntity.ok("게시글이 업데이트되었습니다.");
     }
+
+
     // 게시글 삭제
     @DeleteMapping("/delete/{boardId}")
     public ResponseEntity<String> deleteBoard(@PathVariable int boardId) {

@@ -3,6 +3,7 @@ package kr.or.nextit.backend.service;
 
 import jakarta.transaction.Transactional;
 import kr.or.nextit.backend.mapper.CommunityMapper;
+import kr.or.nextit.backend.mapper.FilesMapper;
 import kr.or.nextit.backend.model.Files;
 import kr.or.nextit.backend.model.Community;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CommunityService {
     private final CommunityMapper communityMapper;
+    private final FilesMapper filesMapper;
 
     //병원후기글 전체 조회
     public List<Community> getAllBoardsWithUser() {
@@ -25,10 +27,19 @@ public class CommunityService {
         return communityMapper.selectAllBoardsWithAdmin();
     }
 
-    //병원후기글 하나 선택
+//    //병원후기글 하나 선택
+//    public Community selectBoard(int boardId) {
+//        return communityMapper.selectBoardWithFiles(boardId);
+//    }
+
+    // 특정 게시글 조회와 첨부파일 포함
     public Community selectBoard(int boardId) {
-        return communityMapper.selectBoardWithFiles(boardId);
+        Community board = communityMapper.selectBoard(boardId).get(0); // 게시글 정보 가져오기
+        List<Files> files = filesMapper.selectAllFiles(boardId); // 첨부파일 정보 가져오기
+        board.setFiles(files); // 게시글에 첨부파일 추가
+        return board; // 게시글과 첨부파일 정보를 포함한 Community 객체 반환
     }
+
 
     //공지사항 하나 선택
     public List<Community> selectNotice(int boardId) {
@@ -50,11 +61,14 @@ public class CommunityService {
     }
 
     // 게시글 업데이트
-    public int updateBoard(Community board) {
+    public int updateBoard(Community board, List<Integer> deletedFileIds) {
         int result=communityMapper.updateBoard(board);
         if(result>0) {
             int boardId = board.getBoardId();
-            communityMapper.deleteBoardFiles(boardId);
+            // 삭제할 파일 처리
+            if (deletedFileIds != null && !deletedFileIds.isEmpty()) {
+                filesMapper.deleteFiles(deletedFileIds); // 삭제할 파일 IDs로 DB에서 삭제
+            }
             List<Files> fileList=board.getFiles();
             if (fileList != null && !fileList.isEmpty()) {
                 for (Files file : fileList) {
@@ -72,9 +86,5 @@ public class CommunityService {
         return communityMapper.deleteBoard(boardId);
     }
 
-    //첨부파일 조회
-    public List<Files> getBoardFiles(int boardId) {
-        return communityMapper.selectBoardFiles(boardId); // 첨부파일 조회 호출
-    }
 
 }

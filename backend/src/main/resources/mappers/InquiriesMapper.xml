@@ -59,11 +59,11 @@
         VALUES (#{userNo}, #{title}, #{content}, NOW(), 0, 'Y');
     </insert>
 
-    <!-- 첨부파일 삽입 -->
-    <insert id="insertBoardFiles" parameterType="kr.or.nextit.backend.model.Files">
-        INSERT INTO board_files (board_id, file_name, file_original_name, file_path, file_type, file_size, uploaded_at)
-        VALUES (#{boardId}, #{fileName}, #{fileOriginalName}, #{filePath}, #{fileType}, #{fileSize}, NOW());
-    </insert>
+<!--    &lt;!&ndash; 첨부파일 삽입 &ndash;&gt;-->
+<!--    <insert id="insertBoardFiles" parameterType="kr.or.nextit.backend.model.Files">-->
+<!--        INSERT INTO board_files (board_id, file_name, file_original_name, file_path, file_type, file_size, uploaded_at)-->
+<!--        VALUES (#{boardId}, #{fileName}, #{fileOriginalName}, #{filePath}, #{fileType}, #{fileSize}, NOW());-->
+<!--    </insert>-->
 
 
 </mapper>

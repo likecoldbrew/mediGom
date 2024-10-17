@@ -27,6 +27,20 @@
                  )
     </insert>
 
+    <!-- 특정 게시글의 모든 첨부파일 조회 -->
+    <select id="selectAllFiles" parameterType="int" resultType="kr.or.nextit.backend.model.Files">
+        SELECT bf.file_id,
+               bf.board_id,
+               bf.file_name,
+               bf.file_original_name,
+               bf.file_path,
+               bf.file_type,
+               bf.file_size,
+               bf.uploaded_at
+        FROM board_files bf
+        WHERE bf.board_id = #{boardId};
+    </select>
+
     <!-- 게시글의 첨부파일 조회 -->
     <select id="selectFile" parameterType="int" resultType="kr.or.nextit.backend.model.Files">
         SELECT bf.file_id,
@@ -39,5 +53,15 @@
         FROM board_files bf
         WHERE bf.file_id = #{fileId};
     </select>
+
+
+
+<!--  첨붛파일 삭제   -->
+    <delete id="deleteFiles">
+        DELETE FROM board_files
+        WHERE board_id = #{boardId}
+    </delete>
+
+
 
 </mapper>
