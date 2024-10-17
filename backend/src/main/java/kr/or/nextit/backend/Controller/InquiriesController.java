@@ -1,13 +1,9 @@
-package kr.or.nextit.backend.Controller;
+package kr.or.nextit.backend.controller;
 
-import kr.or.nextit.backend.model.Community;
 import kr.or.nextit.backend.model.Inquiries;
-import kr.or.nextit.backend.service.CommunityService;
 import kr.or.nextit.backend.service.InquiriesService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 

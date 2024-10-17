@@ -3,10 +3,8 @@ package kr.or.nextit.backend.service;
 
 import jakarta.transaction.Transactional;
 import kr.or.nextit.backend.mapper.CommunityMapper;
-import kr.or.nextit.backend.mapper.DoctorInfoMapper;
-import kr.or.nextit.backend.model.BoardFiles;
+import kr.or.nextit.backend.model.Files;
 import kr.or.nextit.backend.model.Community;
-import kr.or.nextit.backend.model.DoctorInfoDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -42,8 +40,8 @@ public class CommunityService {
         int retValue = communityMapper.insertBoard(boardDTO);
         if (boardDTO.getFiles() != null && !boardDTO.getFiles().isEmpty()) {
             int boardId = boardDTO.getBoardId(); // 방금 등록한 게시글 ID
-            List<BoardFiles> fileList = boardDTO.getFiles();
-            for (BoardFiles file : fileList) {
+            List<Files> fileList = boardDTO.getFiles();
+            for (Files file : fileList) {
                 file.setBoardId(boardId); // 파일의 board_id 설정
             }
             communityMapper.insertBoardFiles(fileList); // 리스트 전체를 한 번에 삽입
@@ -57,9 +55,9 @@ public class CommunityService {
         if(result>0) {
             int boardId = board.getBoardId();
             communityMapper.deleteBoardFiles(boardId);
-            List<BoardFiles> fileList=board.getFiles();
+            List<Files> fileList=board.getFiles();
             if (fileList != null && !fileList.isEmpty()) {
-                for (BoardFiles file : fileList) {
+                for (Files file : fileList) {
                     file.setBoardId(boardId); //boardId가 BoardNo가 됨
                 }
                 return communityMapper.insertBoardFiles(fileList);
@@ -75,7 +73,7 @@ public class CommunityService {
     }
 
     //첨부파일 조회
-    public List<BoardFiles> getBoardFiles(int boardId) {
+    public List<Files> getBoardFiles(int boardId) {
         return communityMapper.selectBoardFiles(boardId); // 첨부파일 조회 호출
     }
 

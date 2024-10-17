@@ -18,8 +18,17 @@
         </foreach>
     </insert>
 
+<!--첨부파일 하나 저장-->
+    <insert id="save" parameterType="kr.or.nextit.backend.model.Files">
+        INSERT INTO board_files (
+            board_id, file_name, file_original_name, file_path, file_type, file_size, uploaded_at
+        ) VALUES (
+                     #{boardId}, #{fileName}, #{fileOriginalName}, #{filePath}, #{fileType}, #{fileSize}, NOW()
+                 )
+    </insert>
+
     <!-- 게시글의 첨부파일 조회 -->
-    <select id="selectFile" parameterType="int" resultType="kr.or.nextit.backend.model.BoardFiles">
+    <select id="selectFile" parameterType="int" resultType="kr.or.nextit.backend.model.Files">
         SELECT bf.file_id,
                bf.file_name,
                bf.file_original_name,

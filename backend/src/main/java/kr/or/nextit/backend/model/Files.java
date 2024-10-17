@@ -3,11 +3,8 @@ package kr.or.nextit.backend.model;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.sql.Timestamp;
-import java.util.List;
-
 @Data
-public class BoardFiles {
+public class Files {
     private int fileId; // 파일 ID
     private int boardId; // 게시글 ID
     private String fileName; // 파일 이름

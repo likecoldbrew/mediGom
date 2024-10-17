@@ -138,7 +138,7 @@
 
 
     <!-- 게시글의 첨부파일 조회 -->
-    <select id="selectBoardFiles" parameterType="int" resultType="kr.or.nextit.backend.model.BoardFiles">
+    <select id="selectBoardFiles" parameterType="int" resultType="kr.or.nextit.backend.model.Files">
         SELECT
             bf.file_id,
             bf.file_name,

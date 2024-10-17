@@ -1,8 +1,7 @@
 package kr.or.nextit.backend.mapper;
 
-import kr.or.nextit.backend.model.BoardFiles;
+import kr.or.nextit.backend.model.Files;
 import kr.or.nextit.backend.model.Community;
-import kr.or.nextit.backend.model.DoctorInfoDTO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -24,9 +23,9 @@ public interface CommunityMapper {
     //조회수
     void updateViews(int boardId);
     // 첨부파일 삽입
-    int insertBoardFiles(List<BoardFiles> boardFiles);
+    int insertBoardFiles(List<Files> files);
     // 게시글의 첨부파일 조회
-    List<BoardFiles> selectBoardFiles(int boardId);
+    List<Files> selectBoardFiles(int boardId);
     //게시글 삭제
     int deleteBoard(int boardId);
     //첨부파일삭제
@@ -35,7 +34,7 @@ public interface CommunityMapper {
     // 특정 게시글 조회와 첨부파일 포함
     default Community selectBoardWithFiles(int boardId) {
         Community board = selectBoard(boardId).get(0); // 게시글 정보 가져오기
-        List<BoardFiles> files = selectBoardFiles(boardId); // 첨부파일 정보 가져오기
+        List<Files> files = selectBoardFiles(boardId); // 첨부파일 정보 가져오기
         board.setFiles(files); // 게시글에 첨부파일 추가
         return board; // 게시글과 첨부파일 정보를 포함한 Community 객체 반환
     }

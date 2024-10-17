@@ -1,25 +1,17 @@
 package kr.or.nextit.backend.controller;
 
-import kr.or.nextit.backend.model.BoardFiles;
+import kr.or.nextit.backend.model.Files;
 import kr.or.nextit.backend.model.Community;
-
 import kr.or.nextit.backend.model.FileStorage;
 import kr.or.nextit.backend.service.CommunityService;
-
+import kr.or.nextit.backend.service.FilesService;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.File;
-import java.io.IOException;
-
-import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
+
 
 @RestController
 @RequestMapping("/api/board")
@@ -27,6 +19,7 @@ import java.util.UUID;
 public class CommunityController {
 
     private final CommunityService communityService;
+    private final FilesService filesService;
     private final FileStorage fileStorage; // FileStorage 주입
 
     public String getUploadDir() {
@@ -65,73 +58,51 @@ public class CommunityController {
         boardDTO.setTitle(title);
         boardDTO.setContent(content);
         boardDTO.setUserNo(userNo);
-        // 파일 처리 로직
-        List<BoardFiles> boardFilesList = new ArrayList<>();
-        if (files != null) {
-            for (MultipartFile file : files) {
-                if (!file.isEmpty()) {
-                    // UUID를 사용하여 랜덤한 파일 이름 생성
-                    String randomFileName = UUID.randomUUID().toString();
-                    String uploadDir = getUploadDir();
-                    String filePath = uploadDir + "/" + randomFileName+"_"+file.getOriginalFilename();
-                    try {
-                        // 파일을 서버에 저장
-                        file.transferTo(new File(filePath));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                                .body("파일 업로드 중 오류가 발생했습니다." + e.getMessage());
-                    }
 
-                    BoardFiles boardFiles = new BoardFiles();
-                    boardFiles.setFileName(randomFileName+"_"+file.getOriginalFilename());
-                    boardFiles.setFileOriginalName(file.getOriginalFilename());
-                    boardFiles.setFilePath(filePath);
-                    boardFiles.setFileSize((int) file.getSize());
-                    boardFiles.setFileType(file.getContentType());
-                    boardFilesList.add(boardFiles);
-                }
-            }
-            boardDTO.setFiles(boardFilesList);
+        // 파일 처리 로직
+        if (files != null && files.length > 0) { // 파일 배열이 비어있지 않은지 체크
+            List<Files> filesList = filesService.uploadAndGetFiles(files); // 여러 파일을 한 번에 전달
+            boardDTO.setFiles(filesList);
         }
+
         communityService.registerBoard(boardDTO);
         return ResponseEntity.ok("게시글이 등록되었습니다.");
     }
 
-    // 게시글 업데이트
-    @PutMapping("/update/{boardId}")
-    public ResponseEntity<String> updateBoard(
-            @PathVariable int boardId,
-            @RequestParam("title") String title,
-            @RequestParam("content") String content,
-            @RequestParam("userId") String userId,
-            @RequestParam(value = "files", required = false) MultipartFile[] files) {
-        Community boardDTO = new Community();
-        boardDTO.setBoardId(boardId);
-        boardDTO.setTitle(title);
-        boardDTO.setContent(content);
-        boardDTO.setUserId(userId);
-        // 첨부파일 처리 (업로드, DB에 저장 등)
-        List<BoardFiles> boardFilesList = new ArrayList<>();
-        if (files != null) {
-            for (MultipartFile file : files) {
-                if (!file.isEmpty()) {
-                    String filePath = getUploadDir() + "/" + file.getOriginalFilename(); // 업로드 경로 설정
-                    BoardFiles boardFiles = new BoardFiles();
-                    // UUID를 사용하여 랜덤한 파일 이름 생성
-                    String randomFileName = UUID.randomUUID().toString();
-                    boardFiles.setFileName(randomFileName+"/"+file.getOriginalFilename());
-                    boardFiles.setFileOriginalName(file.getOriginalFilename());
-                    boardFiles.setFilePath(filePath);
-                    boardFiles.setFileSize((int) file.getSize());
-                    boardFilesList.add(boardFiles);
-                }
-            }
-            boardDTO.setFiles(boardFilesList);
-        }
-        communityService.updateBoard(boardDTO); // 게시글 업데이트 호출
-        return ResponseEntity.ok("게시글이 업데이트되었습니다.");
-    }
+//    // 게시글 업데이트
+//    @PutMapping("/update/{boardId}")
+//    public ResponseEntity<String> updateBoard(
+//            @PathVariable int boardId,
+//            @RequestParam("title") String title,
+//            @RequestParam("content") String content,
+//            @RequestParam("userId") String userId,
+//            @RequestParam(value = "files", required = false) MultipartFile[] files) {
+//        Community boardDTO = new Community();
+//        boardDTO.setBoardId(boardId);
+//        boardDTO.setTitle(title);
+//        boardDTO.setContent(content);
+//        boardDTO.setUserId(userId);
+//        // 첨부파일 처리 (업로드, DB에 저장 등)
+//        List<Files> filesList = new ArrayList<>();
+//        if (files != null) {
+//            for (MultipartFile file : files) {
+//                if (!file.isEmpty()) {
+//                    String filePath = getUploadDir() + "/" + file.getOriginalFilename(); // 업로드 경로 설정
+//                    Files boardFiles = new Files();
+//                    // UUID를 사용하여 랜덤한 파일 이름 생성
+//                    String randomFileName = UUID.randomUUID().toString();
+//                    boardFiles.setFileName(randomFileName+"/"+file.getOriginalFilename());
+//                    boardFiles.setFileOriginalName(file.getOriginalFilename());
+//                    boardFiles.setFilePath(filePath);
+//                    boardFiles.setFileSize((int) file.getSize());
+//                    filesList.add(boardFiles);
+//                }
+//            }
+//            boardDTO.setFiles(filesList);
+//        }
+//        communityService.updateBoard(boardDTO); // 게시글 업데이트 호출
+//        return ResponseEntity.ok("게시글이 업데이트되었습니다.");
+//    }
     // 게시글 삭제
     @DeleteMapping("/delete/{boardId}")
     public ResponseEntity<String> deleteBoard(@PathVariable int boardId) {
