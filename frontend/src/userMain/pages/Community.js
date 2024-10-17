@@ -33,7 +33,6 @@ const Community = () => {
     try {
       const response = await fetch("/api/board/all");
       const data = await response.json();
-
       // 날짜 포맷 변환
       const formattedData = data.map((board) => ({
         ...board,

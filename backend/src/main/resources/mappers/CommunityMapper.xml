@@ -32,6 +32,7 @@
             ON
                 b.user_no = u.user_no
         where u.admin=0 and b.status='Y'
+        order by   COALESCE(b.update_at, b.create_at)  desc
     </select>
 
     <!-- 공지사항글 조회  -->

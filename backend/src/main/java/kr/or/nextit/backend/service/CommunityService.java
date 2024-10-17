@@ -16,6 +16,7 @@ import java.util.List;
 public class CommunityService {
     private final CommunityMapper communityMapper;
     private final FilesMapper filesMapper;
+    private final FilesService filesService;
 
     //병원후기글 전체 조회
     public List<Community> getAllBoardsWithUser() {
@@ -27,10 +28,6 @@ public class CommunityService {
         return communityMapper.selectAllBoardsWithAdmin();
     }
 
-//    //병원후기글 하나 선택
-//    public Community selectBoard(int boardId) {
-//        return communityMapper.selectBoardWithFiles(boardId);
-//    }
 
     // 특정 게시글 조회와 첨부파일 포함
     public Community selectBoard(int boardId) {
@@ -45,8 +42,8 @@ public class CommunityService {
     public List<Community> selectNotice(int boardId) {
         return communityMapper.selectNotice(boardId);
     }
-    //게시글 등록(첨부파일 트랜잭션)
-    @Transactional
+
+
     public int registerBoard(Community boardDTO) {
         int retValue = communityMapper.insertBoard(boardDTO);
         if (boardDTO.getFiles() != null && !boardDTO.getFiles().isEmpty()) {
@@ -55,12 +52,13 @@ public class CommunityService {
             for (Files file : fileList) {
                 file.setBoardId(boardId); // 파일의 board_id 설정
             }
-            communityMapper.insertBoardFiles(fileList); // 리스트 전체를 한 번에 삽입
+            filesService.saveFiles(fileList); // 리스트 전체를 한 번에 삽입
         }
         return retValue;
     }
 
     // 게시글 업데이트
+    @Transactional
     public int updateBoard(Community board, List<Integer> deletedFileIds) {
         int result=communityMapper.updateBoard(board);
         if(result>0) {
@@ -74,7 +72,7 @@ public class CommunityService {
                 for (Files file : fileList) {
                     file.setBoardId(boardId); //boardId가 BoardNo가 됨
                 }
-                return communityMapper.insertBoardFiles(fileList);
+                filesService.saveFiles(fileList);
             }
             return result;
         }

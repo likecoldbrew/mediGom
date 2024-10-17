@@ -55,7 +55,11 @@ const BoardUpdate = ({ boardId }) => {
   };
 
   const handleFileChange = (event) => {
-    setFiles(Array.from(event.target.files));
+    const selectedFiles = Array.from(event.target.files).map((file) => ({
+      fileOriginalName: file.name, // 파일의 원래 이름을 저장
+      fileObject: file, // 파일 객체도 함께 저장
+    }));
+    setFiles((prevFiles) => [...prevFiles, ...selectedFiles]); // 기존 파일 목록에 새 파일 추가
   };
   const handleFileRemove = (index) => {
     setFiles((prevFiles) => prevFiles.filter((_, i) => i !== index)); // 선택된 파일 제거

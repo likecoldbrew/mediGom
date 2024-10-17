@@ -25,11 +25,13 @@ public class CommunityController {
     public String getUploadDir() {
         return fileStorage.getUploadDir(); // 메소드로 접근
     }
+
     //전체 후기글
     @GetMapping("/all")
     public List<Community> getAllBoards() {
         return communityService.getAllBoardsWithUser();
     }
+
     // 특정 후기글
     @GetMapping("/detail")
     public ResponseEntity<Community> selectBoard(@RequestParam int boardId) {
@@ -67,12 +69,11 @@ public class CommunityController {
             List<Files> filesList = filesService.uploadAndGetFiles(files, boardId); // 업로드한 파일을 게시글 ID와 연관지음
             boardDTO.setFiles(filesList); // 파일 정보를 DTO에 추가
         }
-
         return ResponseEntity.ok("게시글이 등록되었습니다.");
-
     }
 
     // 게시글 업데이트
+
     @PutMapping("/update/{boardId}")
     public ResponseEntity<String> updateBoard(
             @PathVariable int boardId,
@@ -96,6 +97,11 @@ public class CommunityController {
         if (updateResult == 0) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("게시글 업데이트에 실패했습니다.");
         }
+        // 4. 삭제할 파일 처리
+        if (deletedFileIds != null && !deletedFileIds.isEmpty()) {
+            filesService.deleteFiles(deletedFileIds); // 삭제할 파일 삭제
+        }
+
         // 4. 새로 업로드할 파일 처리
         if (files != null && files.length > 0) {
             List<Files> filesList = filesService.uploadAndGetFiles(files, boardId); // 업로드한 파일을 게시글 ID와 연관지음

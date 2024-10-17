@@ -2,19 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.or.nextit.backend.mapper.FilesMapper">
-    <!-- 테이블 전체 컬럼   -->
-    <sql id="fileColumns">
-        file_id
-        , board_id, file_name, file_original_name, file_path, file_type, file_size, uploaded_at
-    </sql>
-    <!-- 첨부파일 저장    -->
+<!--  첨부파일여러개  -->
     <insert id="saveAll" parameterType="list">
-        INSERT INTO board_files(
-        <include refid="fileColumns"/>
-        )VALUES
+        INSERT INTO board_files (
+        board_id, file_name, file_original_name, file_path, file_type, file_size, uploaded_at
+        ) VALUES
         <foreach item="file" collection="list" separator=",">
-            (#{boardId}, #{fileName}, #{fileOriginalName}, #{filePath}, #{fileType}, #{fileSize}, NOW()
-            )
+            (#{file.boardId}, #{file.fileName}, #{file.fileOriginalName}, #{file.filePath}, #{file.fileType}, #{file.fileSize}, NOW())
         </foreach>
     </insert>
 
@@ -58,8 +52,10 @@
 
 <!--  첨붛파일 삭제   -->
     <delete id="deleteFiles">
-        DELETE FROM board_files
-        WHERE board_id = #{boardId}
+        DELETE FROM board_files WHERE file_id IN
+        <foreach item="fileId" collection="list" open="(" separator="," close=")">
+            #{fileId}
+        </foreach>
     </delete>
 
 

@@ -29,7 +29,6 @@ public interface CommunityMapper {
     int insertBoardFiles(List<Files> files);
     //게시글 삭제
     int deleteBoard(int boardId);
-    //첨부파일삭제
-    int deleteBoardFiles(int boardId);
+
 }
 
