@@ -84,7 +84,7 @@ const BoardDetail = ({ boardId }) => {
               <p className="mb-5">{board.content}</p>
               {board.files && board.files.length > 0 ? (
                 board.files.map((file) => (
-                  file.fileType.startsWith("image/") ? (
+                   file.fileType.startsWith("image/") ? (
                     <img
                       key={file.fileId}
                       src={`/api/file/view/${file.fileId}`} // 이미지 파일을 표시하는 URL

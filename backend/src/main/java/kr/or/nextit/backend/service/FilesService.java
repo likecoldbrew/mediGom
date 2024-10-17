@@ -48,7 +48,8 @@ public class FilesService {
         }
     }
 
-    public List<Files> uploadAndGetFiles(MultipartFile[] files) {
+    // 게시글 ID와 함께 파일 업로드
+    public List<Files> uploadAndGetFiles(MultipartFile[] files, int boardId) {
         List<Files> savedFiles = new ArrayList<>();
         for (MultipartFile file : files) {
             if (!file.isEmpty()) {
@@ -59,7 +60,9 @@ public class FilesService {
                 savedFile.setFileName(randomFileName);
                 savedFile.setFileOriginalName(file.getOriginalFilename());
                 savedFile.setFilePath(filePath);
+                savedFile.setFileType(file.getContentType());
                 savedFile.setFileSize((int) file.getSize());
+                savedFile.setBoardId(boardId); // 게시글 ID 설정
                 filesMapper.save(savedFile); // 단일 파일 저장 호출
                 savedFiles.add(savedFile); // 저장된 파일 목록에 추가
             }

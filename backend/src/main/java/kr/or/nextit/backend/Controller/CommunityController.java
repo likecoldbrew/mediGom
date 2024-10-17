@@ -58,51 +58,53 @@ public class CommunityController {
         boardDTO.setTitle(title);
         boardDTO.setContent(content);
         boardDTO.setUserNo(userNo);
-
-        // 파일 처리 로직
-        if (files != null && files.length > 0) { // 파일 배열이 비어있지 않은지 체크
-            List<Files> filesList = filesService.uploadAndGetFiles(files); // 여러 파일을 한 번에 전달
-            boardDTO.setFiles(filesList);
+        // 2. 게시글을 먼저 저장 (이후 생성된 게시글 ID를 가져옴)
+        communityService.registerBoard(boardDTO);  // 이때 boardDTO에 ID가 할당됨
+        int boardId = boardDTO.getBoardId(); // 저장된 게시글의 ID를 가져옴
+        // 3. 파일 처리 로직
+        if (files != null && files.length > 0) {
+            List<Files> filesList = filesService.uploadAndGetFiles(files, boardId); // 업로드한 파일을 게시글 ID와 연관지음
+            boardDTO.setFiles(filesList); // 파일 정보를 DTO에 추가
         }
 
-        communityService.registerBoard(boardDTO);
         return ResponseEntity.ok("게시글이 등록되었습니다.");
+
     }
 
-//    // 게시글 업데이트
-//    @PutMapping("/update/{boardId}")
-//    public ResponseEntity<String> updateBoard(
-//            @PathVariable int boardId,
-//            @RequestParam("title") String title,
-//            @RequestParam("content") String content,
-//            @RequestParam("userId") String userId,
-//            @RequestParam(value = "files", required = false) MultipartFile[] files) {
-//        Community boardDTO = new Community();
-//        boardDTO.setBoardId(boardId);
-//        boardDTO.setTitle(title);
-//        boardDTO.setContent(content);
-//        boardDTO.setUserId(userId);
-//        // 첨부파일 처리 (업로드, DB에 저장 등)
-//        List<Files> filesList = new ArrayList<>();
-//        if (files != null) {
-//            for (MultipartFile file : files) {
-//                if (!file.isEmpty()) {
-//                    String filePath = getUploadDir() + "/" + file.getOriginalFilename(); // 업로드 경로 설정
-//                    Files boardFiles = new Files();
-//                    // UUID를 사용하여 랜덤한 파일 이름 생성
-//                    String randomFileName = UUID.randomUUID().toString();
-//                    boardFiles.setFileName(randomFileName+"/"+file.getOriginalFilename());
-//                    boardFiles.setFileOriginalName(file.getOriginalFilename());
-//                    boardFiles.setFilePath(filePath);
-//                    boardFiles.setFileSize((int) file.getSize());
-//                    filesList.add(boardFiles);
-//                }
-//            }
-//            boardDTO.setFiles(filesList);
-//        }
-//        communityService.updateBoard(boardDTO); // 게시글 업데이트 호출
-//        return ResponseEntity.ok("게시글이 업데이트되었습니다.");
-//    }
+    // 게시글 업데이트
+    @PutMapping("/update/{boardId}")
+    public ResponseEntity<String> updateBoard(
+            @PathVariable int boardId,
+            @RequestParam("title") String title,
+            @RequestParam("content") String content,
+            @RequestParam("userId") String userId,
+            @RequestParam(value = "files", required = false) MultipartFile[] files) {
+        Community boardDTO = new Community();
+        boardDTO.setBoardId(boardId);
+        boardDTO.setTitle(title);
+        boardDTO.setContent(content);
+        boardDTO.setUserId(userId);
+        // 첨부파일 처리 (업로드, DB에 저장 등)
+        List<Files> filesList = new ArrayList<>();
+        if (files != null) {
+            for (MultipartFile file : files) {
+                if (!file.isEmpty()) {
+                    String filePath = getUploadDir() + "/" + file.getOriginalFilename(); // 업로드 경로 설정
+                    Files boardFiles = new Files();
+                    // UUID를 사용하여 랜덤한 파일 이름 생성
+                    String randomFileName = UUID.randomUUID().toString();
+                    boardFiles.setFileName(randomFileName+"/"+file.getOriginalFilename());
+                    boardFiles.setFileOriginalName(file.getOriginalFilename());
+                    boardFiles.setFilePath(filePath);
+                    boardFiles.setFileSize((int) file.getSize());
+                    filesList.add(boardFiles);
+                }
+            }
+            boardDTO.setFiles(filesList);
+        }
+        communityService.updateBoard(boardDTO); // 게시글 업데이트 호출
+        return ResponseEntity.ok("게시글이 업데이트되었습니다.");
+    }
     // 게시글 삭제
     @DeleteMapping("/delete/{boardId}")
     public ResponseEntity<String> deleteBoard(@PathVariable int boardId) {
