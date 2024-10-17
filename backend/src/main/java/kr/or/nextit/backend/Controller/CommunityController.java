@@ -2,24 +2,21 @@ package kr.or.nextit.backend.controller;
 
 import kr.or.nextit.backend.model.BoardFiles;
 import kr.or.nextit.backend.model.Community;
-import kr.or.nextit.backend.model.DoctorInfoDTO;
+
 import kr.or.nextit.backend.model.FileStorage;
 import kr.or.nextit.backend.service.CommunityService;
-import kr.or.nextit.backend.service.DoctorInfoService;
+
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
+
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -40,11 +37,13 @@ public class CommunityController {
     public List<Community> getAllBoards() {
         return communityService.getAllBoardsWithUser();
     }
-    //특정 후기글
+    // 특정 후기글
     @GetMapping("/detail")
-    public Community selectBoard(@RequestParam int boardId) {
-        return communityService.selectBoard(boardId);
+    public ResponseEntity<Community> selectBoard(@RequestParam int boardId) {
+        Community community = communityService.selectBoard(boardId);
+        return ResponseEntity.ok(community);
     }
+
     //전체 공지사항
     @GetMapping("/allNotice")
     public List<Community> getAllNotices() {
@@ -85,7 +84,7 @@ public class CommunityController {
                     }
 
                     BoardFiles boardFiles = new BoardFiles();
-                    boardFiles.setFileName(randomFileName);
+                    boardFiles.setFileName(randomFileName+"_"+file.getOriginalFilename());
                     boardFiles.setFileOriginalName(file.getOriginalFilename());
                     boardFiles.setFilePath(filePath);
                     boardFiles.setFileSize((int) file.getSize());
@@ -121,7 +120,7 @@ public class CommunityController {
                     BoardFiles boardFiles = new BoardFiles();
                     // UUID를 사용하여 랜덤한 파일 이름 생성
                     String randomFileName = UUID.randomUUID().toString();
-                    boardFiles.setFileName(randomFileName);
+                    boardFiles.setFileName(randomFileName+"/"+file.getOriginalFilename());
                     boardFiles.setFileOriginalName(file.getOriginalFilename());
                     boardFiles.setFilePath(filePath);
                     boardFiles.setFileSize((int) file.getSize());

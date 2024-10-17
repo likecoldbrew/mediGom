@@ -157,4 +157,7 @@
         DELETE FROM board_files
         WHERE board_id = #{boardId}
     </delete>
+
+
+
 </mapper>

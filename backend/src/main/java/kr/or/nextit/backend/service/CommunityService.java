@@ -45,7 +45,6 @@ public class CommunityService {
             List<BoardFiles> fileList = boardDTO.getFiles();
             for (BoardFiles file : fileList) {
                 file.setBoardId(boardId); // 파일의 board_id 설정
-
             }
             communityMapper.insertBoardFiles(fileList); // 리스트 전체를 한 번에 삽입
         }
@@ -79,4 +78,5 @@ public class CommunityService {
     public List<BoardFiles> getBoardFiles(int boardId) {
         return communityMapper.selectBoardFiles(boardId); // 첨부파일 조회 호출
     }
+
 }

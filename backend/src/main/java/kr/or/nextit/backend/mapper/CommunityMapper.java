@@ -39,5 +39,7 @@ public interface CommunityMapper {
         board.setFiles(files); // 게시글에 첨부파일 추가
         return board; // 게시글과 첨부파일 정보를 포함한 Community 객체 반환
     }
+
+
 }
 

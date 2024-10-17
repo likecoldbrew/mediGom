@@ -4,6 +4,7 @@ import QuickMenu from "../components/QuickMenu";
 import SubCategories from "../components/SubCategory";
 import ChatBot from "../components/ChatBot";
 
+
 const BoardDetail = ({ boardId }) => {
   const location = useLocation();
   const { selectCategory, selectSubCategory } = location.state || {};
@@ -13,13 +14,12 @@ const BoardDetail = ({ boardId }) => {
 
   useEffect(() => {
     fetchBoardDetail();
-  }, [boardId]);
+  }, [boardId], [board]);
 
   const fetchBoardDetail = async () => {
     try {
       const response = await fetch(`/api/board/detail?boardId=${boardId}`);
       const data = await response.json();
-      console.log("게시글데이터", data); // 데이터 확인
       if (!data.isEmpty) {
         const formattedData = {
           ...data,
@@ -80,8 +80,24 @@ const BoardDetail = ({ boardId }) => {
               <div className="text-gray-600">조회수: {board.views}</div>
             </div>
             <hr className="border-t border-sky-200  mb-6" />
-            <div className="mt-4 h-[450px]">
-              <p>{board.content}</p>
+            <div className="mt-4">
+              <p className="mb-5">{board.content}</p>
+              {board.files && board.files.length > 0 ? (
+                board.files.map((file) => (
+                  file.fileType.startsWith("image/") ? (
+                    <img
+                      key={file.fileId}
+                      src={`/api/file/view/${file.fileId}`} // 이미지 파일을 표시하는 URL
+                      alt={file.fileId}
+                      className="h-full object-cover mr-2"
+                    />
+                  ) : (
+                    <a key={file.fileId} href={`/file/download/${file.fileId}`} className="text-blue-500 hover:underline mr-2">
+                   {file.fileId}
+                    </a>
+                  )
+                ))
+              ) : null}
             </div>
             <div className="flex items-center mb-4">
               <span className="mr-2">첨부파일:</span>
