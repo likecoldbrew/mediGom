@@ -1,33 +1,40 @@
 import React, { useState, useEffect } from "react";
-import { Moon, Sun, Search, Filter, List, Grid, ChevronUp, ChevronDown, MoreVertical, UserPlus } from "lucide-react";
+import { Search } from "lucide-react";
 import { useParams } from "react-router-dom";
+import { format } from "date-fns";
 
 const UserManagement = () => {
-  const { userNo } = useParams(); // URL에서 userId 가져오기
+  const { userNo } = useParams(); // URL에서 userNo 가져오기
   const id = parseInt(userNo);
 
-  const [allPatient, setAllPatient] = useState([]);
+  const [allPatient, setAllPatient] = useState({
+    users: {}, // users를 배열로 설정
+    records: []
+  });
+  console.log(userNo);
 
   // API 호출
   useEffect(() => {
     const fetchUsers = async () => {
       try {
         const [userResponse, recordResponse] = await Promise.all([
-          fetch(`http://localhost:8080/api/users/${2}`),
-          fetch(`http://localhost:8080/api/medical_record/${52}`)
+          fetch(`/api/users/${id}`),
+          fetch(`/api/medical_record/${id}`)
         ]);
-        // const response = await fetch(`http://localhost:8080/api/medical_record/${52}`); // userNo는 필요한 값으로 변경
+
         const userData = await userResponse.json();
         const recordData = await recordResponse.json();
 
-        console.log(userData);
+        // console.log(userData);
+        // console.log(recordData);
 
         setAllPatient({
-          users: userData.user || {},
+          users: userData || {}, // userData.user가 배열이라고 가정
           records: recordData.map((record) => ({
             ...record,
             createAt: format(new Date(record.createAt), "yyyy.MM.dd") // 진단일자 포맷팅
-          })) // 받아온 데이터를 상태로 저장
+            // 진단일자 포맷팅
+          }))
         });
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -36,20 +43,21 @@ const UserManagement = () => {
     fetchUsers();
   }, [id]);
 
+  const { users, records } = allPatient;
+
   console.log(allPatient);
 
-  const [filteredusers, setFilteredusers] = useState([]);
+
+  const [filteredUsers, setFilteredUsers] = useState([]); // 필터링된 사용자를 저장하는 배열
   const [searchTerm, setSearchTerm] = useState("");
 
+  //필터링 로직
   useEffect(() => {
-
-    let result = [...allPatient];
-
-    console.log(result);
+    let result = [...records]; // users 배열을 기준으로 필터링
 
     if (searchTerm) {
-      result = result.filter(user =>
-        Object.values(user).some(value => {
+      result = result.filter(record =>
+        Object.values(record).some(value => {
           if (value !== null && value !== undefined) {
             return value.toString().toLowerCase().includes(searchTerm.toLowerCase());
           }
@@ -57,12 +65,11 @@ const UserManagement = () => {
         })
       );
     }
-    setFilteredusers(result);
+    setFilteredUsers(result); // 필터링된 결과 설정
   }, [searchTerm, allPatient]);
 
 
   return (
-
     <div className="container mx-auto px-4 py-8">
       {/* 헤더 */}
       <div className="flex justify-between items-center mb-8">
@@ -73,7 +80,7 @@ const UserManagement = () => {
         <div className="relative w-full md:w-64">
           <input
             type="text"
-            placeholder="Search" w-full px-3 py-2 text-sm text-black bg-gray-100 rounded-md
+            placeholder="Search"
             className="w-full px-4 py-2 pl-10 pr-4 rounded-md bg-gray-50 focus:outline-none focus:ring-1 focus:ring-blue-400"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -88,37 +95,39 @@ const UserManagement = () => {
           <thead>
           <tr className="bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600">
             <th
-              className="px-2 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer">
-              번호
+              className="px-2 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer">번호
             </th>
             <th
-              className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer">
-              진료과
+              className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer">진료과
             </th>
             <th
-              className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer">
-              담당의
+              className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer">담당의
             </th>
             <th
-              className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer">
-              환자이름
+              className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer">환자이름
             </th>
             <th
-              className="px-12 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer">
-              진료내역
+              className="px-12 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer">진료내역
             </th>
           </tr>
           </thead>
           <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-          {filteredusers.map((user, index) => (
-            <tr key={user.userId}>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-500">{index + 1}</td>
-              <td className="px-6 py-4 whitespace-nowrap text-center">{user.departmentName}</td>
-              <td className="px-6 py-4 whitespace-nowrap text-center">{user.userNo}</td>
-              <td className="px-6 py-4 whitespace-nowrap text-center">{user.userNo.userName}</td>
-              <td className="px-6 py-4 whitespace-nowrap text-center">{user.diagnosis}</td>
+          {filteredUsers.length === 0 ? (
+            <tr>
+              <td colSpan="5" className="text-center py-4">
+                No users found.
+              </td>
             </tr>
-          ))}
+          ) : (filteredUsers.map((record, index) => (
+              <tr key={record.recordId}>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-500">{index + 1}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-center">{record.departmentName}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-center">{users.userName} 의사</td>
+                <td className="px-6 py-4 whitespace-nowrap text-center">{record.userName}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-center">{record.treatment}</td>
+              </tr>
+            ))
+          )}
           </tbody>
         </table>
       </div>

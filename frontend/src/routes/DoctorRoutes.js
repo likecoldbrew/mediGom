@@ -13,14 +13,14 @@ import Certificates from "../doctorPage/pages/Certificates";
 function DoctorRoutes() {
   return (
     <Routes>
-      <Route path="/" element={<Doctors/>}>
-        <Route index element={<Home/>}/>
-        <Route path="/list" element={<UserManagement/>}/>
-        <Route path="/clinic" element={<UserClinicCheck/>}/>
-        <Route path="/reserv" element={<UserReservationCheck/>}/>
-        <Route path="/state" element={<UserStateChange/>}/>
-        <Route path="/certificateList" element={<CertificateList/>}/>
-        <Route path="/certificate" element={<Certificates/>}/>
+      <Route path="/" element={<Doctors />}>
+        <Route index element={<Home />} />
+        <Route path="/list/:userNo" element={<UserManagement />} />
+        <Route path="/clinic" element={<UserClinicCheck />} />
+        <Route path="/reserv" element={<UserReservationCheck />} />
+        <Route path="/state" element={<UserStateChange />} />
+        <Route path="/certificateList" element={<CertificateList />} />
+        <Route path="/certificate" element={<Certificates />} />
       </Route>
 
     </Routes>

@@ -11,20 +11,25 @@ import java.util.List;
 public interface UserMapper {
 
     List<User> getAllUsers();
+
     List<User> getPatientList();
+
     List<User> getDoctorList();
+
     List<User> getAdminList();
 
 
     User getUserByNo(int userNo);
+
     User getUserById(String userId);
 
     void insertUser(User user);
+
     void updateUser(User user);
+
     void deleteUser(int userNo);
 
     List<User> getDoctorsName();
 
     boolean checkIdExists(@Param("userId") String userId);
-
 }

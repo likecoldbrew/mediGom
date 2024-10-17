@@ -14,8 +14,10 @@ public class MedicalRecord {
     private int userNo;
     private int doctorNo;
     private Timestamp visitDate;
+    private String userName;
     private String diagnosis;
     private String treatment;
+    private String departmentName;
     private String prescription;
     private String notes;
     private Timestamp createAt;

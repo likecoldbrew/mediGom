@@ -30,12 +30,14 @@ const SidebarAndNavbar = () => {
   const [isOpen, setIsOpen] = useState(true);
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [menuItems, setMenuItems] = useState([]);
+  const [userInfo, setUserInfo] = useState([]);
 
   const toggleSidebar = () => setIsOpen(!isOpen);  // 사이드바 토글
   const toggleDropdown = (key) => {
     setActiveDropdown(activeDropdown === key ? null : key);  // 드롭다운 메뉴 토글
   };
-
+  // 이제 userInfo를 직접 사용 가능
+  console.log(userInfo);
   // 카테고리를 기반으로 동적 메뉴 생성
   // const menuItems = category.map((item, index) => ({
   //     key: String(index + 1),
@@ -115,17 +117,44 @@ const SidebarAndNavbar = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  useEffect(() => {
+    // 페이지 로드 시 사용자 정보를 가져오는 함수
+    const fetchUserInfo = async () => {
+      const token = localStorage.getItem("token"); // JWT를 로컬 스토리지에서 가져옴
+      if (token) {
+        const response = await fetch("/api/users/me", {
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${token}` // JWT 포함
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json(); // 서버에서 반환하는 사용자 정보
+          setUserInfo(data); // 사용자 정보 상태 업데이트
+        } else {
+          console.error("사용자 정보를 가져오는 데 실패했습니다.");
+        }
+      }
+    };
+    fetchUserInfo();
+  }, []);
+
+  console.log(userInfo.userNo);
+
   return (
     <div className="flex min-h-screen bg-gray-100">
       {/* Sidebar */}
       <aside
-        className={`bg-white text-black w-64 min-h-screen p-4 ${isOpen ? "translate-x-0" : "-translate-x-full"} transition-transform duration-300 ease-in-out fixed left-0 top-0 z-10`}>
+        className={`bg-white text-black w-64 min-h-screen p-4 
+                ${isOpen ? "translate-x-0" : "-translate-x-full"} 
+                transition-transform duration-300 ease-in-out fixed left-0 top-0 z-10`}>
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center">
             <Smile size={24} className="w-10 h-10 rounded-full mr-3 " />
             <div>
-              <h2 className="text-lg font-semibold text-gray-800">김의사</h2>
-              <p className="text-xs text-gray-500">마취과 치프</p>
+              <h2 className="text-lg font-semibold text-gray-800">{userInfo.userName}</h2>
+              <p className="text-xs text-gray-500">{userInfo.role}</p>
             </div>
           </div>
           <button className="relative hover:text-blue-400 transition-colors">
@@ -185,7 +214,7 @@ const SidebarAndNavbar = () => {
                       return (
                         <li key={index}>
                           <Link
-                            to={subItem.urlName}
+                            to={`${subItem.urlName}/${userInfo.userNo}`}
                             className="block w-full text-left px-4 py-2 text-sm text-blue-800 hover:bg-blue-400 hover:text-white rounded-md transition-colors duration-200"
                           >
                             {subItem.name}
@@ -207,14 +236,10 @@ const SidebarAndNavbar = () => {
       <main className={`flex-1  ${isOpen ? "md:ml-64" : ""}`}>
         <nav className="bg-blue-300 text-white p-4  w-full">
           <div className="container mx-auto flex justify-between items-center">
-            <button>
-              <div className="flex items-center text-2xl font-bold">
-                <img
-                  width="40"
-                  src="/images/mediGom_Logo.png" />
-                Medi<span className="text-yellow-300">Gom</span>
-              </div>
-            </button>
+            <div className="flex items-center text-2xl font-bold w-1/4">
+              <img className="mr-3 w-1/12" src="/images/mediGom_Logo.png" />
+              Medi<span className="text-yellow-300">Gom</span>
+            </div>
             <div className="flex items-center space-x-6">
               <div className="relative group">
                 <button className="flex items-center space-x-1 hover:text-yellow-300 transition-colors">
