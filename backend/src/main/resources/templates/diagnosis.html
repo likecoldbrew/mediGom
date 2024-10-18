@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
   <meta charset="utf-8" />
@@ -42,7 +42,7 @@
       #t6_1{left:787px;bottom:1106px;}
       #t7_1{left:91px;bottom:1055px;letter-spacing:-0.12px;word-spacing:2.84px;}
       #t8_1{left:91px;bottom:1015px;letter-spacing:-0.12px;word-spacing:2.78px;}
-      #t9_1{left:332px;bottom:1015px;letter-spacing:-0.17px;}
+      #t9_1{left:342px;bottom:1015px;letter-spacing:-0.17px;}
       #ta_1{left:466px;bottom:1015px;letter-spacing:-0.09px;}
       #tb_1{left:106px;bottom:955px;letter-spacing:-0.18px;word-spacing:2.68px;}
       #tc_1{left:285px;bottom:955px;letter-spacing:-0.1px;}
@@ -58,31 +58,30 @@
       #tm_1{left:106px;bottom:902px;letter-spacing:-0.18px;word-spacing:2.68px;}
       #tn_1{left:240px;bottom:902px;letter-spacing:-0.09px;}
       #to_1{left:591px;bottom:902px;letter-spacing:-0.11px;word-spacing:2.77px;}
-      #tp_1{left:102px;bottom:845px;}
-      #tq_1{left:186px;bottom:845px;}
-      #tr_1{left:99px;bottom:785px;letter-spacing:-0.17px;word-spacing:2.66px;}
-      #ts_1{left:99px;bottom:745px;letter-spacing:-0.17px;word-spacing:2.67px;}
+      #tp_1{left:102px;bottom:800px;}
+      #tq_1{left:186px;bottom:800px;}
+      #tq_2{left:250px; bottom:800px;}
       #tt_1{left:692px;bottom:865px;letter-spacing:-0.18px;word-spacing:2.81px;}
       #tu_1{left:692px;bottom:845px;letter-spacing:-0.18px;word-spacing:2.81px;}
+      #tu_2{left:706px; bottom:778px;}
       #tv_1{left:111px;bottom:678px;}
       #tw_1{left:144px;bottom:678px;}
       #tx_1{left:178px;bottom:678px;}
-      #ty_1{left:312px;bottom:678px;}
-      #tz_1{left:362px;bottom:678px;}
-      #t10_1{left:412px;bottom:678px;}
+      #ty_1{left:275px;bottom:678px;}
       #t11_1{left:475px;bottom:678px;letter-spacing:-0.12px;word-spacing:2.72px;}
-      #t12_1{left:663px;bottom:678px;}
-      #t13_1{left:713px;bottom:678px;}
-      #t14_1{left:763px;bottom:678px;}
+      #t12_1{left:620px;bottom:678px;}
       #t15_1{left:106px;bottom:589px;}
       #t16_1{left:182px;bottom:589px;}
       #t17_1{left:106px;bottom:569px;}
       #t18_1{left:182px;bottom:569px;}
       #t19_1{left:106px;bottom:549px;}
       #t1a_1{left:182px;bottom:549px;}
+      #t1a_2{left:235px;top:650px;}
       #t1b_1{left:111px;bottom:452px;}
       #t1c_1{left:178px;bottom:452px;}
+      #t2c_1{left:300px;bottom:452px;}
       #t1d_1{left:548px;bottom:452px;letter-spacing:-0.13px;word-spacing:2.63px;}
+      #t2d_1{left:665px;bottom:452px;letter-spacing:-0.13px;word-spacing:2.63px;}
       #t1e_1{left:398px;bottom:358px;letter-spacing:0.28px;word-spacing:3.06px;}
       #t1f_1{left:127px;bottom:299px;}
       #t1g_1{left:182px;bottom:299px;}
@@ -99,6 +98,14 @@
       #t1r_1{left:384px;bottom:182px;}
       #t1s_1{left:457px;bottom:182px;letter-spacing:0.25px;}
       #t1t_1{left:695px;bottom:182px;}
+      #coating {
+          position: absolute; /* 요소를 특정 위치에 고정 */
+          left:705px;
+          bottom:1015px;
+          z-index: 9999; /* 가장 위로 올리기 위해 z-index 설정 */
+          width: 80px; /* 필요에 따라 이미지 크기 조정 */
+          height: 80px;
+      }
 
       .s0{font-size:15px;font-family:Gulim_j;color:#FFF;}
       .s1{font-size:31px;font-family:Gulim_j;color:#000;-webkit-text-stroke:0.6px #000;text-stroke:0.6px #000;}
@@ -141,49 +148,50 @@
     <span id="t3_1" class="t s1">단 </span>
     <span id="t4_1" class="t s1">서 </span>
     <span id="t5_1" class="t s2">원부대조필 </span>
+    <img id="coating" th:src="@{/images/coating.png}" alt="Coating Image">
+
     <span id="t6_1" class="t s3"> </span>
-    <span id="t7_1" class="t s4">병록번호 <span th:text="${recordNum}">123456</span></span>
-    <span id="t8_1" class="t s4">연 번 호 <span th:text="${serialNum}">000-001</span></span>
+    <span id="t7_1" class="t s4">병록번호 <span th:text="${certificate.medicalRn()}">123456</span></span>
+    <span id="t8_1" class="t s4">연 번 호 <span th:text="${certificate.today() + certificateId}">000-001</span></span>
     <span id="t9_1" class="t s4">주민등록번호 </span>
-    <span id="ta_1" class="t s4" th:text="${Rrn}">XXXX-XXXXXX</span>
+    <span id="ta_1" class="t s4" th:text="${certificate.userRrn}">XXXX-XXXXXX</span>
     <span id="tb_1" class="t s4">환자의 성명 </span>
-    <span id="tc_1" class="t s4" th:text="${name}">홍길동</span>
+    <span id="tc_1" class="t s4" th:text="${certificate.userName}">홍길동</span>
     <span id="td_1" class="t s4">성별 </span>
-    <span id="te_1" class="t s4" th:text="${gen}">남</span>
+    <span id="te_1" class="t s4" th:text="${certificate.gender()}">성별</span>
     <span id="tg_1" class="t s4">생년 </span>
     <span id="th_1" class="t s4">월일 </span>
-    <span id="ti_1" class="t s4" th:text="${Birth}">1990-01-01</span>
+    <span id="ti_1" class="t s4" th:text="${certificate.birth()}">1990-01-01</span>
     <span id="tj_1" class="t s4">연 </span>
     <span id="tk_1" class="t s4">령 </span>
-    <span id="tl_1" class="t s4" th:text="${age}">30</span>
+    <span id="tl_1" class="t s4" th:text="${certificate.age()}">30</span>
     <span id="tm_1" class="t s4">환자의 주소 </span>
-    <span id="tn_1" class="t s4" th:text="${address}">서울시 강남구</span>
-    <span id="to_1" class="t s4">전 화 : <span th:text="${phone}">010-1234-5678</span></span>
+    <span id="tn_1" class="t s4" th:text="${certificate.userAdd + ' ' + certificate.userAdd2}">주소</span>
+    <span id="to_1" class="t s4">전 화 : <span th:text="${certificate.phone}">010-1234-5678</span></span>
     <span id="tp_1" class="t s4">병 </span>
     <span id="tq_1" class="t s4">명 </span>
-    <span id="tr_1" class="t s4">□ 임상적추정 </span>
-    <span id="ts_1" class="t s4">□ 최종진단 </span>
+    <span id="tq_2" class="t s4" th:text="${certificate.diagnosis}">손목터널증후군</span>
     <span id="tt_1" class="t s4">한 국 질 병 </span>
     <span id="tu_1" class="t s4">분 류 번 호 </span>
+    <span id="tu_2" class="t s4" th:text="${certificate.diseaseCode()}">A00-A00</span>
     <span id="tv_1" class="t s4">발 </span>
     <span id="tw_1" class="t s4">병 </span>
     <span id="tx_1" class="t s4">일 </span>
-    <span id="ty_1" class="t s4">년 </span>
-    <span id="tz_1" class="t s4">월 </span>
-    <span id="t10_1" class="t s4">일 </span>
+    <span id="ty_1" class="t s4" th:text="${certificate.formattedOutbreakAt()}">2024년10월18일 </span>
     <span id="t11_1" class="t s4">진 단 일 </span>
-    <span id="t12_1" class="t s4">년 </span>
-    <span id="t13_1" class="t s4">월 </span>
-    <span id="t14_1" class="t s4">일 </span>
+    <span id="t12_1" class="t s4" th:text="${certificate.formattedVisitAt()}">2024년10월18일 </span>
     <span id="t15_1" class="t s4">향 </span>
     <span id="t16_1" class="t s4">후 </span>
     <span id="t17_1" class="t s4">치 </span>
     <span id="t18_1" class="t s4">료 </span>
     <span id="t19_1" class="t s4">의 </span>
     <span id="t1a_1" class="t s4">견 </span>
+    <span id="t1a_2" class="t s4" th:utext="${certificate.content}">집에서 푹 쉬기</span>
     <span id="t1b_1" class="t s4">비 </span>
     <span id="t1c_1" class="t s4">고 </span>
+    <span id="t2c_1" class="t s4" th:text="${certificate.note}">비고 내용</span>
     <span id="t1d_1" class="t s4">용 도 </span>
+    <span id="t2d_1" class="t s4" th:text="${certificate.purpose}">어디 제출 </span>
     <span id="t1e_1" class="t s2">위와 같이 진단함 </span>
     <span id="t1f_1" class="t s2">발 </span>
     <span id="t1g_1" class="t s2">행 </span>
@@ -201,5 +209,9 @@
     <span id="t1s_1" class="t s2">의사성명 </span>
     <span id="t1t_1" class="t s3"> </span>
   </div>
+
+
 </body>
+
+
 </html>

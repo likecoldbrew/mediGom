@@ -18,6 +18,7 @@ public class HospitalController {
 
     @GetMapping("/all")
     public List<Hospital> getHospitalInfo() {
+
         return hospitalService.getHospitalInfo();
     }
 }

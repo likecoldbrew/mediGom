@@ -15,7 +15,6 @@ public interface UserMapper {
     List<User> getDoctorList();
     List<User> getAdminList();
 
-
     User getUserByNo(int userNo);
     User getUserById(String userId);
 

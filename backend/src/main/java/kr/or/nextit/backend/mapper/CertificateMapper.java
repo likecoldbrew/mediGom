@@ -11,6 +11,8 @@ public interface CertificateMapper {
 
     void insertCertificate(Certificate certificate); // Create
 
+    Certificate selectCertificateByUserNo(@Param("userNo") int userNo); // Read by UserNo
+
     Certificate selectCertificateById(@Param("certificateId") int certificateId); // Read by ID
 
     List<Certificate> selectAllCertificates(); // Read all

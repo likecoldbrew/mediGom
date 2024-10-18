@@ -46,7 +46,6 @@ public class UserController {
     }
 
     @GetMapping("/all")
-    @PreAuthorize("hasAnyRole('ADMIN')") // ADMIN 역할만 접근 허용
     public ResponseEntity<List<User>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
     }
@@ -57,25 +56,21 @@ public class UserController {
     }
 
     @GetMapping("/doctors")
-    @PreAuthorize("hasRole('ADMIN')") // ADMIN 역할만 접근 허용
     public ResponseEntity<List<User>> getDoctorList() {
         return ResponseEntity.ok(userService.getDoctorList());
     }
 
     @GetMapping("/admins")
-    @PreAuthorize("hasRole('ADMIN')") // ADMIN 역할만 접근 허용
     public ResponseEntity<List<User>> getAdminList() {
         return ResponseEntity.ok(userService.getAdminList());
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'DOCTOR')") // ADMIN 및 DOCTOR 역할만 접근 허용
     public ResponseEntity<User> getUserById(@PathVariable int id) {
         return ResponseEntity.ok(userService.getUserByNo(id));
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')") // ADMIN 역할만 접근 허용
     public ResponseEntity<Void> deleteUser(@PathVariable int id) {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();

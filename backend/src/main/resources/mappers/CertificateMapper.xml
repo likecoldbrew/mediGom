@@ -9,8 +9,33 @@
         VALUES (#{userNo}, #{doctorNo}, #{certificateType}, #{disease}, #{content}, #{outbreakAt}, #{treatmentAt}, #{createAt}, #{validUntil}, #{status})
     </insert>
 
+    <select id="selectCertificateByUserNo" resultType="kr.or.nextit.backend.model.Certificate">
+        SELECT * FROM certificates WHERE user_no = #{userNo}
+    </select>
+
     <select id="selectCertificateById" resultType="kr.or.nextit.backend.model.Certificate">
-        SELECT * FROM certificates WHERE certificate_id = #{certificateId}
+        SELECT
+            u.user_name,
+            u.user_rrn,
+            u.user_add,
+            u.user_add2,
+            u.phone,
+            r.diagnosis,
+            r.outbreak_at,
+            r.visit_at,
+            c.content,
+            c.note,
+            c.purpose,
+            d.user_name AS doctor_name
+        FROM
+            certificates c
+                JOIN
+            users u ON c.user_no = u.user_no
+                JOIN
+            medical_records r ON u.user_no = r.user_no
+                JOIN
+            users d ON c.doctor_no = d.user_no
+        WHERE certificate_id = #{certificateId}
     </select>
 
     <select id="selectAllCertificates" resultType="kr.or.nextit.backend.model.Certificate">

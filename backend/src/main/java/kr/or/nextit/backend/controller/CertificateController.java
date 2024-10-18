@@ -22,18 +22,21 @@ public class CertificateController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping("/{certificateId}")
-    public ResponseEntity<Certificate> getCertificateById(@PathVariable int certificateId) {
-        Certificate certificate = certificateService.getCertificateById(certificateId);
+    // 해당 유저의 인증서 가져오기
+    @GetMapping("/user/{userNo}")
+    public ResponseEntity<Certificate> getCertificateByUserNo(@PathVariable int userNo) {
+        Certificate certificate = certificateService.getCertificateByUserNo(userNo);
         return ResponseEntity.ok(certificate);
     }
 
+    // 전체 인증서 가져오기
     @GetMapping
     public ResponseEntity<List<Certificate>> getAllCertificates() {
         List<Certificate> certificates = certificateService.getAllCertificates();
         return ResponseEntity.ok(certificates);
     }
 
+    // 수정
     @PutMapping("/{certificateId}")
     public ResponseEntity<Void> updateCertificate(@PathVariable int certificateId, @RequestBody Certificate certificate) {
         certificate.setCertificateId(certificateId);
@@ -41,6 +44,7 @@ public class CertificateController {
         return ResponseEntity.ok().build();
     }
 
+    // 삭제
     @DeleteMapping("/{certificateId}")
     public ResponseEntity<Void> deleteCertificate(@PathVariable int certificateId) {
         certificateService.deleteCertificate(certificateId);

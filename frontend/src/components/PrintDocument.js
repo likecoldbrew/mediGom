@@ -1,44 +1,75 @@
 import React, { useState, useEffect } from 'react';
 
 const PrintDocument = () => {
-  // 로그인한 사용자 정보 상태
   const [userInfo, setUserInfo] = useState(null);
+  const [certificates, setCertificates] = useState([]);
 
   useEffect(() => {
-    // 페이지 로드 시 사용자 정보를 가져오는 함수
     const fetchUserInfo = async () => {
-      const token = localStorage.getItem('token'); // JWT를 로컬 스토리지에서 가져옴
+      const token = localStorage.getItem('token');
       if (token) {
-        const response = await fetch('/api/users/me', {
+        try {
+          const response = await fetch('/api/users/me', {
+            method: 'GET',
+            headers: {
+              'Authorization': `Bearer ${token}`,
+            },
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            setUserInfo(data);
+            console.log('사용자 정보:', data);
+            fetchCertificatesByUserNo(data.userNo);
+          } else {
+            console.error('사용자 정보를 가져오는 데 실패했습니다.');
+          }
+        } catch (error) {
+          console.error('에러가 발생했습니다:', error);
+        }
+      }
+    };
+
+    const fetchCertificatesByUserNo = async (userNo) => {
+      try {
+        const response = await fetch(`/api/certificates/user/${userNo}`, {
           method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${token}`, // JWT 포함
-          },
         });
 
         if (response.ok) {
-          const data = await response.json(); // 서버에서 반환하는 사용자 정보
-          setUserInfo(data); // 사용자 정보 상태 업데이트
-          console.log(data)
+          const data = await response.json();
+          console.log('인증서 리스트:', data);
+
+          // 응답이 객체일 경우 배열로 감싸기
+          const certificateArray = Array.isArray(data) ? data : [data];
+          setCertificates(certificateArray); // 상태 업데이트
         } else {
-          console.error('사용자 정보를 가져오는 데 실패했습니다.');
+          console.error('인증서 정보를 가져오는 데 실패했습니다.');
         }
+      } catch (error) {
+        console.error('에러가 발생했습니다:', error);
       }
     };
 
     fetchUserInfo();
   }, []);
 
-  const openLocalHtml = () => {
-    // 스프링 부트 서버에서 제공하는 HTML 파일 경로를 새 창으로 엽니다.
-    window.open('http://localhost:8080/html/diagnosis.html', '_blank', 'width=800,height=600');
+  // 진단서를 새 창에서 열기 위한 함수
+  const openLocalHtml = (certificateId) => {
+    // 인증서 뷰 페이지를 새 탭에서 열기
+    window.open(`http://localhost:8080/certificates/view/${certificateId}`, '_blank');
+
   };
+
+
+  useEffect(() => {
+    console.log('현재 인증서 리스트:', certificates);
+  }, [certificates]);
 
   return (
     <div style={{ textAlign: 'center', marginTop: '50px' }}>
-      <h1>React에서 HTML 파일 열기</h1>
+      <h1>인증서 목록</h1>
 
-      {/* 로그인한 회원 정보를 표시 */}
       {userInfo ? (
         <div style={{ marginBottom: '20px' }}>
           <strong>현재 로그인한 회원:</strong> {userInfo.userName}
@@ -47,9 +78,30 @@ const PrintDocument = () => {
         <div style={{ marginBottom: '20px' }}>로그인 정보가 없습니다.</div>
       )}
 
-      <button onClick={openLocalHtml} style={{ padding: '10px 20px', fontSize: '16px' }}>
-        진단서 열기
-      </button>
+      <ul style={{ listStyleType: 'none', padding: 0 }}>
+        {certificates && certificates.length > 0 ? (
+          certificates.map((certificate) => (
+            <li
+              key={certificate.certificateId} // use certificateId as key
+              style={{
+                border: "1px solid #ccc",
+                borderRadius: "5px",
+                padding: "10px",
+                margin: "10px 0"
+              }}
+            >
+              <span>인증서 ID: {certificate.certificateId} </span> <br />
+              <span>내용: {certificate.disease}</span> <br />
+              <button onClick={() => openLocalHtml(certificate.certificateId)}>진단서 발급</button>
+            </li>
+          ))
+        ) : (
+          <li>인증서가 없습니다.</li>
+        )}
+      </ul>
+      <div>
+        <pre>{JSON.stringify(certificates[0], null, 2)}</pre>
+      </div>
     </div>
   );
 };
