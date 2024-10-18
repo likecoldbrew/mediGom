@@ -9,6 +9,8 @@ import kr.or.nextit.backend.model.Community;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -52,27 +54,48 @@ public class CommunityService {
             for (Files file : fileList) {
                 file.setBoardId(boardId); // 파일의 board_id 설정
             }
-            filesService.saveFiles(fileList); // 리스트 전체를 한 번에 삽입
+            filesService.saveFiles(fileList, boardId); // 리스트 전체를 한 번에 삽입
         }
         return retValue;
     }
 
     // 게시글 업데이트
     @Transactional
-    public int updateBoard(Community board, List<Integer> deletedFileIds) {
-        int result=communityMapper.updateBoard(board);
-        if(result>0) {
+    public int updateBoard(Community board, int deletedFileId) {
+        int result = communityMapper.updateBoard(board);
+        if (result > 0) {
             int boardId = board.getBoardId();
+
             // 삭제할 파일 처리
-            if (deletedFileIds != null && !deletedFileIds.isEmpty()) {
-                filesMapper.deleteFiles(deletedFileIds); // 삭제할 파일 IDs로 DB에서 삭제
+            if (deletedFileId > 0) {
+                filesService.deleteFiles(deletedFileId); // 단일 파일 삭제
             }
-            List<Files> fileList=board.getFiles();
+
+            // 새로 추가할 파일 처리
+            List<Files> fileList = board.getFiles();
+            List<String> existingFileNames = new ArrayList<>();
+
+            // 기존 파일 이름 목록 생성
             if (fileList != null && !fileList.isEmpty()) {
-                for (Files file : fileList) {
-                    file.setBoardId(boardId); //boardId가 BoardNo가 됨
+                // 기존 파일 이름을 데이터베이스에서 가져옴
+                List<Files> existingFiles = filesService.selectAllFiles(boardId);
+                for (Files existingFile : existingFiles) {
+                    existingFileNames.add(existingFile.getFileOriginalName()); // 기존 파일 이름 추가
                 }
-                filesService.saveFiles(fileList);
+
+                // 새로 추가할 파일 처리
+                List<Files> newFiles = new ArrayList<>(); // 새로 추가할 파일 리스트
+                for (Files file : fileList) {
+                    // 중복 파일이 아닌 경우에만 boardId 설정
+                    if (!existingFileNames.contains(file.getFileOriginalName())) {
+                        file.setBoardId(boardId); // boardId 설정
+                        newFiles.add(file); // 새로 추가할 파일 리스트에 추가
+                    }
+                }
+                // 새로 추가할 파일 저장
+                if (!newFiles.isEmpty()) {
+                    filesService.saveFiles(newFiles, boardId); // 두 개의 파라미터를 전달
+                }
             }
             return result;
         }

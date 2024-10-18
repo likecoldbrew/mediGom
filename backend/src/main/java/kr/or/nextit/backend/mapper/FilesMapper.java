@@ -2,6 +2,7 @@ package kr.or.nextit.backend.mapper;
 
 import kr.or.nextit.backend.model.Files;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -20,5 +21,8 @@ public interface FilesMapper {
     List<Files> selectAllFiles(int boardId);
 
     // 첨부파일 삭제
-    void deleteFiles(List<Integer> fileIds);
+    void deleteFiles(int fileId);
+
+    //파일 이름 중복 체크(중복 저장 예방용)
+    int countByFileNameAndBoardId(@Param("fileName") String fileName, @Param("boardId") int boardId);
 }

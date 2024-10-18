@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,7 +24,7 @@ public class FilesController {
     private final FilesService filesService;
 
     @PostMapping(value = "/upload", consumes = "multipart/form-data")
-    public ResponseEntity<String> uploadFiles(@RequestParam(value = "files") MultipartFile[] files) {
+    public ResponseEntity<String> uploadFiles(@RequestParam(value = "files") MultipartFile[] files,  @RequestParam(value = "boardId") int boardId) {
         List<Files> filesList = new ArrayList<>();
         for (MultipartFile file : files) {
             if (!file.isEmpty()) {
@@ -33,7 +34,6 @@ public class FilesController {
                 try {
                     // 파일을 서버에 저장
                     file.transferTo(new File(filePath));
-
                     Files boardFiles = new Files();
                     boardFiles.setFileName(randomFileName + "_" + file.getOriginalFilename());
                     boardFiles.setFileOriginalName(file.getOriginalFilename());
@@ -48,7 +48,7 @@ public class FilesController {
                 }
             }
         }
-        filesService.saveFiles(filesList);
+        filesService.saveFiles(filesList, boardId);
         return ResponseEntity.ok("파일이 업로드되었습니다.");
     }
 
@@ -62,4 +62,17 @@ public class FilesController {
         }
         return filesService.readFile(file);
     }
+
+    // 특정 파일 삭제 요청 처리 (파일 ID를 URL 경로 변수로 받음)
+    @DeleteMapping("/delete/{fileId}")
+    public ResponseEntity<Void> deleteFile(@PathVariable Integer fileId) {
+        try {
+            // 파일 삭제 서비스 호출
+            filesService.deleteFiles(fileId);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
 }

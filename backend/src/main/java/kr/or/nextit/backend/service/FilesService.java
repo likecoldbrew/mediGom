@@ -30,8 +30,18 @@ public class FilesService {
     }
 
 
-    public void saveFiles(List<Files> filesList) {
-        filesMapper.saveAll(filesList);
+    public void saveFiles(List<Files> filesList, int boardId) {
+        List<Files> newFiles = new ArrayList<>();
+        for (Files file : filesList) {
+            // 파일 이름 중복 검사
+            if (!isFileNameExists(file.getFileName(), boardId)) {
+                newFiles.add(file); // 중복이 아닌 경우 새로운 파일 목록에 추가
+            }
+        }
+        // 새로운 파일 목록이 비어 있지 않으면 저장
+        if (!newFiles.isEmpty()) {
+            filesMapper.saveAll(newFiles);
+        }
     }
 
     public Files getFileById(int fileId) {
@@ -77,17 +87,24 @@ public class FilesService {
     }
 
     // 게시글 ID로 파일 삭제
-    public void deleteFiles(List<Integer> fileIds) {
-        if (fileIds != null && !fileIds.isEmpty()) {
-            // 각 파일 ID에 대해 실제 파일 시스템에서 삭제
-            for (int fileId : fileIds) {
-                Files file = filesMapper.selectFile(fileId);
-                if (file != null) {
-                    // 파일 시스템에서 파일 삭제
-                    fileStorage.deleteFile(file.getFilePath());
-                }
+    public void deleteFiles(Integer fileId) {
+        Files file = filesMapper.selectFile(fileId);
+        if (file != null) {
+            String filePath = file.getFilePath(); // filePath를 로컬 변수로 저장
+            if (filePath != null) { // null 체크
+                filesMapper.deleteFiles(fileId); // DB에서 파일 삭제
+                fileStorage.deleteFile(filePath); // 파일 시스템에서 삭제
+            } else {
+                System.out.println("파일 경로가 null입니다."); // 디버깅용 로그
             }
-            filesMapper.deleteFiles(fileIds); // DB에서 파일 삭제
+        } else {
+            System.out.println("해당 파일을 찾을 수 없습니다."); // 디버깅용 로그
         }
+    }
+
+    // 파일 이름 중복 검사 메서드
+    public boolean isFileNameExists(String fileName, int boardId) {
+        // 데이터베이스에서 해당 boardId에 대해 fileName이 이미 존재하는지 확인하는 쿼리 실행
+        return filesMapper.countByFileNameAndBoardId(fileName, boardId) > 0;
     }
 }

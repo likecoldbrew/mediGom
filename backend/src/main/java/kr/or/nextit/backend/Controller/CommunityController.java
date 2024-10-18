@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -81,7 +83,7 @@ public class CommunityController {
             @RequestParam("content") String content,
             @RequestParam("userId") String userId,
             @RequestParam(value = "files", required = false) MultipartFile[] files,
-            @RequestParam(value = "deletedFileIds", required = false) List<Integer> deletedFileIds) {
+            @RequestParam(value = "deletedFileId", required = false) Integer deletedFileId) {
         // 1. 기존 게시글을 조회
         Community existingBoard = communityService.selectBoard(boardId);
         if (existingBoard == null) {
@@ -92,22 +94,25 @@ public class CommunityController {
         existingBoard.setContent(content);
         existingBoard.setUserId(userId);
 
-        // 3. 게시글 업데이트
-        int  updateResult= communityService.updateBoard(existingBoard, deletedFileIds); // 업데이트 서비스 메서드 호출
+        // 3. 기존 파일 삭제 (옵션)
+        if (deletedFileId != null) {
+            filesService.deleteFiles(deletedFileId); // 삭제할 파일 삭제
+        }
+        // 4. 새로 업로드할 파일 처리
+        List<Files> newFilesList = new ArrayList<>();
+        if (files != null && files.length > 0) {
+            newFilesList = filesService.uploadAndGetFiles(files, boardId); // 새로운 파일만 업로드
+        }
+        // 5. 기존 파일과 새로운 파일 리스트를 합치기
+        List<Files> allFiles = new ArrayList<>(existingBoard.getFiles()); // 기존 파일 목록 가져오기
+        allFiles.addAll(newFilesList); // 새로 업로드한 파일 목록 추가
+        existingBoard.setFiles(allFiles); // 합쳐진 파일 목록 설정
+
+        // 6. 게시글 업데이트
+        int updateResult = communityService.updateBoard(existingBoard, deletedFileId != null ? deletedFileId : 0);
         if (updateResult == 0) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("게시글 업데이트에 실패했습니다.");
         }
-        // 4. 삭제할 파일 처리
-        if (deletedFileIds != null && !deletedFileIds.isEmpty()) {
-            filesService.deleteFiles(deletedFileIds); // 삭제할 파일 삭제
-        }
-
-        // 4. 새로 업로드할 파일 처리
-        if (files != null && files.length > 0) {
-            List<Files> filesList = filesService.uploadAndGetFiles(files, boardId); // 업로드한 파일을 게시글 ID와 연관지음
-            existingBoard.setFiles(filesList); // 파일 정보를 DTO에 추가
-        }
-
         return ResponseEntity.ok("게시글이 업데이트되었습니다.");
     }
 

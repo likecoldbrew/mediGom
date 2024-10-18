@@ -12,9 +12,10 @@ const BoardUpdate = ({ boardId }) => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [userId, setUserId] = useState("");
-  const [files, setFiles] = useState([]);
+  const [files, setFiles] = useState([]); // 기존에 등록된 파일 확인용
+  const [newFiles, setNewFiles] = useState([]); // 새 파일 상태
   const [loading, setLoading] = useState(false);
-
+  const [filePreviews, setFilePreviews] = useState([]);
   useEffect(() => {
     fetchBoardDetail();
   }, [boardId]);
@@ -59,10 +60,28 @@ const BoardUpdate = ({ boardId }) => {
       fileOriginalName: file.name, // 파일의 원래 이름을 저장
       fileObject: file, // 파일 객체도 함께 저장
     }));
-    setFiles((prevFiles) => [...prevFiles, ...selectedFiles]); // 기존 파일 목록에 새 파일 추가
+    // 파일 미리보기 URL 생성
+    const previews = selectedFiles.map(file => URL.createObjectURL(file));
+    setFilePreviews(previews);
+    // 새 파일만 상태에 저장
+    setNewFiles(selectedFiles);
   };
-  const handleFileRemove = (index) => {
-    setFiles((prevFiles) => prevFiles.filter((_, i) => i !== index)); // 선택된 파일 제거
+
+  const handleFileRemove = async  (fileId, index) => {
+    try {
+      const response = await fetch(`/api/file/delete/${fileId}`, {
+        method: 'DELETE',
+      });
+      console.log("dpae",response.ok)
+      if (response.ok) {
+        setFiles((prevFiles) => prevFiles.filter((file, i) => i !== index)); // UI에서 파일 삭제
+      } else {
+        alert('파일 삭제에 실패했습니다.');
+      }
+    } catch (error) {
+      console.error('Error removing file:', error);
+      alert('파일 삭제 중 오류가 발생했습니다.');
+    }
   };
 
   const handleSubmit = async (event) => {
@@ -73,8 +92,10 @@ const BoardUpdate = ({ boardId }) => {
     formData.append("title", title);
     formData.append("content", content);
     formData.append("userId", userId);
-    files.forEach((file) => {
-      formData.append("files", file); // 'files'로 추가해야 합니다.
+
+    // 새 파일만 API에 전달
+    newFiles.forEach((file) => {
+      formData.append("files", file.fileObject);
     });
 
     try {
@@ -142,14 +163,26 @@ const BoardUpdate = ({ boardId }) => {
               </div>
               <div className="mb-4">
                 <label className="block mb-2 text-gray-600">첨부파일</label>
-                {files.length > 0 ? (
+                {files.length > 0 || newFiles.length > 0 ? (
                   <ul className="list-disc pl-5">
                     {files.map((file, index) => (
                       <li key={index} className="text-gray-600 flex justify-between items-center">
                         {file.fileOriginalName}
                         <button
                           type="button"
-                          onClick={() => handleFileRemove(index)}
+                          onClick={() => handleFileRemove(file.fileId, index)} // 기존 파일 삭제
+                          className="ml-2 text-red-600 hover:underline"
+                        >
+                          x
+                        </button>
+                      </li>
+                    ))}
+                    {newFiles.map((file, index) => (
+                      <li key={index + files.length} className="text-gray-600 flex justify-between items-center">
+                        {file.fileOriginalName} {/* 새 파일 이름 표시 */}
+                        <button
+                          type="button"
+                          onClick={() => setNewFiles((prev) => prev.filter((_, i) => i !== index))} // 선택된 새 파일 삭제
                           className="ml-2 text-red-600 hover:underline"
                         >
                           x

@@ -49,15 +49,15 @@
     </select>
 
 
-
 <!--  첨붛파일 삭제   -->
-    <delete id="deleteFiles">
-        DELETE FROM board_files WHERE file_id IN
-        <foreach item="fileId" collection="list" open="(" separator="," close=")">
-            #{fileId}
-        </foreach>
+    <delete id="deleteFiles" >
+        DELETE FROM board_files WHERE file_id =#{fileId}
     </delete>
-
-
+    <!-- 파일 이름 중복되는 거 없는지 체크  -->
+    <select id="countByFileNameAndBoardId" resultType="int">
+        SELECT COUNT(*)
+        FROM board_files
+        WHERE file_name = #{fileName} AND board_id = #{boardId}
+    </select>
 
 </mapper>
