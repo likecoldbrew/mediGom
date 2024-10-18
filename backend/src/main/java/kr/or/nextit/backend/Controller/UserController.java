@@ -24,11 +24,9 @@ public class UserController {
     public ResponseEntity<String> login(@RequestBody User user) {
         // 사용자가 입력한 ID로 사용자 조회
         User existingUser = userService.getUserById(user.getUserId());
-
         if (existingUser == null || !passwordEncoder.matches(user.getUserPass(), existingUser.getUserPass())) {
             return ResponseEntity.status(401).body("Invalid credentials");
         }
-
         // JWT 토큰 생성
         String token = jwtUtil.generateToken(existingUser.getUserId());
         return ResponseEntity.ok(token);

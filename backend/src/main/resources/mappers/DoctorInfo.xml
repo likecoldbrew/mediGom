@@ -14,7 +14,7 @@
         FROM
             users u
                 JOIN
-            doctors d ON u.user_no = d.doctor_user_no
+            doctors d ON u.user_no = d.doctor_no
                 JOIN
             medical_department md ON d.department = md.department_no
                 JOIN
@@ -34,7 +34,7 @@
         GROUP_CONCAT(DISTINCT mt.treatment_name) AS treatments
         FROM
         users u
-        JOIN doctors d ON u.user_no = d.doctor_user_no
+        JOIN doctors d ON u.user_no = d.doctor_no
         JOIN medical_department md ON d.department = md.department_no
         JOIN medical_treatment mt ON FIND_IN_SET(mt.treatment_no, d.treatment) > 0
         WHERE
@@ -53,7 +53,7 @@
         FROM
             medical_department md
                 JOIN doctors d ON d.department = md.department_no
-                JOIN users u ON u.user_no = d.doctor_user_no
+                JOIN users u ON u.user_no = d.doctor_no
                 JOIN medical_treatment mt ON FIND_IN_SET(mt.treatment_no, d.treatment) > 0
         GROUP BY
             md.department_name;
@@ -67,7 +67,7 @@
         GROUP_CONCAT(DISTINCT mt.treatment_name) AS treatments
         FROM
         users u
-        JOIN doctors d ON u.user_no = d.doctor_user_no
+        JOIN doctors d ON u.user_no = d.doctor_no
         JOIN medical_department md ON d.department = md.department_no
         JOIN medical_treatment mt ON FIND_IN_SET(mt.treatment_no, d.treatment) > 0
         WHERE
@@ -80,7 +80,7 @@
     <select id="getDoctorCareer" resultType="kr.or.nextit.backend.model.DoctorInfoDTO">
         SELECT * FROM doctors d
         INNER JOIN users u
-        ON u.user_no = d.doctor_user_no
+        ON u.user_no = d.doctor_no
         INNER JOIN medical_department md
         ON d.department = md.department_no
         INNER JOIN doctors_career dc
@@ -92,7 +92,7 @@
     <select id="getDoctorEducation" resultType="kr.or.nextit.backend.model.DoctorInfoDTO">
         SELECT * FROM doctors d
         INNER JOIN users u
-        ON u.user_no = d.doctor_user_no
+        ON u.user_no = d.doctor_no
         INNER JOIN doctors_education de
         ON d.doctor_no = de.doctor_no
         AND u.user_no = #{userNo}

@@ -42,11 +42,11 @@ const DoctorInfo = () => {
 
   const fetchDetail = async (userNo) => {
     try {
-      const response = await fetch(`/api/users/${userNo}`); // Spring Boot 서버에서 데이터 가져오기
+      const response = await fetch(`/api/doctorsInfo/${userNo}`); // Spring Boot 서버에서 데이터 가져오기
       const data = await response.json();
-      setSelectedDoctor(data.user); // 상태 업데이트
-      setEducation(data.education); // 상태 업데이트
-      setCareer(data.career); // 상태 업데이트
+      setSelectedDoctor(data.user); // 의사선택
+      setEducation(data.education); // 의사학력
+      setCareer(data.career); // 의사경력
     } catch (error) {
       console.error("Error fetching users:", error);
     }
