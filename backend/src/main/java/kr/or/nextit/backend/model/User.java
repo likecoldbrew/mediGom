@@ -1,6 +1,7 @@
 package kr.or.nextit.backend.model;
 
 import java.sql.Timestamp;
+import java.time.Instant;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -29,19 +30,24 @@ public class User {
     private String userAdd;
     private String userAdd2;
 
-    private Timestamp createAt;
-    private Timestamp updateAt;
+    @Column(nullable = false, updatable = false)
+    private Timestamp createAt; // 생성일자
+
+    private Timestamp updateAt; // 수정일자
 
     // admin: 0 = 환자, 1 = 의사, 2 = 관리자
     private int admin;
 
+    @Column(length = 1, nullable = false)
     private String deleteYn; // 삭제 여부 ('Y', 'N')
 
-    @Transient //db에 없는 값이면 추가 필요
+    @Transient // DB에 저장되지 않는 필드
     private String departmentName; // 부서명 (의사일 경우)
+
     @Transient
     private String rank; // 직급 (의사일 경우)
 
+    // 역할(Role) 가져오기
     public String getRole() {
         switch (admin) {
             case 0:
@@ -55,4 +61,16 @@ public class User {
         }
     }
 
+    // 엔티티가 처음 저장되기 전 실행되는 메서드
+    @PrePersist
+    protected void onCreate() {
+        this.createAt = Timestamp.from(Instant.now()); // 현재 시간 설정
+        this.deleteYn = "N"; // 기본값 'N' 설정
+    }
+
+    // 엔티티가 업데이트될 때 호출되는 메서드
+    @PreUpdate
+    protected void onUpdate() {
+        this.updateAt = Timestamp.from(Instant.now()); // 수정 시간 갱신
+    }
 }

@@ -8,6 +8,7 @@
     <select id="getAllUsers" resultType="kr.or.nextit.backend.model.User">
         SELECT * FROM users
         ORDER BY delete_yn, user_no;
+
     </select>
 
     <!-- 환자 목록 조회 -->

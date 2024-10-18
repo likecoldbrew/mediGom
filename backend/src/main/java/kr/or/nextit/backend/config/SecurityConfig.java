@@ -32,8 +32,6 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/users/register").permitAll() // 사용자 등록 허용
-                        .requestMatchers("/api/category/admin/**").authenticated() // 관리자 접근 필요
-                        .requestMatchers("/api/category/doctor/**").authenticated() // 의사 접근 필요
                         .anyRequest().permitAll() // 나머지 요청 허용
                 )
                 .httpBasic(httpBasic -> httpBasic

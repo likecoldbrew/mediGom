@@ -17,6 +17,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+
     public void insertUser(User user) {
         user.setUserPass(passwordEncoder.encode(user.getUserPass())); // 비밀번호 암호화
         userRepository.save(user);
@@ -46,7 +47,6 @@ public class UserService {
         return userMapper.getAdminList();
     }
 
-    // 유저 한 명 조회
     public User getUserByNo(int userNo) {
         return userMapper.getUserByNo(userNo);
     }

@@ -35,7 +35,7 @@ const Header = () => {
     const fetchUserInfo = async () => {
       const token = localStorage.getItem('token'); // JWT를 로컬 스토리지에서 가져옴
       if (token) {
-        const response = await fetch('/api/users/me', {
+        const response = await fetch('/api/users/login', {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`, // JWT 포함

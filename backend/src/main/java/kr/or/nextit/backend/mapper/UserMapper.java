@@ -1,6 +1,7 @@
 package kr.or.nextit.backend.mapper;
 
 import kr.or.nextit.backend.model.User;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -13,6 +14,7 @@ public interface UserMapper {
     List<User> getPatientList();
     List<User> getDoctorList();
     List<User> getAdminList();
+
 
     User getUserByNo(int userNo);
     User getUserById(String userId);
