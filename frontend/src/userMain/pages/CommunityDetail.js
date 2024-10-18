@@ -11,10 +11,37 @@ const BoardDetail = ({ boardId }) => {
   const [board, setBoard] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const [userInfo, setUserInfo] = useState(null); // 유저 정보
+
+  useEffect(() => {
+    // 페이지 로드 시 사용자 정보를 가져오는 함수
+    const fetchUserInfo = async () => {
+      const token = localStorage.getItem("token"); // JWT를 로컬 스토리지에서 가져옴
+      if (token) {
+        const response = await fetch("/api/users/me", {
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${token}` // JWT 포함
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json(); // 서버에서 반환하는 사용자 정보
+          setUserInfo(data); // 사용자 정보 상태 업데이트
+        } else {
+          console.error("사용자 정보를 가져오는 데 실패했습니다.");
+        }
+      }
+    };
+    fetchUserInfo();
+  }, []);
+
+
 
   useEffect(() => {
     fetchBoardDetail();
   }, [boardId], [board]);
+
 
   const fetchBoardDetail = async () => {
     try {
@@ -37,6 +64,7 @@ const BoardDetail = ({ boardId }) => {
       setLoading(false);
     }
   };
+
   console.log("ㅂ호두", board);
   const formatDate = (timestamp) => {
     const date = new Date(timestamp);
@@ -120,16 +148,20 @@ const BoardDetail = ({ boardId }) => {
             >
               목록으로 돌아가기
             </Link>
-            <Link
-              to={`/board/update/${boardId}`}
-              state={{ selectCategory, selectSubCategory }}
-              className="text-sky-600 hover:underline mr-4"
-            >
-              <button
-                className="px-4 py-2  hover:bg-sky-200 hover:font-bold border rounded-md bg-white  text-blue-500 disabled:text-gray-300">
-                수정하기
-              </button>
-            </Link>
+            {userInfo? (
+              <>
+                <Link
+                  to={`/board/update/${boardId}`}
+                  state={{ selectCategory, selectSubCategory }}
+                  className="text-sky-600 hover:underline mr-4"
+                >
+                  <button
+                    className="px-4 py-2  hover:bg-sky-200 hover:font-bold border rounded-md bg-white  text-blue-500 disabled:text-gray-300">
+                    수정하기
+                  </button>
+                </Link>
+              </>
+            ):null}
           </div>
         </main>
         <div className="flex flex-col space-y-4">

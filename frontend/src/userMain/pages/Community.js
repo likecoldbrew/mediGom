@@ -13,15 +13,33 @@ const Community = () => {
   const [loading, setLoading] = useState(true); // 로딩 메시지
   const [currentPage, setCurrentPage] = useState(Number(page) || 1); // URL에서 페이지 번호 설정
   const navigate = useNavigate(); // 페이지 이동을 위한 useNavigate
+  const [userInfo, setUserInfo] = useState(null); // 유저 정보
 
   // API 호출
   useEffect(() => {
     fetchBoards();
+    window.scrollTo(0, 0);
+    const fetchUserInfo = async () => {
+      const token = localStorage.getItem("token"); // JWT를 로컬 스토리지에서 가져옴
+      if (token) {
+        const response = await fetch("/api/users/me", {
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${token}` // JWT 포함
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json(); // 서버에서 반환하는 사용자 정보
+          setUserInfo(data); // 사용자 정보 상태 업데이트
+        } else {
+          console.error("사용자 정보를 가져오는 데 실패했습니다.");
+        }
+      }
+    };
+    fetchUserInfo();
   }, []);
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
 
   // URL에서 page가 변경될 때 currentPage 업데이트
   useEffect(() => {
@@ -157,15 +175,19 @@ const Community = () => {
               </table>
             </div>
             <div className="flex justify-end">
-              <Link
-                to={`/board/register`}
-                state={{ selectCategory, selectSubCategory }}
-                className="text-sky-600 hover:underline mr-4"
-              >
-                <button className="px-4 hover:bg-sky-200 hover:font-bold py-2 border rounded-md bg-white  text-blue-500 disabled:text-gray-300">
-                  후기 등록
-                </button>
-              </Link>
+              {userInfo? (
+                <>
+                  <Link
+                    to={`/board/register`}
+                    state={{ selectCategory, selectSubCategory }}
+                    className="text-sky-600 hover:underline mr-4"
+                  >
+                    <button className="px-4 hover:bg-sky-200 hover:font-bold py-2 border rounded-md bg-white  text-blue-500 disabled:text-gray-300">
+                      후기 등록
+                    </button>
+                  </Link>
+                </>
+              ):null}
             </div>
             <div className="flex justify-center items-center space-x-2 mt-4">
               <button

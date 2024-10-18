@@ -21,7 +21,7 @@ import InquiriesRegist from "../InquiriesRegist";
 
 const CategoryContainer = () => {
   const { urlName, page, action } = useParams();
-  const location = useLocation();
+
   // 디버깅을 위해 현재 매개변수를 콘솔에 출력
 
   switch (urlName) {

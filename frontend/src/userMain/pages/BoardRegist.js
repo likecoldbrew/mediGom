@@ -14,18 +14,31 @@ const BoardRegist = () => {
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(false);
   const [filePreviews, setFilePreviews] = useState([]); // 미리보기 상태 추가
-  // 유저 정보를 저장할 state
-  const [username, setUsername] = useState("user10");
+  const [userInfo, setUserInfo] = useState(null); // 유저 정보
 
-  // 로그인한 유저의 정보를 가져오기 위한 useEffect
-  // useEffect(() => {
-  //   const storedUser = localStorage.getItem("username"); // 또는 API 호출
-  //   if (storedUser) {
-  //     setUsername(storedUser);
-  //   } else {
-  //     navigate("/login");
-  //   }
-  // }, [navigate]);
+  useEffect(() => {
+    // 페이지 로드 시 사용자 정보를 가져오는 함수
+    const fetchUserInfo = async () => {
+      const token = localStorage.getItem("token"); // JWT를 로컬 스토리지에서 가져옴
+      if (token) {
+        const response = await fetch("/api/users/me", {
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${token}` // JWT 포함
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json(); // 서버에서 반환하는 사용자 정보
+          setUserInfo(data); // 사용자 정보 상태 업데이트
+        } else {
+          console.error("사용자 정보를 가져오는 데 실패했습니다.");
+        }
+      }
+    };
+    fetchUserInfo();
+  }, []);
+
 
   const handleFileChange = (event) => {
     const selectedFiles = Array.from(event.target.files);
@@ -36,14 +49,6 @@ const BoardRegist = () => {
     setFilePreviews(previews);
   };
 
-  // 날짜 포맷 변환 함수
-  const formatDate = (timestamp) => {
-    const date = new Date(timestamp); // timestamp를 Date 객체로 변환
-    const year = date.getFullYear(); // 연도
-    const month = String(date.getMonth() + 1).padStart(2, "0"); // 월 (0부터 시작하므로 1 추가)
-    const day = String(date.getDate()).padStart(2, "0"); // 일
-    return `${year}-${month}-${day}`; // 형식: YYYY-MM-DD
-  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -65,12 +70,12 @@ const BoardRegist = () => {
     try {
       const response = await fetch("/api/board/register", {
         method: "POST",
-        body: formData,
+        body: formData
       });
       if (response.ok) {
         // 게시글 등록 성공 시
         alert("게시글이 등록되었습니다.");
-        navigate("/community",  {
+        navigate("/community", {
           state: {
             selectCategory,
             selectSubCategory
@@ -111,13 +116,27 @@ const BoardRegist = () => {
               />
             </div>
             <div className="mb-4">
-              <label className="block mb-2 text-gray-600">작성자</label>
-              <input
-                type="text"
-                value={username} // 임의의 값
-                readOnly
-                className="w-full border border-gray-300 p-2 rounded-md bg-gray-100"
-              />
+              {userInfo ? (
+                <>
+                  <label className="block mb-2 text-gray-600">작성자</label>
+                  <input
+                    type="text"
+                    value={userInfo.userId} // 임의의 값
+                    readOnly
+                    className="w-full border border-gray-300 p-2 rounded-md bg-gray-100"
+                  />
+                </>
+              ) : (
+                <>
+                  <label className="block mb-2 text-gray-600">작성자</label>
+                  <input
+                    type="text"
+                    value="로그인한 유저가 없습니다." // 임의의 값
+                    readOnly
+                    className="w-full border border-gray-300 p-2 rounded-md bg-gray-100"
+                  />
+                </>)}
+
             </div>
             <div className="mb-4">
               <label className="block mb-2 text-gray-600">내용</label>
