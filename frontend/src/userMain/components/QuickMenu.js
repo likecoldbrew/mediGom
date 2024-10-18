@@ -1,14 +1,75 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const QuickMenu = () => {
   const navigate = useNavigate(); // useNavigate 훅 사용
-  const sidebarItems = [
-    { name: "간편예약", icon: "🗓️", path: "/111" },
-    { name: "진료과/의료진 검색", icon: "🔍", path: "/102" },
-    { name: "증명서 발급", icon: "📄", path: "/121" },
-    { name: "이용안내", icon: "ℹ️", path: "/103" },
-  ];
+  const [sidebarItems, setSidebarItems] = useState([]);
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch("/api/category/main");
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const categories = await response.json();
+        console.log(categories); // 응답 데이터 확인
+
+        console.log(categories[1].subcategories); // 응답 데이터 확인
+        // 필요한 카테고리 ID 목록
+        const selectedCategoryIds = [110, 100, 121, 103];
+        // 아이콘 매핑
+        const icons = {
+          110: "🗓️", // 간편예약
+          100: "🔍", // 진료과/의료진 검색
+          121: "📄", // 증명서 발급
+          103: "ℹ️", // 이용안내
+        };
+        // 카테고리 이름 매핑
+        const categoryNames = {
+          110: "간편예약",
+          100: "진료과/의료진 검색",
+          121: "증명서 발급",
+          103: "이용안내",
+        };
+        // selectedCategoryIds 순서대로 아이템 생성
+        const items = selectedCategoryIds
+          .map(id => {
+            // 첫 번째 카테고리를 찾기
+            const category = categories.find(category => category.categoryId === id);
+
+            if (category) {
+              return {
+                name:  categoryNames[category.categoryId],
+                icon: icons[category.categoryId],
+                path: `/${category.urlName}`,
+              };
+            } else {
+              // 서브카테고리에서 찾기
+              const subCategory = categories.find(category =>
+                category.subcategories.some(sub => sub.categoryId === id)
+              );
+
+              if (subCategory) {
+                const foundSub = subCategory.subcategories.find(sub => sub.categoryId === id);
+                return {
+                  name: foundSub ? foundSub.name : null,
+                  icon: icons[id],
+                  path: `/${foundSub ? foundSub.urlName : ''}`,
+                };
+              }
+            }
+            return null; // 해당 카테고리가 없는 경우 null 반환
+          })
+          .filter(item => item && item.name); // null 또는 이름이 없는 아이템을 필터링
+
+        setSidebarItems(items);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
   const handleNavigation = (path) => {
     navigate(path); // path로 이동
   };

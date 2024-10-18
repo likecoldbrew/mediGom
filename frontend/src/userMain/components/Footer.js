@@ -26,7 +26,8 @@ const Footer = () => {
       <div className="container mx-auto px-4 flex items-center justify-center">
         <Link
           to="/" className="h-24">
-        <img src="/images/userMain/logo.png" className="h-24 mr-4" alt="logo" />
+        <img src="/images/mediGom_Logo.png" className="h-24 mr-4" alt="logo" />
+
         </Link>
         <div className="text-center">
           {hospital.length > 0 ? (

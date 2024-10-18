@@ -59,7 +59,7 @@ const InquiriesRegist = () => {
     }
 
     try {
-      const response = await fetch("/api/board/register", {
+      const response = await fetch("/api/inquiries/register", {
         method: "POST",
         body: formData,
       });
