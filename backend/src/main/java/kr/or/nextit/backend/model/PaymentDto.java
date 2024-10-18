@@ -1,4 +1,4 @@
-        package kr.or.nextit.backend.model;
+package kr.or.nextit.backend.model;
 
 import lombok.*;
 

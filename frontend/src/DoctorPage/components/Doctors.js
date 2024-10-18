@@ -18,7 +18,6 @@ import { Outlet, Link } from "react-router-dom";
 // 아이콘 배열 (카테고리와 순서를 맞춰서 배치)
 const icons = [
   <User size={20} />,         // 환자 관리
-  <UserCheck size={20} />,     // 예약 확인
   <FileText size={20} />,     // 증명서 요청
   <FolderPlus size={20} />,   // 입원 신청
   <Send size={20} />,     // 휴무 신청

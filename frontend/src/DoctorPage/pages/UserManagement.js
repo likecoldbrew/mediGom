@@ -98,16 +98,22 @@ const UserManagement = () => {
               className="px-2 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer">번호
             </th>
             <th
+              className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer">환자이름
+            </th>
+            <th
               className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer">진료과
             </th>
             <th
               className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer">담당의
             </th>
             <th
-              className="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer">환자이름
+              className="px-12 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer">진료내역
             </th>
             <th
-              className="px-12 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer">진료내역
+              className="px-12 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer">처방내역
+            </th>
+            <th
+              className="px-12 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer">약물처방내역
             </th>
           </tr>
           </thead>
@@ -121,10 +127,12 @@ const UserManagement = () => {
           ) : (filteredUsers.map((record, index) => (
               <tr key={record.recordId}>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-500">{index + 1}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-center">{record.departmentName}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-center">{users.userName} 의사</td>
                 <td className="px-6 py-4 whitespace-nowrap text-center">{record.userName}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-center">{record.departmentName}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-center">{users.userName}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-center">{record.notes}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-center">{record.treatment}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-center">{record.prescription}</td>
               </tr>
             ))
           )}

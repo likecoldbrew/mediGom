@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.or.nextit.backend.mapper.ReserveMapper">
+
+    <!-- 예약 추가 -->
+    <insert id="insertReserve">
+        INSERT INTO reserve (user_no, doctor_no, medical_department, reserve_time, symptom, status)
+        VALUES (#{userNo}, #{doctorNo}, #{medicalDepartment}, #{reserveTime}, #{symptom}, #{status})
+    </insert>
+
+    <!-- 모든 예약 조회 -->
+    <select id="selectAllReserves" resultType="kr.or.nextit.backend.model.Reserve">
+        SELECT reserve_id as reserveId,
+               user_no    as userNo,
+               doctor_no  as doctorNo,
+               medical_department,
+               reserve_time,
+               symptom,
+               status
+        FROM reserve
+    </select>
+
+    <!-- ID로 특정 예약 조회 -->
+    <select id="selectReserveById" parameterType="int" resultType="kr.or.nextit.backend.model.Reserve">
+        SELECT reserve_id as reserveId,
+               user_no    as userNo,
+               doctor_no  as doctorNo,
+               medical_department,
+               reserve_time,
+               symptom,
+               status
+        FROM reserve
+        WHERE reserve_id = #{reserveId}
+    </select>
+
+    <!-- 예약 삭제 -->
+    <delete id="deleteReserve" parameterType="int">
+        DELETE
+        FROM reserve
+        WHERE reserve_id = #{reserveId}
+    </delete>
+
+</mapper>
