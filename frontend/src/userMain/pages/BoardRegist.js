@@ -13,7 +13,7 @@ const BoardRegist = () => {
   const [content, setContent] = useState("");
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(false);
-
+  const [filePreviews, setFilePreviews] = useState([]); // 미리보기 상태 추가
   // 유저 정보를 저장할 state
   const [username, setUsername] = useState("user10");
 
@@ -28,7 +28,12 @@ const BoardRegist = () => {
   // }, [navigate]);
 
   const handleFileChange = (event) => {
-    setFiles(Array.from(event.target.files));
+    const selectedFiles = Array.from(event.target.files);
+    setFiles(selectedFiles);
+
+    // 파일 미리보기 URL 생성
+    const previews = selectedFiles.map(file => URL.createObjectURL(file));
+    setFilePreviews(previews);
   };
 
   // 날짜 포맷 변환 함수
@@ -133,6 +138,21 @@ const BoardRegist = () => {
                 className="border border-gray-300 p-2 rounded-md"
               />
             </div>
+            {filePreviews.length > 0 && (
+              <div className="mb-4">
+                <h3 className="text-gray-600">미리보기</h3>
+                <div className="flex flex-wrap">
+                  {filePreviews.map((preview, index) => (
+                    <img
+                      key={index}
+                      src={preview}
+                      alt={`preview-${index}`}
+                      className="w-20 h-20 object-cover mr-2 mb-2"
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
             <div className="flex justify-end items-center">
               <Link
                 to={`/community/1`} // 목록 페이지로 돌아가기
