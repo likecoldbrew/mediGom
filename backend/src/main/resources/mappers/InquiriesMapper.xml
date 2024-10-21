@@ -13,7 +13,6 @@
         <result property="status" column="status"/>
         <result property="answer " column="answer"/>
         <result property="userId" column="user_id"/>
-        <result property="admin" column="admin"/>
     </resultMap>
     <!-- todo 나중에 로그인 기능 구현 하고 나서 Where에 로그인한 유저랑 user_id 일치하는 조건 넣기-->
     <!-- 전체 문의사항 조회  -->

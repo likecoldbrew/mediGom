@@ -5,7 +5,7 @@ const SubCategories = () => {
   const { subcategory } = useParams(); // URL에서 서브카테고리 가져오기
   const location = useLocation();
   const { selectCategory, selectSubCategory } = location.state || {};
-
+  console.log("카테고리",selectCategory,selectSubCategory)
   return (
     <div className="flex flex-col bg-white">
       <div className="w-full bg-sky-100 py-2 border-y border-sky-200">

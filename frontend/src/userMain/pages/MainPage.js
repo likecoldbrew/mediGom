@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../style/tailwind.css";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const HospitalHomepage = () => {
   const imageCount = 4; // 이미지 개수
@@ -28,38 +28,43 @@ const HospitalHomepage = () => {
         const contentsInfo = {
           110: "쉽고 편하게 진료 예약을 할 수 있습니다.",
           100: "원하는 진료과 또는 의료진을 \n 검색하실 수 있습니다.",
-          121: "필요한 증명서를 신청 후 편하게 다운받아 볼 수 있습니다",
-          103: "병원 위치 및 예약 가능 시간을 확인 할 수 있습니다"
+          121: "필요한 증명서를 신청 후 \n 편하게 다운받아 볼 수 있습니다",
+          103: "병원 위치 및 예약 가능 시간을 \n 확인 할 수 있습니다"
         };
         // selectedCategoryIds 순서대로 아이템 생성
-        const items = contentsIds
-          .map((id) => {
-            // 첫 번째 카테고리를 찾기
-            const content = contents.find((category) => category.categoryId === id);
-            if (content) {
+        console.log("Contents:", contents);
+        contents.forEach(content => {
+          console.log(`Category ID: ${content.categoryId}, Subcategories:`, content.subcategories);
+        });
+        const items = contentsIds.map((id) => {
+          const content = contents.find((category) => category.categoryId === id);
+          if (content) {
+            const subCategory = content.subcategories && content.subcategories[0];
+            return {
+              contentName: contentsNames[content.categoryId],
+              contentsInfo: contentsInfo[content.categoryId],
+              path: `/${content.urlName}`,
+              categoryName: content.name,
+              subCategoryName: subCategory ? subCategory.name : ""
+            };
+          } else {
+            const subCategoryParent = contents.find((content) =>
+              content.subcategories.some((sub) => sub.categoryId === id)
+            );
+            if (subCategoryParent) {
+              const foundSub = subCategoryParent.subcategories.find((sub) => sub.categoryId === id);
               return {
-                name: contentsNames[content.categoryId],
-                contentsInfo: contentsInfo[content.categoryId],
-                path: `/${content.urlName}`,
+                contentName: foundSub ? foundSub.name : contentsNames[id],
+                contentsInfo: contentsInfo[id],
+                path: `/${foundSub ? foundSub.urlName : ""}`,
+                categoryName: subCategoryParent.name,
+                subCategoryName: foundSub ? foundSub.name : ""
               };
-            } else {
-              // 서브카테고리에서 찾기
-              const subCategory = contents.find((category) =>
-                category.subcategories.some((sub) => sub.categoryId === id)
-              );
-              if (subCategory) {
-                const foundSub = subCategory.subcategories.find((sub) => sub.categoryId === id);
-                return {
-                  name: foundSub ? foundSub.name : contentsNames[id], // 서브 카테고리 이름 또는 기본 이름 사용
-                  contentsInfo: contentsInfo[id],
-                  path: `/${foundSub ? foundSub.urlName : ''}`,
-                };
-              }
             }
-            return null; // 해당 카테고리가 없는 경우 null 반환
-          })
-          .filter((item) => item && item.name); // null 또는 이름이 없는 아이템을 필터링
-
+          }
+          return null;
+        }).filter((item) => item !== null);
+        console.log("item", items)
         setContentItems(items); // 잘 필터링된 아이템을 상태에 설정
       } catch (error) {
         console.error("Error fetching categories:", error);
@@ -67,10 +72,6 @@ const HospitalHomepage = () => {
     };
     fetchCategories();
   }, []);
-
-  const handleNavigation = (path) => {
-    navigate(path); // path로 이동
-  };
 
   // 이미지 슬라이드 효과
   useEffect(() => {
@@ -84,7 +85,6 @@ const HospitalHomepage = () => {
   const goToImage = (index) => {
     setCurrentIndex(index);
   };
-
 
 
   return (
@@ -123,15 +123,23 @@ const HospitalHomepage = () => {
         <div className="grid grid-cols-4 gap-4 ">
           {contentItems.map((item, index) => (
             <>
-              <div key={index} className="flex flex-col items-center justify-center h-48 rounded-lg bg-white shadow-md p-4">
-                <div className="text-center text-sky-700 font-bold text-lg mb-2">{item.name} </div>
-                <div className="text-center text-gray-600 mb-4"> ● {item.contentsInfo}</div>
-                <button
+              <div key={index} className="flex flex-col items-center justify-center rounded-lg bg-white shadow-md p-4">
+                <div className="text-center mt-8 text-sky-700 font-bold text-lg mb-2"
+                     style={{ flex: "0 0 20%" }}>{item.contentName} </div>
+                <div className="text-center text-gray-600 mb-4" style={{ flex: "0 0 40%" }} dangerouslySetInnerHTML={{
+                  __html: `● ${item.contentsInfo.replace(/\n/g, "<br />")}`
+                }}></div>
+                <Link
                   key={index}
-                  onClick={() => handleNavigation(item.path)}
-                  className="px-4 hover:bg-sky-200 hover:font-bold py-2 border rounded-md bg-white  text-blue-500 disabled:text-gray-300">
+                  to={item.path}
+                  state={{
+                    selectCategory: item.categoryName,
+                    selectSubCategory: item.subCategoryName
+                  }}
+                  className="px-4 hover:bg-sky-200 hover:font-bold py-2 mb-4 border rounded-md bg-white text-blue-500 disabled:text-gray-300"
+                >
                   이동
-                </button>
+                </Link>
               </div>
             </>
           ))}

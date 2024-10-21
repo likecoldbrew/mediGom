@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const QuickMenu = () => {
   const navigate = useNavigate(); // useNavigate 훅 사용
@@ -30,43 +30,45 @@ const QuickMenu = () => {
         };
         // selectedCategoryIds 순서대로 아이템 생성
         const items = selectedCategoryIds
-          .map(id => {
-            // 첫 번째 카테고리를 찾기
-            const category = categories.find(category => category.categoryId === id);
-
+          .map((id) => {
+            const category = categories.find((category) => category.categoryId === id);
             if (category) {
+              const subCategory = category.subcategories && category.subcategories[0];
+
               return {
-                name:  categoryNames[category.categoryId],
+                name: categoryNames[category.categoryId],
                 icon: icons[category.categoryId],
                 path: `/${category.urlName}`,
+                categoryName: category.name, // 카테고리 이름
+                subCategoryName: subCategory ? subCategory.name : "", // 첫 번째 서브카테고리 이름
               };
             } else {
-              // 서브카테고리에서 찾기
-              const subCategory = categories.find(category =>
-                category.subcategories.some(sub => sub.categoryId === id)
+              const subCategoryParent = categories.find((category) =>
+                category.subcategories.some((sub) => sub.categoryId === id)
               );
-
-              if (subCategory) {
-                const foundSub = subCategory.subcategories.find(sub => sub.categoryId === id);
+              if (subCategoryParent) {
+                const foundSub = subCategoryParent.subcategories.find((sub) => sub.categoryId === id);
                 return {
                   name: foundSub ? foundSub.name : null,
                   icon: icons[id],
-                  path: `/${foundSub ? foundSub.urlName : ''}`,
+                  path: `/${foundSub ? foundSub.urlName : ""}`,
+                  categoryName: subCategoryParent.name, // 부모 카테고리 이름
+                  subCategoryName: foundSub ? foundSub.name : "", // 서브카테고리 이름
                 };
               }
             }
-            return null; // 해당 카테고리가 없는 경우 null 반환
+            return null;
           })
-          .filter(item => item && item.name); // null 또는 이름이 없는 아이템을 필터링
+          .filter((item) => item && item.name);
 
         setSidebarItems(items);
       } catch (error) {
         console.error("Error fetching categories:", error);
       }
     };
-
     fetchCategories();
   }, []);
+
   const handleNavigation = (path) => {
     navigate(path); // path로 이동
   };
@@ -74,14 +76,18 @@ const QuickMenu = () => {
     <div className="sticky top-10 right-4 bg-sky-100 rounded-lg p-4 shadow-md h-60">
       <div className="space-y-4 h-full  overflow-y-auto">
         {sidebarItems.map((item, index) => (
-          <button
+          <Link
             key={index}
-            onClick={() => handleNavigation(item.path)}
-            className="w-full bg-white  hover:bg-sky-200 text-sky-800 font-bold py-2 px-4 rounded flex items-center justify-center transition-colors"
+            to={item.path}
+            state={{
+              selectCategory: item.categoryName,
+              selectSubCategory: item.subCategoryName,
+            }}
+            className="w-full bg-white hover:bg-sky-200 text-sky-800 font-bold py-2 px-4 rounded flex items-center justify-center transition-colors"
           >
             <span className="mr-2">{item.icon}</span>
             {item.name}
-          </button>
+          </Link>
         ))}
       </div>
     </div>
