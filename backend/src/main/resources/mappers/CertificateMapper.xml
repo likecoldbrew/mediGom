@@ -26,7 +26,14 @@
             c.content,
             c.note,
             c.purpose,
-            d.user_name AS doctor_name
+            d.user_name AS doctor_name,
+            h.room_type,
+            h.seat_no,
+            h.disease_name,
+            h.start_date,
+            h.due_date,
+            h.end_date,
+            md.department_name
         FROM
             certificates c
                 JOIN
@@ -35,7 +42,13 @@
             medical_records r ON u.user_no = r.user_no
                 JOIN
             users d ON c.doctor_no = d.user_no
-        WHERE certificate_id = #{certificateId}
+                JOIN
+            hospitalization h ON u.user_no = h.user_no
+                JOIN
+            medical_department md ON h.department_no = md.department_no
+        WHERE
+            c.certificate_id = #{certificateId}
+
     </select>
 
     <select id="selectAllCertificates" resultType="kr.or.nextit.backend.model.Certificate">

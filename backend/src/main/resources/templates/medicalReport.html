@@ -3,13 +3,26 @@
 <head>
   <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
   <meta charset="utf-8" />
+  <style>
+      @media print {
+          button {
+              display: none !important; /* 강제 적용 */
+          }
+
+          @page {
+              margin: 0; /* 페이지 여백 제거 */
+          }
+          body {
+              margin: 0; /* 문서 내용 여백 제거 */
+          }
+      }
+  </style>
 </head>
 
 <body style="margin: 0;">
 
 <div id="p1" style="overflow: hidden; position: relative; background-color: white; width: 909px; height: 1284px;">
 
-  <!-- Begin shared CSS values -->
   <style class="shared-css" type="text/css" >
       .t {
           transform-origin: bottom left;
@@ -28,11 +41,10 @@
           }
       }
   </style>
-  <!-- End shared CSS values -->
 
 
-  <!-- Begin inline CSS -->
   <style type="text/css" >
+
 
       #t2_1{left:352px;bottom:1087px;}
       #t5_1{left:700px;bottom:1106px;letter-spacing:0.26px;}
@@ -74,7 +86,7 @@
       #t2c_1{left:300px;bottom:452px;}
       #t1d_1{left:548px;bottom:452px;letter-spacing:-0.13px;word-spacing:2.63px;}
       #t2d_1{left:665px;bottom:452px;letter-spacing:-0.13px;word-spacing:2.63px;}
-      #t1e_1{left:398px;bottom:358px;letter-spacing:0.28px;word-spacing:3.06px;}
+      #t1e_1{left:365px;bottom:358px;letter-spacing:0.28px;word-spacing:3.06px;}
       #t1f_1{left:127px;bottom:299px;}
       #t1i_1{left:285px;bottom:299px;letter-spacing:0.05px;}
       #t1m_1{left:127px;bottom:270px;letter-spacing:0.26px;word-spacing:3.05px;}
@@ -134,15 +146,6 @@
       .s3{font-size:18px;color:#000;}
       .s4{font-size:17px;color:#000;}
   </style>
-  <!-- End inline CSS -->
-
-  <!-- Begin embedded font definitions -->
-  <style id="fonts1" type="text/css" >
-
-
-
-  </style>
-  <!-- End embedded font definitions -->
 
   <!-- Begin page background -->
   <div id="pg1Overlay" style="width:100%; height:100%; position:absolute; z-index:1; background-color:rgba(0,0,0,0); -webkit-user-select: none;"></div>
@@ -165,7 +168,10 @@
 
   <!-- Begin text definitions (Positioned/styled in CSS) -->
   <div class="text-container">
-    <span id="t2_1" class="t s1">진     단     서</span>
+
+    <span id="t2_1" class="t s1"
+          th:text="${certificateType == 1 ? '진     단     서' : certificateType == 2 ? '소     견     서' : certificateType == 3 ? '입퇴원    확인서' : ''}">
+    </span>
     <span id="t5_1" class="t s2">원부대조필</span>
     <img id="coating" th:src="@{/images/coating.png}" alt="Coating Image">
     <span id="t7_1" class="t s4">병록번호 <span th:text="${certificate.medicalRn()}">123456</span></span>
@@ -206,7 +212,7 @@
     <span id="t2c_1" class="t s4" th:text="${certificate.note}">비고 내용</span>
     <span id="t1d_1" class="t s4">용 도 </span>
     <span id="t2d_1" class="t s4" th:text="${certificate.purpose}">어디 제출 </span>
-    <span id="t1e_1" class="t s2">위와 같이 진단함 </span>
+    <span id="t1e_1" class="t s2" th:text="${certificateType == 1 ? '위와 같이 진단함' : certificateType == 2 ? '위와 같이 진료를 소견함' : ''}">위와 같이</span>
     <span id="t1f_1" class="t s2">발      행      일 : </span>
     <span id="t1i_1" class="t s2" th:text="${certificate.todayDate()}">2024년 10월 21일 </span>
     <span id="t1m_1" class="t s2">의 료 기 관 명 : </span>
@@ -241,7 +247,12 @@
     <span id="t1t_1" class="t s3">(인) </span>
   </div>
 
-
+  <script>
+    // 페이지가 로드되면 자동으로 프린트 대화상자를 열도록 설정
+    window.onload = function() {
+      window.print();
+    };
+  </script>
 </body>
 
 

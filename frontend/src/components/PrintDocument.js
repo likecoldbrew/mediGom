@@ -54,13 +54,20 @@ const PrintDocument = () => {
     fetchUserInfo();
   }, []);
 
-  // 진단서를 새 창에서 열기 위한 함수
-  const openLocalHtml = (certificateId) => {
-    // 인증서 뷰 페이지를 새 탭에서 열기
-    window.open(`http://localhost:8080/certificates/view/${certificateId}`, '_blank');
+  // 진단서를 새 창에서 열기 위한 함수 (새 창 강제)
+  const openLocalHtml = (userNo, certificateId, certificateType) => {
+    const windowFeatures = 'width=800,height=600,scrollbars=yes,resizable=yes';
 
+    // 새 창에서 진단서 열기
+    const newWindow = window.open(
+      `http://localhost:8080/certificates/print/${userNo}/${certificateId}/${certificateType}`,
+      '_blank',
+      windowFeatures
+    );
+
+    // 새 창이 정상적으로 열리면 포커스 맞추기
+    if (newWindow) newWindow.focus();
   };
-
 
   useEffect(() => {
     console.log('현재 인증서 리스트:', certificates);
@@ -84,24 +91,31 @@ const PrintDocument = () => {
             <li
               key={certificate.certificateId} // use certificateId as key
               style={{
-                border: "1px solid #ccc",
-                borderRadius: "5px",
-                padding: "10px",
-                margin: "10px 0"
+                border: '1px solid #ccc',
+                borderRadius: '5px',
+                padding: '10px',
+                margin: '10px 0'
               }}
             >
               <span>인증서 ID: {certificate.certificateId} </span> <br />
               <span>내용: {certificate.disease}</span> <br />
-              <button onClick={() => openLocalHtml(certificate.certificateId)}>진단서 발급</button>
+              <button
+                onClick={() =>
+                  openLocalHtml(
+                    certificate.userNo,
+                    certificate.certificateId,
+                    certificate.certificateType
+                  )
+                }
+              >
+                진단서 발급
+              </button>
             </li>
           ))
         ) : (
           <li>인증서가 없습니다.</li>
         )}
       </ul>
-      <div>
-        <pre>{JSON.stringify(certificates[0], null, 2)}</pre>
-      </div>
     </div>
   );
 };

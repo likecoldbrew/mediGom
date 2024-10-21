@@ -22,18 +22,27 @@ public class CertificateViewController {
     private HospitalService hospitalService;
 
     // 특정 인증서의 정보를 HTML로 렌더링
-    @GetMapping("/view/{certificateId}")
-    public String viewCertificate(@PathVariable int certificateId, Model model) {
+    @GetMapping("/print/{userNo}/{certificateId}/{certificateType}")
+    public String viewCertificate(@PathVariable int userNo, @PathVariable int certificateId, @PathVariable int certificateType, Model model) {
         Certificate certificate = certificateService.getCertificateById(certificateId);
         Hospital hospital = hospitalService.getHospitalInfo();
+
         if (certificate != null) {
             model.addAttribute("certificate", certificate);
             model.addAttribute("stamp", certificate.getDoctorName().split(""));
             model.addAttribute("hospital", hospital);
-            System.out.println(hospital);
-            return "diagnosis"; // Thymeleaf 템플릿 파일 이름
+
+            // certificateType에 따라 다른 템플릿 리턴
+            if (certificateType == 1 || certificateType == 2) {
+                return "medicalReport"; // 1 또는 2일 경우
+            } else if (certificateType == 3) {
+                return "adAndDis"; // 3일 경우
+            } else {
+                return "error"; // 잘못된 certificateType일 경우
+            }
         } else {
             return "error"; // 인증서가 없을 경우 에러 페이지
         }
     }
+
 }

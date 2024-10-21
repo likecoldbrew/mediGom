@@ -179,10 +179,23 @@ public class Certificate {
         // 숫자 앞에 0을 붙여 8자리로 변환
         return String.format("%08d", number);
     }
+    private String departmentName;
+    private Date startDate;
+    private Date endDate;
 
+    public String formattedStartDate() {
+        if (startDate == null) {
+            return "";
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
+        return sdf.format(startDate);
+    }
 
-
-
-
-
+    public String formattedEndDate() {
+        if (endDate == null) {
+            return "";
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
+        return sdf.format(endDate);
+    }
 }

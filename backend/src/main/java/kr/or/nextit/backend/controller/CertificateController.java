@@ -24,10 +24,11 @@ public class CertificateController {
 
     // 해당 유저의 인증서 가져오기
     @GetMapping("/user/{userNo}")
-    public ResponseEntity<Certificate> getCertificateByUserNo(@PathVariable int userNo) {
-        Certificate certificate = certificateService.getCertificateByUserNo(userNo);
-        return ResponseEntity.ok(certificate);
+    public ResponseEntity<List<Certificate>> getCertificatesByUserNo(@PathVariable int userNo) {
+        List<Certificate> certificates = certificateService.getCertificatesByUserNo(userNo); // 서비스 호출 변경
+        return ResponseEntity.ok(certificates); // List<Certificate> 반환
     }
+
 
     // 전체 인증서 가져오기
     @GetMapping

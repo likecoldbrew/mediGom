@@ -17,7 +17,7 @@ public class CertificateService {
         certificateMapper.insertCertificate(certificate);
     }
 
-    public Certificate getCertificateByUserNo(int userNo) {
+    public List<Certificate> getCertificatesByUserNo(int userNo) {
         return certificateMapper.selectCertificateByUserNo(userNo);
     }
 
