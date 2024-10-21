@@ -139,17 +139,7 @@ const Notification = () => {
                 </tbody>
               </table>
             </div>
-            <div className="flex justify-end">
-              <Link
-                to={`/notice/register`} // 등록 페이지
-                state={{ selectCategory, selectSubCategory }}
-                className="text-sky-600 hover:underline mr-4"
-              >
-                <button className="px-4 hover:bg-sky-200 hover:font-bold py-2 border rounded-md bg-white  text-blue-500 disabled:text-gray-300">
-                  공지사항 등록
-                </button>
-              </Link>
-            </div>
+
             <div className="flex justify-center items-center space-x-2 mt-4">
               <button
                 onClick={() => handlePageChange(currentPage - 1)}

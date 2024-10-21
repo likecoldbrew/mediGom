@@ -10,7 +10,7 @@ const NotificationDetail = ({ boardId }) => {
   const [board, setBoard] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-
+  console.log(boardId)
   useEffect(() => {
     fetchBoardDetail();
   }, [boardId]);
@@ -19,11 +19,12 @@ const NotificationDetail = ({ boardId }) => {
     try {
       const response = await fetch(`/api/board/detailNotice?boardId=${boardId}`);
       const data = await response.json();
-      if (data.length > 0) {
+      console.log("가져와야되는거",data);
+      if (!data.isEmpty) {
         const formattedData = {
           ...data[0],
           createAt: formatDate(data[0].createAt),
-          updateAt: data[0].updateAt ? formatDate(data[0].updateAt) : null,
+          updateAt: data.updateAt ? formatDate(data[0].updateAt) : null,
         };
         setBoard(formattedData);
       } else {

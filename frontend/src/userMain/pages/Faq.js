@@ -94,16 +94,7 @@ const Faq = () => {
                       <hr className="border-t border-sky-200 mb-4 mt-4" />{" "}
                       {/* 구분선 추가 */}
                       <p className="text-gray-600 w-[850px]"  style={{ whiteSpace: 'pre-line' }}>{faq.content}</p>
-                      <Link
-                        to={`/faq/update`} // 목록 페이지로 돌아가기
-                        state={{ selectCategory, selectSubCategory }}
-                      >
-                        <div className="flex justify-end">
-                          <button className="px-4 mt-8 hover:bg-sky-200 hover:font-bold py-1 border rounded-md bg-white text-blue-500 disabled:text-gray-300">
-                            수정하기
-                          </button>
-                        </div>
-                      </Link>
+
                     </>
                   )}
                 </div>
@@ -111,17 +102,7 @@ const Faq = () => {
             ) : (
               <p>검색 결과가 없습니다.</p>
             )}
-            <div className="flex justify-end">
-              <Link
-                to={`/faq/register`} // 목록 페이지로 돌아가기
-                state={{ selectCategory, selectSubCategory }}
-                className="text-sky-600 hover:underline mr-4"
-              >
-                <button className="px-4 hover:bg-sky-200 hover:font-bold py-2 border rounded-md bg-white text-blue-500 disabled:text-gray-300">
-                  Faq 등록
-                </button>
-              </Link>
-            </div>
+
             <div className="flex justify-center items-center space-x-2 mt-4">
               <button
                 onClick={() => handlePageChange(currentPage - 1)}

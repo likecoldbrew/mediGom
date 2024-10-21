@@ -36,5 +36,4 @@
         WHERE faq_id = #{faqId}
     </delete>
 
-
 </mapper>

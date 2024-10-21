@@ -1,10 +1,78 @@
 import React, { useEffect, useState } from "react";
 import "../style/tailwind.css";
+import { useNavigate } from "react-router-dom";
 
 const HospitalHomepage = () => {
   const imageCount = 4; // 이미지 개수
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [content, setContent] = useState("");
+  const [contentItems, setContentItems] = useState([]);
+  const navigate = useNavigate(); // useNavigate 훅 사용
+  useEffect(() => {
+    //바로가기 값 불러오기
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch("/api/category/main");
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const contents = await response.json();
+        // 필요한 카테고리 ID 목록
+        const contentsIds = [110, 100, 121, 103];
+        // 카테고리 이름 매핑
+        const contentsNames = {
+          110: "간편예약",
+          100: "진료과/의료진 검색",
+          121: "증명서 발급",
+          103: "이용안내"
+        };
+        const contentsInfo = {
+          110: "쉽고 편하게 진료 예약을 할 수 있습니다.",
+          100: "원하는 진료과 또는 의료진을 \n 검색하실 수 있습니다.",
+          121: "필요한 증명서를 신청 후 편하게 다운받아 볼 수 있습니다",
+          103: "병원 위치 및 예약 가능 시간을 확인 할 수 있습니다"
+        };
+        // selectedCategoryIds 순서대로 아이템 생성
+        const items = contentsIds
+          .map((id) => {
+            // 첫 번째 카테고리를 찾기
+            const content = contents.find((category) => category.categoryId === id);
+            if (content) {
+              return {
+                name: contentsNames[content.categoryId],
+                contentsInfo: contentsInfo[content.categoryId],
+                path: `/${content.urlName}`,
+              };
+            } else {
+              // 서브카테고리에서 찾기
+              const subCategory = contents.find((category) =>
+                category.subcategories.some((sub) => sub.categoryId === id)
+              );
+              if (subCategory) {
+                const foundSub = subCategory.subcategories.find((sub) => sub.categoryId === id);
+                return {
+                  name: foundSub ? foundSub.name : contentsNames[id], // 서브 카테고리 이름 또는 기본 이름 사용
+                  contentsInfo: contentsInfo[id],
+                  path: `/${foundSub ? foundSub.urlName : ''}`,
+                };
+              }
+            }
+            return null; // 해당 카테고리가 없는 경우 null 반환
+          })
+          .filter((item) => item && item.name); // null 또는 이름이 없는 아이템을 필터링
+
+        setContentItems(items); // 잘 필터링된 아이템을 상태에 설정
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+    fetchCategories();
+  }, []);
+
+  const handleNavigation = (path) => {
+    navigate(path); // path로 이동
+  };
+
+  // 이미지 슬라이드 효과
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % imageCount);
@@ -17,16 +85,18 @@ const HospitalHomepage = () => {
     setCurrentIndex(index);
   };
 
+
+
   return (
     <div className="flex flex-col min-h-screen bg-sky-50">
       <main className="flex-grow container mx-auto px-4 py-8">
         {/*배너*/}
-        <div className="relative overflow-hidden h-72"> {/* 높이를 설정 */}
+        <div className="relative overflow-hidden h-80"> {/* 높이를 설정 */}
           {Array.from({ length: imageCount }, (_, index) => (
             <div key={index} className="absolute inset-0">
               <img
                 src={`/images/banner/${index + 1}.png`} // 동적으로 이미지 경로 생성
-                className={`w-full object-cover transition-opacity duration-700 ease-in-out ${
+                className={`w-full object-cover transition-opacity duration-700 ease-in-out  rounded-[10px] ${
                   currentIndex === index
                     ? "opacity-100 translate-x-0"
                     : "opacity-0 -translate-x-full" // 왼쪽으로 이동
@@ -35,7 +105,7 @@ const HospitalHomepage = () => {
               />
               {/*배너 이미지 클릭 버튼*/}
               <div
-                className="absolute mt-2 left-1/2 transform -translate-x-1/2 flex space-x-2"> {/* 버튼을 하단 중앙에 위치 */}
+                className="absolute mt-2 left-1/2 transform -translate-x-1/2 flex space-x-2 "> {/* 버튼을 하단 중앙에 위치 */}
                 {Array.from({ length: imageCount }, (_, btnIndex) => (
                   <button
                     key={btnIndex}
@@ -51,10 +121,19 @@ const HospitalHomepage = () => {
         </div>
         {/* 둥근 네모 박스 4개 추가 */}
         <div className="grid grid-cols-4 gap-4 ">
-          {Array.from({ length: 4 }, (_, index) => (
-            <div key={index} className="flex items-center justify-center h-32 rounded-lg bg-white shadow-md">
-              <p className="text-center text-gray-700">박스 {index + 1}</p>
-            </div>
+          {contentItems.map((item, index) => (
+            <>
+              <div key={index} className="flex flex-col items-center justify-center h-48 rounded-lg bg-white shadow-md p-4">
+                <div className="text-center text-sky-700 font-bold text-lg mb-2">{item.name} </div>
+                <div className="text-center text-gray-600 mb-4"> ● {item.contentsInfo}</div>
+                <button
+                  key={index}
+                  onClick={() => handleNavigation(item.path)}
+                  className="px-4 hover:bg-sky-200 hover:font-bold py-2 border rounded-md bg-white  text-blue-500 disabled:text-gray-300">
+                  이동
+                </button>
+              </div>
+            </>
           ))}
         </div>
       </main>

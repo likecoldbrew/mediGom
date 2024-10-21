@@ -58,9 +58,6 @@ const CategoryContainer = () => {
       if (action === "detail") {
         return <NotificationDetail boardId={page} />;
       }
-      if (action === "update") {
-        return <NotificationUpdate boardId={page} />;
-      }
       return <Notification page={page} />;
     case "inquiry":
       if (action === "detail") {

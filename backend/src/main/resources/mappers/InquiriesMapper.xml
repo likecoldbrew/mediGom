@@ -55,7 +55,7 @@
     </select>
     <!-- 게시글 등록 -->
     <insert id="insertBoard" parameterType="kr.or.nextit.backend.model.Community">
-        INSERT INTO board (user_no, title, content, create_at, views, status)
+        INSERT INTO inquiries (user_no, title, content, create_at, views, status)
         VALUES (#{userNo}, #{title}, #{content}, NOW(), 0, 'Y');
     </insert>
 

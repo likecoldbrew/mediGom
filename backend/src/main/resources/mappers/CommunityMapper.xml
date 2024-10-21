@@ -81,7 +81,7 @@
             b.create_at,
             b.update_at,
             b.views,
-            u.user_id,
+            u.user_id
         FROM
             board b
                 JOIN
