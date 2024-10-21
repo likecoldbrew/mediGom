@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.or.nextit.backend.mapper.ChattingMapper">
+
+    <insert id="insertChatting" parameterType="kr.or.nextit.backend.model.Chatting">
+        INSERT INTO chatting (chatting_room_id, user_no, join_at, leave_yn)
+        VALUES (#{chattingRoomId}, #{userNo}, #{joinAt}, #{leaveYn})
+    </insert>
+
+    <select id="selectChattingByRoomId" parameterType="int" resultType="kr.or.nextit.backend.model.Chatting">
+        SELECT * FROM chatting WHERE chatting_room_id = #{chattingRoomId}
+    </select>
+
+    <select id="selectAllChatting" resultType="kr.or.nextit.backend.model.Chatting">
+        SELECT * FROM chatting WHERE user_no = #{userNo}
+    </select>
+
+</mapper>

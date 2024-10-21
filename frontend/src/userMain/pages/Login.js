@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useCookies } from 'react-cookie';
 import "../style/tailwind.css";
 import Footer from "../components/Footer";
 
@@ -9,8 +10,22 @@ export default function LoginPage() {
     password: "",
   });
   const [errorMessage, setErrorMessage] = useState("");
+  const [rememberMe, setRememberMe] = useState(false); // 체크박스 상태
+  const [cookies, setCookie, removeCookie] = useCookies(["savedId"]); // 쿠키 처리
   const navigate = useNavigate();
 
+  // 페이지가 로드될 때 쿠키에서 아이디를 불러옴
+  useEffect(() => {
+    if (cookies.savedId) {
+      setFormData((prevState) => ({
+        ...prevState,
+        id: cookies.savedId,
+      }));
+      setRememberMe(true); // 쿠키에 아이디가 있으면 체크박스를 체크 상태로 설정
+    }
+  }, [cookies.savedId]);
+
+  // 입력 값 변경 핸들러
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevState) => ({
@@ -19,10 +34,15 @@ export default function LoginPage() {
     }));
   };
 
+  // 체크박스 변경 핸들러
+  const handleCheckboxChange = (e) => {
+    setRememberMe(e.target.checked); // 체크박스 상태 업데이트
+  };
+
+  // 폼 제출 핸들러
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // 로그인 요청을 위한 API 호출
     try {
       const response = await fetch("/api/users/login", {
         method: "POST",
@@ -32,20 +52,27 @@ export default function LoginPage() {
         body: JSON.stringify({
           userId: formData.id,
           userPass: formData.password,
+          rememberMe: rememberMe,
         }),
       });
 
       if (!response.ok) {
-        const errorText = await response.text(); // 응답을 텍스트로 읽기
-        setErrorMessage(errorText); // 텍스트를 직접 에러 메시지로 설정
+        const errorText = await response.text();
+        setErrorMessage(errorText);
         return;
       }
 
       const token = await response.text();
-      // JWT 토큰을 로컬 스토리지에 저장
-      localStorage.setItem("token", token);
-      // 로그인 성공 후 대시보드 또는 원하는 페이지로 이동
-      navigate("/");
+      localStorage.setItem("token", token); // JWT 토큰 저장
+
+      // "아이디 저장하기" 체크 여부에 따라 쿠키를 저장 또는 삭제
+      if (rememberMe) {
+        setCookie("savedId", formData.id, { path: "/", maxAge: 7 * 24 * 60 * 60 }); // 7일 동안 유지
+      } else {
+        removeCookie("savedId"); // 쿠키 삭제
+      }
+
+      navigate("/"); // 로그인 성공 후 페이지 이동
     } catch (error) {
       console.error("로그인 중 오류 발생:", error);
       setErrorMessage("로그인 중 오류가 발생했습니다.");
@@ -110,6 +137,7 @@ export default function LoginPage() {
                     id="id"
                     name="id"
                     type="text"
+                    value={cookies.savedId}
                     required
                     className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm"
                     onChange={handleChange}
@@ -142,13 +170,15 @@ export default function LoginPage() {
                     id="remember-me"
                     name="remember-me"
                     type="checkbox"
+                    checked={rememberMe}
+                    onChange={handleCheckboxChange} // 수정된 부분
                     className="h-4 w-4 text-sky-600 focus:ring-sky-500 border-gray-300 rounded"
                   />
                   <label
                     htmlFor="remember-me"
                     className="ml-2 block text-sm text-gray-900"
                   >
-                    로그인 상태 유지
+                    아이디 저장하기
                   </label>
                 </div>
 

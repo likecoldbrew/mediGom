@@ -1,11 +1,12 @@
 package kr.or.nextit.backend.controller;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import kr.or.nextit.backend.model.User;
 import kr.or.nextit.backend.service.UserService;
 import kr.or.nextit.backend.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,8 +21,9 @@ public class UserController {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
+
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody User user) {
+    public ResponseEntity<String> login(@RequestBody User user, HttpServletResponse response) {
         // 사용자가 입력한 ID로 사용자 조회
         User existingUser = userService.getUserById(user.getUserId());
 
@@ -31,7 +33,32 @@ public class UserController {
 
         // JWT 토큰 생성
         String token = jwtUtil.generateToken(existingUser.getUserId());
-        return ResponseEntity.ok(token);
+
+        // JWT 토큰을 쿠키에 저장
+        Cookie cookie = new Cookie("token", token);
+        cookie.setHttpOnly(true); // 클라이언트 스크립트에서 접근할 수 없도록 설정
+        cookie.setSecure(true); // HTTPS에서만 전송
+        cookie.setPath("/"); // 모든 경로에서 유효하도록 설정
+        cookie.setMaxAge(7 * 24 * 60 * 60); // 7일 동안 유지
+        response.addCookie(cookie); // 응답에 쿠키 추가
+
+        // SameSite 속성을 응답 헤더에 추가
+        response.setHeader("Set-Cookie", "token=" + token + "; HttpOnly; Secure; Path=/; Max-Age=" + (7 * 24 * 60 * 60) + "; SameSite=Strict");
+
+        // 아이디 저장 옵션 추가 (쿠키로 저장)
+        if (user.isRememberMe()) { // 클라이언트에서 체크박스 상태를 포함하여 보내도록 수정 필요
+            Cookie idCookie = new Cookie("savedId", user.getUserId());
+            idCookie.setHttpOnly(true); // 클라이언트 스크립트에서 접근할 수 없도록 설정
+            idCookie.setSecure(true); // HTTPS에서만 전송
+            idCookie.setPath("/"); // 모든 경로에서 유효하도록 설정
+            idCookie.setMaxAge(7 * 24 * 60 * 60); // 7일 동안 유지
+            response.addCookie(idCookie); // 응답에 쿠키 추가
+
+            // SameSite 속성을 응답 헤더에 추가
+            response.setHeader("Set-Cookie", "savedId=" + user.getUserId() + "; HttpOnly; Secure; Path=/; Max-Age=" + (7 * 24 * 60 * 60) + "; SameSite=Strict");
+        }
+
+        return ResponseEntity.ok(token); // 로그인 성공 시 토큰 반환
     }
 
     @PostMapping("/register")

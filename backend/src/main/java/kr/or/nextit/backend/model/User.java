@@ -47,6 +47,9 @@ public class User {
     @Transient
     private String rank; // 직급 (의사일 경우)
 
+    @Transient // DB에 저장되지 않는 필드
+    private boolean rememberMe; // 아이디 저장 옵션 추가
+
     // 역할(Role) 가져오기
     public String getRole() {
         switch (admin) {
@@ -72,5 +75,10 @@ public class User {
     @PreUpdate
     protected void onUpdate() {
         this.updateAt = Timestamp.from(Instant.now()); // 수정 시간 갱신
+    }
+
+    // Custom getter for rememberMe
+    public boolean isRememberMe() {
+        return rememberMe;
     }
 }

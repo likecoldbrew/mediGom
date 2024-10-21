@@ -55,7 +55,6 @@ public class UserService {
         return userMapper.getUserById(userId);
     }
 
-
     // 유저 삭제
     public void deleteUser(int userNo) {
         userMapper.deleteUser(userNo);
