@@ -9,9 +9,9 @@ function userMain() {
       <div className="z-50">
         <Header />
       </div>
-      <div className="bg-sky-50 flex-grow">
+      <main  className="bg-sky-50 flex-grow">
         <Outlet />
-      </div>
+      </main>
       <Footer />
     </div>
   );

@@ -5,20 +5,20 @@
     <!-- 전체 FAQ 조회 -->
     <select id="selectAllFaq" resultType="kr.or.nextit.backend.model.Faq">
         SELECT *
-        FROM faq_board;
+        FROM faq_board
     </select>
 
     <!-- 특정 FAQ 조회 -->
     <select id="selectFaq" parameterType="int" resultType="kr.or.nextit.backend.model.Faq">
         SELECT *
-        FROM faq_board;
+        FROM faq_board
         WHERE faq_id = #{faqId}
     </select>
 
     <!-- FAQ 등록 -->
     <select id="insertFaq" parameterType="kr.or.nextit.backend.model.Faq">
         INSERT INTO faq_board (faq_id, title, content)
-        VALUES (#{faqId}, #{title}, #{content});
+        VALUES (#{faqId}, #{title}, #{content})
     </select>
 
     <!-- FAQ 수정 -->
@@ -26,14 +26,15 @@
         UPDATE faq_board
         SET title = #{title},
             content = #{content}
-        WHERE faqId = #{faqId}
+        WHERE faq_id = #{faqId}
     </update>
 
     <!-- FAQ 삭제 -->
     <delete id="deleteFaq" parameterType="int">
         UPDATE faq_board
         SET status = 'N'
-        WHERE faqId = #{faqId}
+        WHERE faq_id = #{faqId}
     </delete>
+
 
 </mapper>

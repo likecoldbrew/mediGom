@@ -12,9 +12,6 @@ const QuickMenu = () => {
           throw new Error("Network response was not ok");
         }
         const categories = await response.json();
-        console.log(categories); // 응답 데이터 확인
-
-        console.log(categories[1].subcategories); // 응답 데이터 확인
         // 필요한 카테고리 ID 목록
         const selectedCategoryIds = [110, 100, 121, 103];
         // 아이콘 매핑
