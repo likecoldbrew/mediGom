@@ -37,7 +37,6 @@ const BoardDetail = ({ boardId }) => {
   }, []);
 
 
-
   useEffect(() => {
     fetchBoardDetail();
   }, [boardId], [board]);
@@ -65,7 +64,6 @@ const BoardDetail = ({ boardId }) => {
     }
   };
 
-  console.log("ㅂ호두", board);
   const formatDate = (timestamp) => {
     const date = new Date(timestamp);
     const year = date.getFullYear();
@@ -73,6 +71,25 @@ const BoardDetail = ({ boardId }) => {
     const day = String(date.getDate()).padStart(2, "0");
     return `${year}-${month}-${day}`;
   };
+
+  const handleDelete = async () => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const response = await fetch(`/api/board/delete/${boardId}`, {
+        method: "DELETE",
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        navigate(`/community/1`, { state: { selectCategory, selectSubCategory } }); // 목록 페이지로 리다이렉트
+      } else {
+        console.error("게시글 삭제에 실패했습니다.");
+      }
+    }
+  };
+
 
   if (loading) {
     return (
@@ -112,7 +129,7 @@ const BoardDetail = ({ boardId }) => {
               <p className="mb-5">{board.content}</p>
               {board.files && board.files.length > 0 ? (
                 board.files.map((file) => (
-                   file.fileType.startsWith("image/") ? (
+                  file.fileType.startsWith("image/") ? (
                     <img
                       key={file.fileId}
                       src={`/api/file/view/${file.fileId}`} // 이미지 파일을 표시하는 URL
@@ -120,8 +137,9 @@ const BoardDetail = ({ boardId }) => {
                       className="h-full object-cover mr-2"
                     />
                   ) : (
-                    <a key={file.fileId} href={`/file/download/${file.fileId}`} className="text-blue-500 hover:underline mr-2">
-                   {file.fileId}
+                    <a key={file.fileId} href={`/file/download/${file.fileId}`}
+                       className="text-blue-500 hover:underline mr-2">
+                      {file.fileId}
                     </a>
                   )
                 ))
@@ -148,8 +166,13 @@ const BoardDetail = ({ boardId }) => {
             >
               목록으로 돌아가기
             </Link>
-            {userInfo? (
+            {userInfo ? (
               <>
+                <button onClick={handleDelete}
+                        className="px-4 py-2  hover:bg-sky-200 hover:font-bold border rounded-md bg-white mr-3 text-blue-500 disabled:text-gray-300">
+                  삭제하기
+                </button>
+
                 <Link
                   to={`/board/update/${boardId}`}
                   state={{ selectCategory, selectSubCategory }}
@@ -161,7 +184,7 @@ const BoardDetail = ({ boardId }) => {
                   </button>
                 </Link>
               </>
-            ):null}
+            ) : null}
           </div>
         </main>
         <div className="flex flex-col space-y-4">

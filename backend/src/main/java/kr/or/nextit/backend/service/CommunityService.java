@@ -107,5 +107,4 @@ public class CommunityService {
         return communityMapper.deleteBoard(boardId);
     }
 
-
 }

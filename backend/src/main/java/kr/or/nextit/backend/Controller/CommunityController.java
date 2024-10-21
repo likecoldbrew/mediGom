@@ -126,6 +126,7 @@ public class CommunityController {
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("게시글이 존재하지 않습니다.");
         }
+
     }
 
 }

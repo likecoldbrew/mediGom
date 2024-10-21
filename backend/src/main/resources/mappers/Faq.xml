@@ -4,23 +4,36 @@
 <mapper namespace="kr.or.nextit.backend.mapper.FaqMapper">
     <!-- 전체 FAQ 조회 -->
     <select id="selectAllFaq" resultType="kr.or.nextit.backend.model.Faq">
-        SELECT faq_id, question, answer, status
+        SELECT *
         FROM faq_board;
     </select>
 
-    <!-- 특젇 FAQ 조회 -->
+    <!-- 특정 FAQ 조회 -->
     <select id="selectFaq" parameterType="int" resultType="kr.or.nextit.backend.model.Faq">
-        SELECT faq_id, question, answer, status
+        SELECT *
         FROM faq_board;
-        WHERE  faq_id=#{faqId}
+        WHERE faq_id = #{faqId}
     </select>
-
 
     <!-- FAQ 등록 -->
     <select id="insertFaq" parameterType="kr.or.nextit.backend.model.Faq">
-        INSERT INTO faq_board (faq_id, question, answer, status)
-        VALUES (#{faqId}, #{question}, #{answer}, 'Y');
+        INSERT INTO faq_board (faq_id, title, content)
+        VALUES (#{faqId}, #{title}, #{content});
     </select>
 
+    <!-- FAQ 수정 -->
+    <update id="updateFaq" parameterType="kr.or.nextit.backend.model.Faq">
+        UPDATE faq_board
+        SET title = #{title},
+            content = #{content}
+        WHERE faqId = #{faqId}
+    </update>
+
+    <!-- FAQ 삭제 -->
+    <delete id="deleteFaq" parameterType="int">
+        UPDATE faq_board
+        SET status = 'N'
+        WHERE faqId = #{faqId}
+    </delete>
 
 </mapper>

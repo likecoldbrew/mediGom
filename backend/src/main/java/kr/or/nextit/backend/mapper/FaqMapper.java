@@ -8,8 +8,9 @@ import java.util.List;
 @Mapper
 public interface FaqMapper {
     List<Faq> selectAllFaq();
-    List<Faq> selectFaq(int faqId);
+    Faq selectFaq(int faqId);
     void insertFaq(Faq faq);
-
+    void updateFaq(Faq faq);
+    void deleteFaq(int faqId);
 }
 

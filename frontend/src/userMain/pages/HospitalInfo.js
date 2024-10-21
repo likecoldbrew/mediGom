@@ -26,29 +26,6 @@ const HospitalInfo = () => {
     }
   };
 
-  // 일정 글자수마다 줄바꿈
-  const splitIntoLines = (text, maxLength) => {
-    const words = text.split(" ");
-    let currentLine = "";
-    const lines = [];
-
-    words.forEach((word) => {
-      if (currentLine.length + word.length + 1 <= maxLength) {
-        currentLine += (currentLine.length ? " " : "") + word;
-      } else {
-        lines.push(currentLine);
-        currentLine = word;
-      }
-    });
-
-    if (currentLine.length) lines.push(currentLine);
-    return lines;
-  };
-
-  // 병원 소개 텍스트를 50자로 줄바꿈
-  const introText = hospital[0]?.intro
-    ? splitIntoLines(hospital[0].intro, 25)
-    : [];
   return (
     <div className="flex flex-col min-h-screen">
       <SubCategories />
@@ -57,7 +34,7 @@ const HospitalInfo = () => {
           <div className="flex-col min-h-full space-y-4 items-center justify-center">
             <div
               className="flex-col flex-grow bg-white p-4 border border-blue-300 rounded shadow relative"
-              style={{ height: "30%" }}
+              style={{ height: "30%", whiteSpace: 'pre-line' } }
             >
               {" "}
               {/* 부모 div의 높이를 30%로 설정 */}
@@ -80,13 +57,7 @@ const HospitalInfo = () => {
               />
               {/* 텍스트 내용 */}
               <h2 className="text-xl flex-grow text-center font-bold m-8 relative ">
-                {" "}
-                {/* z-index 조정 */}
-                {introText.map((line, index) => (
-                  <p key={index} className="text-black mb-2">
-                    {line}
-                  </p>
-                ))}
+                {hospital.length > 0 ? <>{hospital[0].intro}</>: null }
               </h2>
             </div>
             <h2 className="text-xl flex-grow flex-col font-bold m-4">

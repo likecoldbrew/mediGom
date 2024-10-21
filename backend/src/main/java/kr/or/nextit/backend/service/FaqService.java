@@ -11,20 +11,30 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class FaqService {
-
     private final FaqMapper faqMapper;
 
+    // 목록 조회
     public List<Faq> selectAllFaq() {
         return faqMapper.selectAllFaq();
     }
 
-    public List<Faq> selectFaq(int faqId) {
+    // 아이템 하나 조회
+    public Faq selectFaq(int faqId) {
         return faqMapper.selectFaq(faqId);
     }
+
+    // 등록
     public void insertFaq(Faq faq) {
         faqMapper.insertFaq(faq); // 게시글 업데이트 호출
     }
 
+    // 수정
+    public void updateFaq(Faq faq) {
+        faqMapper.updateFaq(faq);
+    }
 
-
+    // 삭제
+    public void deleteFaq(int faqId) {
+        faqMapper.deleteFaq(faqId);
+    }
 }

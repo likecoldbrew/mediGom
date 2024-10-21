@@ -38,6 +38,7 @@ const Faq = () => {
     try {
       const response = await fetch("/api/faq/all");
       const data = await response.json();
+      console.log("확인", data)
       setFaqs(data);
     } catch (error) {
       console.error("Error fetching FAQ info:", error);
@@ -86,13 +87,13 @@ const Faq = () => {
                     className="font-semibold cursor-pointer"
                     onClick={() => toggleAnswer(index)} // Toggle answer on click
                   >
-                    {faq.question}
+                    {faq.title}
                   </p>
                   {expandedIndex === index && ( // Conditionally render answer
                     <>
                       <hr className="border-t border-sky-200 mb-4 mt-4" />{" "}
                       {/* 구분선 추가 */}
-                      <p className="text-gray-600 w-[850px]">{faq.answer}</p>
+                      <p className="text-gray-600 w-[850px]"  style={{ whiteSpace: 'pre-line' }}>{faq.content}</p>
                       <Link
                         to={`/faq/update`} // 목록 페이지로 돌아가기
                         state={{ selectCategory, selectSubCategory }}

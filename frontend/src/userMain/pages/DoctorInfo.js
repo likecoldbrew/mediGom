@@ -9,6 +9,7 @@ import axios from "axios";
 import debounce from "lodash.debounce";
 import Modal from "../components/DepartmentModal";
 import DoctorInfoModal from "../components/DoctorInfoModal";
+import AlertModal from "../components/AlertModal";
 
 const DoctorInfo = () => {
   const { subcategory } = useParams(); // URL에서 subcategory 가져오기

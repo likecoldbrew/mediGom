@@ -123,12 +123,11 @@
     </update>
 
     <!-- 게시글 삭제 -->
-    <update id="deleteBoard" parameterType="kr.or.nextit.backend.model.Community">
+    <update id="deleteBoard" parameterType="int">
         UPDATE board b
-        SET b.status = 'N',
-        WHERE b.board_id = #{boardId};
+        SET b.status = 'N'
+        WHERE b.board_id = #{boardId}
     </update>
-
 
 
 </mapper>

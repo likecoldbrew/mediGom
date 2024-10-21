@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../style/tailwind.css";
+import AlertModal from "./AlertModal";
 
 const Header = () => {
   const [hoveredCategory, setHoveredCategory] = useState(null);
@@ -8,6 +9,11 @@ const Header = () => {
   const [selectCategory, setSelectCategory] = useState(null);
   const [selectSubCategory, setSelectSubCategory] = useState(null);
   const [userInfo, setUserInfo] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false); // 모달 상태
+  const [modalMessage, setModalMessage] = useState(""); // 모달 메시지
+  const [modalButtonText, setModalButtonText] = useState(""); // 버튼 텍스트
+  const [isSuccess, setIsSuccess] = useState(false); // 모달 성공 여부 상태
+  const [redirectPath, setRedirectPath] = useState("");
   const navigate = useNavigate(); // useNavigate 훅 사용
   useEffect(() => {
     const fetchCategories = async () => {
@@ -53,6 +59,16 @@ const Header = () => {
     fetchUserInfo();
   }, []);
 
+  //모달창 내용
+  const showAlertModal = (message, buttonText,  isSuccess = false, redirectPath) => {
+    console.log('redirectPath:', redirectPath);
+    setModalMessage(message);
+    setModalButtonText(buttonText);
+    setModalOpen(true);
+    setIsSuccess(isSuccess); // isSuccess 상태 업데이트
+    setRedirectPath(redirectPath); // redirectPath 상태 업데이트
+  };
+
   // 로그아웃 함수
   const handleLogout = () => {
     localStorage.removeItem('token'); // 토큰 제거
@@ -62,6 +78,7 @@ const Header = () => {
 
 
   return (
+    <>
     <header className="bg-white shadow-sm">
       <div className="container mx-auto px-4 py-4">
         <div className="flex justify-between items-center w-full">
@@ -117,11 +134,11 @@ const Header = () => {
                       if (category.categoryId
                         === 140 && !userInfo) {
                         e.preventDefault(); // 기본 링크 클릭 방지
-                        alert("로그인 후 이용 가능합니다."); // 로그인 알림
+                        showAlertModal("로그인 후 이용 가능합니다.", "로그인 페이지로 이동", false, "/login"); // 모달 표시
                       } else {
                         handleSubCategorySelect(category.name, category.subcategories[0]?.name); // 클릭 시 상태 설정
                       }
-                    }} // 클릭 시 상태 설정
+                    }}
                   >
                     {category.name}
                   </Link>
@@ -144,9 +161,9 @@ const Header = () => {
                             onClick={(e) =>{
                               if ((sub.categoryId === 134 || (sub.categoryId >= 140 && sub.categoryId <= 144)) && !userInfo) {
                                 e.preventDefault(); // 기본 링크 클릭 방지
-                                alert("로그인 후 이용 가능합니다."); // 로그인 알림
+                                showAlertModal("로그인 후 이용 가능합니다.", "로그인 페이지로 이동", false, "/login")
                               } else {
-                                handleSubCategorySelect(category.name, sub.name);
+                                handleSubCategorySelect(category.name, category.subcategories[0]?.name); // 클릭 시 상태 설정
                               }
                             }}
                           >
@@ -165,6 +182,18 @@ const Header = () => {
         </div>
       </div>
     </header>
+      {modalOpen && ( // modalOpen이 true일 때만 AlertModal 렌더링
+        <AlertModal
+          isOpen={modalOpen}
+          message={modalMessage}
+          buttonText={modalButtonText}
+          onClose={() => setModalOpen(false)}
+          isSuccess={isSuccess}
+          redirectPath={redirectPath}
+        />
+      )}
+
+    </>
   );
 };
 
