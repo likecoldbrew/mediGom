@@ -4,8 +4,12 @@ import { Link, useNavigate } from "react-router-dom";
 
 const HospitalHomepage = () => {
   const imageCount = 4; // 이미지 개수
+  //이미지 번호
   const [currentIndex, setCurrentIndex] = useState(0);
+  //바로가기 값들
   const [contentItems, setContentItems] = useState([]);
+  //병원 후기 글 정보
+  const [boards, setBoards] = useState([]);
   const navigate = useNavigate(); // useNavigate 훅 사용
   useEffect(() => {
     //바로가기 값 불러오기
@@ -64,7 +68,7 @@ const HospitalHomepage = () => {
           }
           return null;
         }).filter((item) => item !== null);
-        console.log("item", items)
+        console.log("item", items);
         setContentItems(items); // 잘 필터링된 아이템을 상태에 설정
       } catch (error) {
         console.error("Error fetching categories:", error);
@@ -86,6 +90,36 @@ const HospitalHomepage = () => {
     setCurrentIndex(index);
   };
 
+  //후기글 정보
+  // 게시글 정보 가져오기
+  const fetchBoards = async () => {
+    try {
+      const response = await fetch("/api/board/all");
+      const data = await response.json();
+      // 날짜 포맷 변환
+      const formattedData = data.map((board) => ({
+        ...board,
+        createAt: formatDate(board.createAt), // 날짜 포맷 변경
+      }));
+
+      setBoards(formattedData); // 변환된 데이터로 상태 업데이트
+      setLoading(false); // 로딩 완료
+    } catch (error) {
+      console.error("Error fetching boards:", error);
+      setLoading(false); // 로딩 종료
+    }
+  };
+
+  // 날짜 포맷 변환 함수
+  const formatDate = (timestamp) => {
+    const date = new Date(timestamp); // timestamp를 Date 객체로 변환
+    const year = date.getFullYear(); // 연도
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // 월 (0부터 시작하므로 1 추가)
+    const day = String(date.getDate()).padStart(2, "0"); // 일
+    return `${year}-${month}-${day}`; // 형식: YYYY-MM-DD
+  };
+
+
 
   return (
     <div className="flex flex-col min-h-screen bg-sky-50">
@@ -99,7 +133,7 @@ const HospitalHomepage = () => {
                 className={`w-full object-cover transition-opacity duration-700 ease-in-out  rounded-[10px] ${
                   currentIndex === index
                     ? "opacity-100 translate-x-0"
-                    : "opacity-0 -translate-x-full" // 왼쪽으로 이동
+                    : "opacity-0 -translate-x-full" // 왼쪽으로 이동 
                 }`}
                 alt={`배너${index + 1}`}
               />
@@ -119,7 +153,7 @@ const HospitalHomepage = () => {
             </div>
           ))}
         </div>
-        {/* 둥근 네모 박스 4개 추가 */}
+        {/* 바로가기 메뉴? */}
         <div className="grid grid-cols-4 gap-4 ">
           {contentItems.map((item, index) => (
             <>
@@ -143,6 +177,64 @@ const HospitalHomepage = () => {
               </div>
             </>
           ))}
+        </div>
+        <hr className="border-[3px] border-dashed border-sky-200 mb-4 mt-10" />
+        {/* 공지사항/커뮤니티 등 */}
+
+        <div className="grid grid-cols-2 grid-rows-2 gap-4 mt-10">
+          {/* 커뮤니티 */}
+          <div className="flex flex-col items-center justify-center rounded-lg bg-white shadow-md p-4">
+            <div className="text-center mt-8 text-sky-700 font-bold text-lg mb-2">커뮤니티</div>
+            <div className="text-center text-gray-600 mb-4" dangerouslySetInnerHTML={{
+              __html: `● 신규 환자로 등록하여 진료를 받을 수 있습니다.`
+            }}></div>
+            <Link
+              to="/new-patient-registration"
+              className="px-4 hover:bg-sky-200 hover:font-bold py-2 mb-4 border rounded-md bg-white text-blue-500 disabled:text-gray-300"
+            >
+              이동
+            </Link>
+          </div>
+          {/* 공지사항*/}
+          <div className="flex flex-col items-center justify-center rounded-lg bg-white shadow-md p-4">
+            <div className="text-center mt-8 text-sky-700 font-bold text-lg mb-2">공지사항</div>
+            <div className="text-center text-gray-600 mb-4" dangerouslySetInnerHTML={{
+              __html: `● 비상시 연락처를 등록하고 관리할 수 있습니다.`
+            }}></div>
+            <Link
+              to="/emergency-contact"
+              className="px-4 hover:bg-sky-200 hover:font-bold py-2 mb-4 border rounded-md bg-white text-blue-500 disabled:text-gray-300"
+            >
+              이동
+            </Link>
+          </div>
+          {/* 병원정보*/}
+          <div className="flex flex-col items-center justify-center rounded-lg bg-white shadow-md p-4">
+            <div className="text-center mt-8 text-sky-700 font-bold text-lg mb-2">병원정보</div>
+            <div className="text-center text-gray-600 mb-4" dangerouslySetInnerHTML={{
+              __html: `● 비상시 연락처를 등록하고 관리할 수 있습니다.`
+            }}></div>
+            <Link
+              to="/emergency-contact"
+              className="px-4 hover:bg-sky-200 hover:font-bold py-2 mb-4 border rounded-md bg-white text-blue-500 disabled:text-gray-300"
+            >
+              이동
+            </Link>
+          </div>
+          {/* FAQ*/}
+          <div className="flex flex-col items-center justify-center rounded-lg bg-white shadow-md p-4">
+            <div className="text-center mt-8 text-sky-700 font-bold text-lg mb-2">FAQ 자주하는 질문</div>
+            <div className="text-center text-gray-600 mb-4" dangerouslySetInnerHTML={{
+              __html: `● 비상시 연락처를 등록하고 관리할 수 있습니다.`
+            }}></div>
+            <Link
+              to="/emergency-contact"
+              className="px-4 hover:bg-sky-200 hover:font-bold py-2 mb-4 border rounded-md bg-white text-blue-500 disabled:text-gray-300"
+            >
+              이동
+            </Link>
+          </div>
+
         </div>
       </main>
     </div>
