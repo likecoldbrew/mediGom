@@ -94,6 +94,7 @@ public class Certificate {
         birthDate.set(birthYear, birthMonth - 1, birthDay); // Month is 0-based in Calendar
 
         Calendar today = Calendar.getInstance();
+
         int age = today.get(Calendar.YEAR) - birthDate.get(Calendar.YEAR);
 
         // Adjust age if birthday has not occurred yet this year
@@ -165,6 +166,18 @@ public class Certificate {
         }
 
         return sb.toString(); // 최종 문자열 반환
+    }
+
+    public String todayDate() {
+        return new SimpleDateFormat("yyyy년 MM월 dd일").format(new Date());
+    }
+
+    public String licenseNumber() {
+        Random random = new Random();
+        int number = random.nextInt(100000);  // 0 ~ 99999 사이의 랜덤 숫자 생성
+
+        // 숫자 앞에 0을 붙여 8자리로 변환
+        return String.format("%08d", number);
     }
 
 

@@ -11,7 +11,7 @@ import java.util.List;
 public class HospitalService {
 
     private final HospitalMapper HospitalMapper;
-    public List<Hospital> getHospitalInfo() {
+    public Hospital getHospitalInfo() {
         return HospitalMapper.getHospitalInfo();
     }
 }

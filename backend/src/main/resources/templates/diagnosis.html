@@ -34,12 +34,8 @@
   <!-- Begin inline CSS -->
   <style type="text/css" >
 
-      #t1_1{left:86px;bottom:1156px;letter-spacing:0.22px;word-spacing:2.59px;}
       #t2_1{left:352px;bottom:1087px;}
-      #t3_1{left:444px;bottom:1087px;}
-      #t4_1{left:535px;bottom:1087px;}
-      #t5_1{left:686px;bottom:1106px;letter-spacing:0.26px;}
-      #t6_1{left:787px;bottom:1106px;}
+      #t5_1{left:700px;bottom:1106px;letter-spacing:0.26px;}
       #t7_1{left:91px;bottom:1055px;letter-spacing:-0.12px;word-spacing:2.84px;}
       #t8_1{left:91px;bottom:1015px;letter-spacing:-0.12px;word-spacing:2.78px;}
       #t9_1{left:342px;bottom:1015px;letter-spacing:-0.17px;}
@@ -48,7 +44,6 @@
       #tc_1{left:285px;bottom:955px;letter-spacing:-0.1px;}
       #td_1{left:412px;bottom:955px;letter-spacing:-0.15px;}
       #te_1{left:485px;bottom:955px;letter-spacing:-0.13px;}
-      #tf_1{left:475px;bottom:955px;letter-spacing:-0.12px;}
       #tg_1{left:535px;bottom:965px;letter-spacing:-0.15px;}
       #th_1{left:535px;bottom:945px;letter-spacing:-0.15px;}
       #ti_1{left:600px;bottom:955px;letter-spacing:-0.09px;}
@@ -71,11 +66,8 @@
       #t11_1{left:475px;bottom:678px;letter-spacing:-0.12px;word-spacing:2.72px;}
       #t12_1{left:620px;bottom:678px;}
       #t15_1{left:106px;bottom:589px;}
-      #t16_1{left:182px;bottom:589px;}
       #t17_1{left:106px;bottom:569px;}
-      #t18_1{left:182px;bottom:569px;}
       #t19_1{left:106px;bottom:549px;}
-      #t1a_1{left:182px;bottom:549px;}
       #t1a_2{left:235px;top:650px;}
       #t1b_1{left:111px;bottom:452px;}
       #t1c_1{left:178px;bottom:452px;}
@@ -84,19 +76,19 @@
       #t2d_1{left:665px;bottom:452px;letter-spacing:-0.13px;word-spacing:2.63px;}
       #t1e_1{left:398px;bottom:358px;letter-spacing:0.28px;word-spacing:3.06px;}
       #t1f_1{left:127px;bottom:299px;}
-      #t1g_1{left:182px;bottom:299px;}
-      #t1h_1{left:237px;bottom:299px;letter-spacing:0.14px;word-spacing:3.06px;}
-      #t1i_1{left:363px;bottom:299px;letter-spacing:0.05px;}
-      #t1j_1{left:448px;bottom:299px;}
-      #t1k_1{left:530px;bottom:299px;}
-      #t1l_1{left:622px;bottom:299px;}
+      #t1i_1{left:285px;bottom:299px;letter-spacing:0.05px;}
       #t1m_1{left:127px;bottom:270px;letter-spacing:0.26px;word-spacing:3.05px;}
+      #t1m_2{left:285px;bottom:270px;letter-spacing:0.26px;word-spacing:3.05px;}
       #t1n_1{left:127px;bottom:241px;letter-spacing:0.25px;word-spacing:3.06px;}
+      #t1n_2{left:285px;bottom:241px;letter-spacing:0.25px;word-spacing:3.06px;}
       #t1o_1{left:127px;bottom:212px;letter-spacing:0.22px;word-spacing:3.04px;}
+      #t1o_2{left:285px;bottom:212px;letter-spacing:0.22px;word-spacing:3.04px;}
       #t1p_1{left:127px;bottom:182px;letter-spacing:0.22px;word-spacing:3.06px;}
       #t1q_1{left:256px;bottom:182px;}
+      #t1q_2{left:285px;bottom:182px;}
       #t1r_1{left:384px;bottom:182px;}
       #t1s_1{left:457px;bottom:182px;letter-spacing:0.25px;}
+      #t1s_2{left:585px;bottom:182px;letter-spacing:0.25px;}
       #t1t_1{left:695px;bottom:182px;}
       #coating {
           position: absolute; /* 요소를 특정 위치에 고정 */
@@ -107,11 +99,40 @@
           height: 80px;
       }
 
-      .s0{font-size:15px;font-family:Gulim_j;color:#FFF;}
-      .s1{font-size:31px;font-family:Gulim_j;color:#000;-webkit-text-stroke:0.6px #000;text-stroke:0.6px #000;}
-      .s2{font-size:18px;font-family:Gulim_j;color:#000;-webkit-text-stroke:0.4px #000;text-stroke:0.4px #000;}
-      .s3{font-size:18px;font-family:HaansoftDotum_p;color:#000;-webkit-text-stroke:0.4px #000;text-stroke:0.4px #000;}
-      .s4{font-size:17px;font-family:Gulim_j;color:#000;}
+      .stamp-container {
+          display: inline-block;
+          position: absolute;
+          width: 80px;
+          height: 80px;
+          left:635px;
+          bottom:175px;
+          z-index: 9999;
+      }
+
+      .stamp-svg {
+          width: 100%;
+          height: 100%;
+      }
+
+      .stamp-border {
+          fill: none;
+          stroke: red;
+          stroke-width: 2;
+      }
+
+      .stamp-text {
+          fill: red;
+          font-size: 25px;
+          font-weight: bold;
+          font-family: Arial, sans-serif;
+          filter: url(#stamp-texture);
+      }
+
+
+      .s1{font-size:31px;color:#000;}
+      .s2{font-size:18px;color:#000; font-weight: bold}
+      .s3{font-size:18px;color:#000;}
+      .s4{font-size:17px;color:#000;}
   </style>
   <!-- End inline CSS -->
 
@@ -144,13 +165,9 @@
 
   <!-- Begin text definitions (Positioned/styled in CSS) -->
   <div class="text-container">
-    <span id="t2_1" class="t s1">진 </span>
-    <span id="t3_1" class="t s1">단 </span>
-    <span id="t4_1" class="t s1">서 </span>
-    <span id="t5_1" class="t s2">원부대조필 </span>
+    <span id="t2_1" class="t s1">진     단     서</span>
+    <span id="t5_1" class="t s2">원부대조필</span>
     <img id="coating" th:src="@{/images/coating.png}" alt="Coating Image">
-
-    <span id="t6_1" class="t s3"> </span>
     <span id="t7_1" class="t s4">병록번호 <span th:text="${certificate.medicalRn()}">123456</span></span>
     <span id="t8_1" class="t s4">연 번 호 <span th:text="${certificate.today() + certificateId}">000-001</span></span>
     <span id="t9_1" class="t s4">주민등록번호 </span>
@@ -177,15 +194,12 @@
     <span id="tv_1" class="t s4">발 </span>
     <span id="tw_1" class="t s4">병 </span>
     <span id="tx_1" class="t s4">일 </span>
-    <span id="ty_1" class="t s4" th:text="${certificate.formattedOutbreakAt()}">2024년10월18일 </span>
+    <span id="ty_1" class="t s4" th:text="${certificate.formattedOutbreakAt()}">2024년 10월 18일 </span>
     <span id="t11_1" class="t s4">진 단 일 </span>
-    <span id="t12_1" class="t s4" th:text="${certificate.formattedVisitAt()}">2024년10월18일 </span>
-    <span id="t15_1" class="t s4">향 </span>
-    <span id="t16_1" class="t s4">후 </span>
-    <span id="t17_1" class="t s4">치 </span>
-    <span id="t18_1" class="t s4">료 </span>
-    <span id="t19_1" class="t s4">의 </span>
-    <span id="t1a_1" class="t s4">견 </span>
+    <span id="t12_1" class="t s4" th:text="${certificate.formattedVisitAt()}">2024년 10월 18일 </span>
+    <span id="t15_1" class="t s4">향          후</span>
+    <span id="t17_1" class="t s4">치          료</span>
+    <span id="t19_1" class="t s4">의          견</span>
     <span id="t1a_2" class="t s4" th:utext="${certificate.content}">집에서 푹 쉬기</span>
     <span id="t1b_1" class="t s4">비 </span>
     <span id="t1c_1" class="t s4">고 </span>
@@ -193,21 +207,38 @@
     <span id="t1d_1" class="t s4">용 도 </span>
     <span id="t2d_1" class="t s4" th:text="${certificate.purpose}">어디 제출 </span>
     <span id="t1e_1" class="t s2">위와 같이 진단함 </span>
-    <span id="t1f_1" class="t s2">발 </span>
-    <span id="t1g_1" class="t s2">행 </span>
-    <span id="t1h_1" class="t s2">일 : </span>
-    <span id="t1i_1" class="t s2">20 </span>
-    <span id="t1j_1" class="t s2">년 </span>
-    <span id="t1k_1" class="t s2">월 </span>
-    <span id="t1l_1" class="t s2">일 </span>
-    <span id="t1m_1" class="t s2">의 료 기 관 명 : ○○ 대학병원 </span>
-    <span id="t1n_1" class="t s2">주 소 및 명 칭 : ○○시 ○○구 ○○동 ○○ - ○○ </span>
+    <span id="t1f_1" class="t s2">발      행      일 : </span>
+    <span id="t1i_1" class="t s2" th:text="${certificate.todayDate()}">2024년 10월 21일 </span>
+    <span id="t1m_1" class="t s2">의 료 기 관 명 : </span>
+    <span id="t1m_2" class="t s2" th:text="${hospital.hospitalName}">메디곰</span>
+    <span id="t1n_1" class="t s2">주 소 및 명 칭 : </span>
+    <span id="t1n_2" class="t s2" th:text="${hospital.hospitalAdd}">병원의 주소</span>
     <span id="t1o_1" class="t s2">전 화 및 FAX : </span>
+    <span id="t1o_2" class="t s2" th:text="${hospital.huntingLine}">병원의 전화번호</span>
     <span id="t1p_1" class="t s2">면 허 번 호 </span>
     <span id="t1q_1" class="t s2">제 </span>
+    <span id="t1q_2" class="t s2" th:text="${certificate.licenseNumber()}">00000000 </span>
     <span id="t1r_1" class="t s2">호 </span>
     <span id="t1s_1" class="t s2">의사성명 </span>
-    <span id="t1t_1" class="t s3"> </span>
+    <span id="t1s_2" class="t s2" th:text="${certificate.doctorName}">의사성명 </span>
+    <div class="stamp-container">
+      <svg class="stamp-svg" viewBox="0 0 100 100">
+        <defs>
+          <filter id="stamp-texture">
+            <feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="3" result="noise" />
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="1" />
+          </filter>
+        </defs>
+        <rect x="5" y="5" width="90" height="90" class="stamp-border" />
+        <text class="stamp-text">
+          <tspan x="20" y="40" th:text="${stamp[0]}">길</tspan>
+          <tspan x="60" y="40" th:text="${stamp[1]}">일</tspan>
+          <tspan x="20" y="75" th:text="${stamp[2]}">원</tspan>
+          <tspan x="60" y="75">인</tspan>
+        </text>
+      </svg>
+    </div>
+    <span id="t1t_1" class="t s3">(인) </span>
   </div>
 
 

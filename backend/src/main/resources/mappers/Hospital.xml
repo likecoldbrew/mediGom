@@ -6,7 +6,7 @@
 
     <select id="getHospitalInfo" resultType="kr.or.nextit.backend.model.Hospital">
         SELECT
-            hospital_add, hunting_line, business_registration_number, reserve_number, reserve_week_time, reserve_sat_time, reserve_holi_time, intro
+            hospital_name, hospital_add, hunting_line, business_registration_number, reserve_number, reserve_week_time, reserve_sat_time, reserve_holi_time, intro
         FROM hospital_info;
     </select>
 

@@ -7,7 +7,7 @@ import java.util.List;
 
 @Mapper
 public interface HospitalMapper {
-    List<Hospital> getHospitalInfo();  // 최상위 카테고리 조회
+    Hospital getHospitalInfo();  // 최상위 카테고리 조회
 
 }
 

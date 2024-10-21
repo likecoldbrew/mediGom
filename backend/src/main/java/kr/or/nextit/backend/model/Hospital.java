@@ -11,6 +11,7 @@ import lombok.Data;
 public class Hospital {
     @Id
     @GeneratedValue
+    private String hospitalName;    // 병원이름
     private String hospitalAdd;        // 병원주소
     private String huntingLine;    // 대표 번호
     private String businessRegistrationNumber;     // 사업자 번호
