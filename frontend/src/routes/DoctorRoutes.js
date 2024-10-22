@@ -20,7 +20,7 @@ function DoctorRoutes() {
       <Route path="/" element={<Doctors />}>
         <Route index element={<Home />} />
         <Route path="/list/:userNo" element={<UserManagement />} />
-        <Route path="/clinic/:doctorNo/:userNo" element={<UserClinicCheck />} />
+        <Route path="/clinic/:doctorNo" element={<UserClinicCheck />} />
         <Route path="/reserv/:doctorNo" element={<UserReservationCheck />} />
         <Route path="/state" element={<UserStateChange />} />
         <Route path="/depart" element={<ChangeDepartment />} />

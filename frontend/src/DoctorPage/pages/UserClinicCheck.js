@@ -3,15 +3,25 @@ import { Search } from "lucide-react";
 import Modal from "react-modal";
 import UserStateChange from "./UserStateChange";
 import ChangeDepartment from "./ChangeDepartment";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 
 Modal.setAppElement("#root");
 
 const UserClinicCheck = () => {
-  const { userNo, doctorNo } = useParams();
+  const { doctorNo } = useParams();  // URL 파라미터에서 doctorNo 읽기
+  const location = useLocation();  // URL 쿼리 스트링 읽기
+  //그냥 doctorNo 로 다 받아와서 status 가 1인 것만 받아오게 하고 +로
+  //doctorNo를 보내서 값을 가져오게 한다고 했던 것 같음
+
+  // 쿼리 스트링에서 userNo 값 추출
+  const queryParams = new URLSearchParams(location.search);
+  const userNo = queryParams.get("userNo");
+  //쿼리 파람은 ?user=no/30 이런거라 상세 불러올때하지 이건 할 필요 없음
+
   console.log("userNo:", userNo, "doctorNo:", doctorNo);
-  const useNo = userNo ? parseInt(userNo) : 0;
-  const docNo = doctorNo ? parseInt(doctorNo) : 0;
+  const useNo = parseInt(userNo);
+  const docNo = parseInt(doctorNo);
+
   const [patients, setPatients] = useState([]);
   const [medicalRecords, setMedicalRecords] = useState([]);
   const [filteredMedicalRecords, setFilteredMedicalRecords] = useState([]);
@@ -22,48 +32,52 @@ const UserClinicCheck = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredUsers, setFilteredUsers] = useState([]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (!isNaN(useNo) && !isNaN(docNo)) {
-        try {
-          const [userReserveResponse, medicalRecordsResponse] = await Promise.all([
-            fetch(`/api/medical_record/${docNo}`), // doctorNo 사용
-            fetch(`/api/reserve/user/${useNo}`)
-          ]);
+  const fetchData = async () => {
+    try {
+      const [userReserveResponse, medicalRecordsResponse] = await Promise.all([
+        fetch(`/api/medical_record/${docNo}`), // doctorNo 사용
+        fetch(`/api/reserve/user/${useNo}`) // userNo 사용
+      ]);
 
-          const userReserveData = await userReserveResponse.json();
-          const medicalRecordsData = await medicalRecordsResponse.json();
+      // GET: /api/reserve/xxxx/{53}
+      // api/doctors/53/reserved-patient
+      // ?doctorNo=53
+      //
 
-          console.log("API Response(user):", userReserveData);
-          setPatients(userReserveData);
-          console.log("User Reserve Data:", JSON.stringify(userReserveData, null, 2));
-
-          const recordsWithTreatment = medicalRecordsData.filter(
-            record => record.diagnosis && record.diagnosis.trim() !== ""
-          );
-
-          const recordsWithoutTreatment = medicalRecordsData.filter(
-            record => !record.diagnosis || record.diagnosis.trim() === ""
-          ).map(record => {
-            const userData = userReserveData.find(user => user.id === record.userId);
-            return {
-              ...record,
-              symptom: userData ? userData.symptom : "증상 정보 없음"
-            };
-          });
-
-          setMedicalRecords(medicalRecordsData);
-          setFilteredMedicalRecords(recordsWithTreatment);
-          setDiagnosisPending(recordsWithoutTreatment);
-        } catch (error) {
-          console.error("Error fetching data:", error);
-        }
-      } else {
-        console.error("Invalid user_no:", useNo);
+      if (!userReserveResponse.ok || !medicalRecordsResponse.ok) {
+        throw new Error("API 응답 실패");
       }
-    };
-    fetchData();
-  }, [useNo, docNo]);
+
+      const userReserveData = await userReserveResponse.json();
+      const medicalRecordsData = await medicalRecordsResponse.json();
+
+      setPatients(userReserveData);
+
+      const recordsWithTreatment = medicalRecordsData.filter(
+        record => record.diagnosis && record.diagnosis.trim() !== ""
+      );
+
+      const recordsWithoutTreatment = medicalRecordsData.filter(
+        record => !record.diagnosis || record.diagnosis.trim() === ""
+      ).map(record => {
+        const userData = userReserveData.find(user => user.id === record.userId);
+        return {
+          ...record,
+          symptom: userData ? userData.symptom : "증상 정보 없음"
+        };
+      });
+
+      setMedicalRecords(medicalRecordsData);
+      setFilteredMedicalRecords(recordsWithTreatment);
+      setDiagnosisPending(recordsWithoutTreatment);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();  // 컴포넌트가 로드될 때 데이터를 가져옴
+  }, [docNo, useNo]);  // doctorNo와 userNo가 바뀔 때마다 API 호출
 
   useEffect(() => {
     const approvedPatients = patients.filter(patient => patient.status === 1);
