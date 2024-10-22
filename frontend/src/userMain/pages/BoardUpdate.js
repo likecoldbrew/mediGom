@@ -24,8 +24,6 @@ const BoardUpdate = ({ boardId }) => {
     try {
       const response = await fetch(`/api/board/detail?boardId=${boardId}`);
       const data = await response.json();
-      console.log(data)
-      console.log(data.length)
       if (!data.isEmpty) {
         const formattedData = {
           ...data,

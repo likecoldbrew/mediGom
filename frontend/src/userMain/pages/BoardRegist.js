@@ -3,6 +3,7 @@ import { useParams, useNavigate, Link, useLocation } from "react-router-dom";
 import SubCategories from "../components/SubCategory";
 import QuickMenu from "../components/QuickMenu";
 import ChatBot from "../components/ChatBot";
+import { useUser } from "../../utils/UserContext";
 
 const BoardRegist = () => {
   const { boardId } = useParams(); // URL에서 boardId 가져오기 (선택적)
@@ -14,30 +15,15 @@ const BoardRegist = () => {
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(false);
   const [filePreviews, setFilePreviews] = useState([]); // 미리보기 상태 추가
-  const [userInfo, setUserInfo] = useState(null); // 유저 정보
+  // AlertModal 상태 관리
+  const [isOpen, setModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+  const [modalButtonText, setModalButtonText] = useState("확인");
+  const [modalRedirectPath, setRedirectPath] = useState("/");
+  const [isSuccess, setIsSuccess] = useState(false);
+  const {userInfo}=useUser() //유저 정보
 
-  useEffect(() => {
-    // 페이지 로드 시 사용자 정보를 가져오는 함수
-    const fetchUserInfo = async () => {
-      const token = localStorage.getItem("token"); // JWT를 로컬 스토리지에서 가져옴
-      if (token) {
-        const response = await fetch("/api/users/me", {
-          method: "GET",
-          headers: {
-            "Authorization": `Bearer ${token}` // JWT 포함
-          }
-        });
 
-        if (response.ok) {
-          const data = await response.json(); // 서버에서 반환하는 사용자 정보
-          setUserInfo(data); // 사용자 정보 상태 업데이트
-        } else {
-          console.error("사용자 정보를 가져오는 데 실패했습니다.");
-        }
-      }
-    };
-    fetchUserInfo();
-  }, []);
 
 
   const handleFileChange = (event) => {
@@ -49,7 +35,6 @@ const BoardRegist = () => {
     setFilePreviews(previews);
   };
 
-
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
@@ -58,6 +43,15 @@ const BoardRegist = () => {
     formData.append("title", title);
     formData.append("content", content);
     formData.append("userNo", 10); // 예시로 userNo 추가
+
+    //만약 로그인을 안했을 경우
+    if(!userInfo.userId){
+      setModalMessage("로그인 후 이용가능합니다.");
+      setModalButtonText("로그인 하기");
+      setModalOpen(true);
+      setIsSuccess(false); // isSuccess 상태 업데이트
+      setRedirectPath("/login"); // redirectPath 상태 업데이
+    }
 
     // 파일이 존재할 경우에만 formData에 추가
     if (files.length > 0) {

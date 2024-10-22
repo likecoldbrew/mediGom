@@ -14,16 +14,14 @@ const Faq = () => {
   const [currentPage, setCurrentPage] = useState(Number(page) || 1);
   const navigate = useNavigate();
   const [error, setError] = useState(null);
-  const [expandedIndex, setExpandedIndex] = useState(null); // State to track the expanded question
+  const [expandedIndex, setExpandedIndex] = useState(null); // 클릭한 질문
 
   // API 호출
   useEffect(() => {
     fetchFaqs();
-  }, []);
-
-  useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
 
   // URL에서 page가 변경될 때 currentPage 업데이트
   useEffect(() => {
@@ -38,7 +36,6 @@ const Faq = () => {
     try {
       const response = await fetch("/api/faq/all");
       const data = await response.json();
-      console.log("확인", data)
       setFaqs(data);
     } catch (error) {
       console.error("Error fetching FAQ info:", error);
@@ -48,7 +45,7 @@ const Faq = () => {
     }
   };
 
-  const itemsPerPage = 2;
+  const itemsPerPage = 10;
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = faqs.slice(indexOfFirstItem, indexOfLastItem);

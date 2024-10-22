@@ -3,6 +3,7 @@ import { useParams, useNavigate, useLocation, Link } from "react-router-dom";
 import QuickMenu from "../components/QuickMenu";
 import SubCategories from "../components/SubCategory";
 import ChatBot from "../components/ChatBot";
+import { useUser } from "../../utils/UserContext";
 
 const Community = () => {
   const { subcategory } = useParams(); // URL에서 subcategory 가져오기
@@ -13,31 +14,12 @@ const Community = () => {
   const [loading, setLoading] = useState(true); // 로딩 메시지
   const [currentPage, setCurrentPage] = useState(Number(page) || 1); // URL에서 페이지 번호 설정
   const navigate = useNavigate(); // 페이지 이동을 위한 useNavigate
-  const [userInfo, setUserInfo] = useState(null); // 유저 정보
+  const {userInfo}=useUser(); //유저정보
 
   // API 호출
   useEffect(() => {
     fetchBoards();
     window.scrollTo(0, 0);
-    const fetchUserInfo = async () => {
-      const token = localStorage.getItem("token"); // JWT를 로컬 스토리지에서 가져옴
-      if (token) {
-        const response = await fetch("/api/users/me", {
-          method: "GET",
-          headers: {
-            "Authorization": `Bearer ${token}` // JWT 포함
-          }
-        });
-
-        if (response.ok) {
-          const data = await response.json(); // 서버에서 반환하는 사용자 정보
-          setUserInfo(data); // 사용자 정보 상태 업데이트
-        } else {
-          console.error("사용자 정보를 가져오는 데 실패했습니다.");
-        }
-      }
-    };
-    fetchUserInfo();
   }, []);
 
 
@@ -175,7 +157,7 @@ const Community = () => {
               </table>
             </div>
             <div className="flex justify-end">
-              {userInfo? (
+              {userInfo.userId? (
                 <>
                   <Link
                     to={`/board/register`}

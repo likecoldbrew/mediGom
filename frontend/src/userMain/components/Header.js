@@ -16,7 +16,6 @@ const Header = () => {
   const [redirectPath, setRedirectPath] = useState("");
   const {userInfo, setUserInfo}=useUser()
   const navigate = useNavigate(); // useNavigate 훅 사용
- console.log("유저정보", userInfo)
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -39,7 +38,6 @@ const Header = () => {
   };
   //모달창 내용
   const showAlertModal = (message, buttonText,  isSuccess = false, redirectPath) => {
-    console.log('redirectPath:', redirectPath);
     setModalMessage(message);
     setModalButtonText(buttonText);
     setModalOpen(true);

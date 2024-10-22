@@ -13,6 +13,7 @@ const HospitalInfo = () => {
   // API 호출
   useEffect(() => {
     fetchHospital();
+    window.scrollTo(0, 0);
   }, []);
 
   //병원 정보
