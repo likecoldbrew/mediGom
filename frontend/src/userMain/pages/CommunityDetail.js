@@ -15,6 +15,7 @@ const BoardDetail = ({ boardId }) => {
 
   useEffect(() => {
     // 페이지 로드 시 사용자 정보를 가져오는 함수
+    window.scrollTo(0, 0);
     const fetchUserInfo = async () => {
       const token = localStorage.getItem("token"); // JWT를 로컬 스토리지에서 가져옴
       if (token) {

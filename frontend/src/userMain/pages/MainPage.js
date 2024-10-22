@@ -10,6 +10,8 @@ const HospitalHomepage = () => {
   const [contentItems, setContentItems] = useState([]);
   //병원 후기 글 정보
   const [boards, setBoards] = useState([]);
+  //공지사항 글
+  const [notices, setNotices] = useState([]);
   const navigate = useNavigate(); // useNavigate 훅 사용
   useEffect(() => {
     //바로가기 값 불러오기
@@ -35,11 +37,13 @@ const HospitalHomepage = () => {
           121: "필요한 증명서를 신청 후 \n 편하게 다운받아 볼 수 있습니다",
           103: "병원 위치 및 예약 가능 시간을 \n 확인 할 수 있습니다"
         };
+        const btnName = {
+          110: "예약하기",
+          100: "검색하기",
+          121: "발급하기",
+          103: "이동하기"
+        };
         // selectedCategoryIds 순서대로 아이템 생성
-        console.log("Contents:", contents);
-        contents.forEach(content => {
-          console.log(`Category ID: ${content.categoryId}, Subcategories:`, content.subcategories);
-        });
         const items = contentsIds.map((id) => {
           const content = contents.find((category) => category.categoryId === id);
           if (content) {
@@ -49,7 +53,8 @@ const HospitalHomepage = () => {
               contentsInfo: contentsInfo[content.categoryId],
               path: `/${content.urlName}`,
               categoryName: content.name,
-              subCategoryName: subCategory ? subCategory.name : ""
+              subCategoryName: subCategory ? subCategory.name : "",
+              btnName: btnName[content.categoryId] || ""
             };
           } else {
             const subCategoryParent = contents.find((content) =>
@@ -62,19 +67,21 @@ const HospitalHomepage = () => {
                 contentsInfo: contentsInfo[id],
                 path: `/${foundSub ? foundSub.urlName : ""}`,
                 categoryName: subCategoryParent.name,
-                subCategoryName: foundSub ? foundSub.name : ""
+                subCategoryName: foundSub ? foundSub.name : "",
+                btnName: btnName[id] || ""
               };
             }
           }
           return null;
         }).filter((item) => item !== null);
-        console.log("item", items);
         setContentItems(items); // 잘 필터링된 아이템을 상태에 설정
       } catch (error) {
         console.error("Error fetching categories:", error);
       }
     };
     fetchCategories();
+    fetchBoards();
+    fetchNotices();
   }, []);
 
   // 이미지 슬라이드 효과
@@ -91,23 +98,33 @@ const HospitalHomepage = () => {
   };
 
   //후기글 정보
-  // 게시글 정보 가져오기
+  // 게시글(병원후기) 정보 가져오기
   const fetchBoards = async () => {
-    try {
-      const response = await fetch("/api/board/all");
-      const data = await response.json();
-      // 날짜 포맷 변환
-      const formattedData = data.map((board) => ({
-        ...board,
-        createAt: formatDate(board.createAt), // 날짜 포맷 변경
-      }));
+    const response = await fetch("/api/board/all");
+    const data = await response.json();
+    //게시글 5개만 가져오기
+    const limitedData = data.length > 5 ? data.slice(0, 5) : data;
+    // 날짜 포맷 변환
+    const formattedData = limitedData.map((board) => ({
+      ...board,
+      createAt:board.updateAt? formatDate(board.updateAt): formatDate(board.createAt)// 날짜 포맷 변경
+    }));
+    setBoards(formattedData); // 변환된 데이터로 상태 업데이트
+  };
 
-      setBoards(formattedData); // 변환된 데이터로 상태 업데이트
-      setLoading(false); // 로딩 완료
-    } catch (error) {
-      console.error("Error fetching boards:", error);
-      setLoading(false); // 로딩 종료
-    }
+  // 게시글 정보 가져오기
+  const fetchNotices = async () => {
+    const response = await fetch("/api/board/allNotice");
+    const data = await response.json();
+    //공지사항 5개만 가져오기
+    const limitedData = data.length > 5 ? data.slice(0, 5) : data;
+    console.log("공지사항 확인용", limitedData);
+    // 날짜 포맷 변환
+    const formattedData = limitedData.map((board) => ({
+      ...board,
+      createAt:board.updateAt? formatDate(board.updateAt): formatDate(board.createAt) // 날짜 포맷 변경
+    }));
+    setNotices(formattedData); // 변환된 데이터로 상태 업데이트
   };
 
   // 날짜 포맷 변환 함수
@@ -118,7 +135,6 @@ const HospitalHomepage = () => {
     const day = String(date.getDate()).padStart(2, "0"); // 일
     return `${year}-${month}-${day}`; // 형식: YYYY-MM-DD
   };
-
 
 
   return (
@@ -172,51 +188,93 @@ const HospitalHomepage = () => {
                   }}
                   className="px-4 hover:bg-sky-200 hover:font-bold py-2 mb-4 border rounded-md bg-white text-blue-500 disabled:text-gray-300"
                 >
-                  이동
+                  {item.btnName}
                 </Link>
               </div>
             </>
           ))}
         </div>
         <hr className="border-[3px] border-dashed border-sky-200 mb-4 mt-10" />
-        {/* 공지사항/커뮤니티 등 */}
-
+        {/* 컨텐츠[공지사항/커뮤니티 등] */}
         <div className="grid grid-cols-2 grid-rows-2 gap-4 mt-10">
-          {/* 커뮤니티 */}
-          <div className="flex flex-col items-center justify-center rounded-lg bg-white shadow-md p-4">
-            <div className="text-center mt-8 text-sky-700 font-bold text-lg mb-2">커뮤니티</div>
-            <div className="text-center text-gray-600 mb-4" dangerouslySetInnerHTML={{
-              __html: `● 신규 환자로 등록하여 진료를 받을 수 있습니다.`
-            }}></div>
+          {/* 커뮤니티(병원후기) */}
+          <div className="flex flex-col justify-center rounded-lg bg-white shadow-md p-4">
+            <div
+              className="text-center mt-3 text-sky-700 font-bold text-lg pb-3 border-b-2 border-blue-700 w-full">커뮤니티
+            </div>
+            <div className="text-gray-600 mb-4 mt-2 w-full">
+              {boards.length > 0 ? (
+                <>
+                  {boards.map((board) => (
+                    <div key={board.id} className="border-b border-blue-200 w-full px-4 py-2 h-12 flex">
+                      <div className="w-3/5">제목:
+                        <Link
+                          to={`/board/detail/${board.boardId}`} // 제목 클릭 시 이동할 경로
+                          state={{ selectCategory:"커뮤니티", selectSubCategory:"진료 후기" }} // 카테고리 값 넘겨주기
+                          className="text-blue-500 hover:underline"
+                        >
+                          <span className="ml-2">{board.title}</span>
+                        </Link>
+                      </div>
+                      <div className="w-1/5 text-center">작성자: <span className="ml-2 text-sky-400">{board.userId}</span>
+                      </div>
+                      <div className="w-2/5 text-center">작성일: <span
+                        className="ml-2 text-sky-400"> {board.updateAt ? formatDate(board.updateAt) : formatDate(board.createAt)}</span>
+                      </div>
+                    </div>
+                  ))}
+                </>
+              ) : "게시글 불러오는 중"}
+            </div>
             <Link
-              to="/new-patient-registration"
-              className="px-4 hover:bg-sky-200 hover:font-bold py-2 mb-4 border rounded-md bg-white text-blue-500 disabled:text-gray-300"
+              to="/community"
+              state={{ selectCategory:"커뮤니티", selectSubCategory:"진료 후기" }}
+              className="px-4 text-right hover:font-bold py-2 text-blue-500"
             >
-              이동
+              더보기
             </Link>
           </div>
           {/* 공지사항*/}
-          <div className="flex flex-col items-center justify-center rounded-lg bg-white shadow-md p-4">
-            <div className="text-center mt-8 text-sky-700 font-bold text-lg mb-2">공지사항</div>
-            <div className="text-center text-gray-600 mb-4" dangerouslySetInnerHTML={{
-              __html: `● 비상시 연락처를 등록하고 관리할 수 있습니다.`
-            }}></div>
+          <div className="flex flex-col justify-center rounded-lg bg-white shadow-md p-4">
+            <div className="text-center mt-3 text-sky-700 font-bold text-lg pb-3 border-b-2 border-blue-700 w-full">공지사항</div>
+            <div className="text-gray-600mb-4 mt-2 w-full">
+              {notices.length>0?(
+                <>
+                  {notices.map((notice) => (
+                    <div key={notice.id} className="border-b border-blue-200 w-full px-4 py-2 h-12 flex">
+                      <div className="w-3/5">제목:
+                        <Link
+                          to={`/notice/detail/${notice.boardId}`} // 제목 클릭 시 이동할 경로
+                          state={{ selectCategory:"커뮤니티", selectSubCategory:"공지사항" }} // 카테고리 값 넘겨주기
+                          className="text-blue-500 hover:underline">
+                          <span className="ml-2">{notice.title}</span>
+                        </Link>
+                      </div>
+                      <div className="w-2/5 text-center">작성일: <span
+                        className="ml-2 text-sky-400"> {notice.createAt}</span>
+                      </div>
+                    </div>
+                  ))}
+                </>
+              ) : "공지사항 불러오는 중"}
+            </div>
             <Link
-              to="/emergency-contact"
-              className="px-4 hover:bg-sky-200 hover:font-bold py-2 mb-4 border rounded-md bg-white text-blue-500 disabled:text-gray-300"
+              to="/notice"
+              state={{ selectCategory:"커뮤니티", selectSubCategory:"공지사항" }}
+              className="px-4 text-right hover:font-bold py-2 text-blue-500"
             >
-              이동
+              더보기
             </Link>
           </div>
+
+
           {/* 병원정보*/}
-          <div className="flex flex-col items-center justify-center rounded-lg bg-white shadow-md p-4">
-            <div className="text-center mt-8 text-sky-700 font-bold text-lg mb-2">병원정보</div>
-            <div className="text-center text-gray-600 mb-4" dangerouslySetInnerHTML={{
-              __html: `● 비상시 연락처를 등록하고 관리할 수 있습니다.`
-            }}></div>
+          <div className="flex flex-col justify-center rounded-lg bg-white shadow-md p-4">
+            <div className="text-center mt-3 text-sky-700 font-bold text-lgpb-3 border-b-2 border-blue-700 w-full">병원정보</div>
+            <div className="text-center text-gray-600 mb-4"></div>
             <Link
               to="/emergency-contact"
-              className="px-4 hover:bg-sky-200 hover:font-bold py-2 mb-4 border rounded-md bg-white text-blue-500 disabled:text-gray-300"
+              className="px-4 hover:bg-sky-200 hover:font-bold py-2 mb-4 border rounded-md bg-white text-blue-500"
             >
               이동
             </Link>
@@ -224,12 +282,10 @@ const HospitalHomepage = () => {
           {/* FAQ*/}
           <div className="flex flex-col items-center justify-center rounded-lg bg-white shadow-md p-4">
             <div className="text-center mt-8 text-sky-700 font-bold text-lg mb-2">FAQ 자주하는 질문</div>
-            <div className="text-center text-gray-600 mb-4" dangerouslySetInnerHTML={{
-              __html: `● 비상시 연락처를 등록하고 관리할 수 있습니다.`
-            }}></div>
+            <div className="text-center text-gray-600 mb-4"></div>
             <Link
               to="/emergency-contact"
-              className="px-4 hover:bg-sky-200 hover:font-bold py-2 mb-4 border rounded-md bg-white text-blue-500 disabled:text-gray-300"
+              className="px-4 hover:bg-sky-200 hover:font-bold py-2 mb-4 border rounded-md bg-white text-blue-500"
             >
               이동
             </Link>

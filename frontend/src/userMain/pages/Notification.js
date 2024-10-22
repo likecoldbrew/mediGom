@@ -17,9 +17,6 @@ const Notification = () => {
   // API 호출
   useEffect(() => {
     fetchBoards();
-  }, []);
-
-  useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 

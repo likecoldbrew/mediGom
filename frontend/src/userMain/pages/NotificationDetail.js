@@ -10,7 +10,10 @@ const NotificationDetail = ({ boardId }) => {
   const [board, setBoard] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-  console.log(boardId)
+
+  useEffect(() => {
+  window.scrollTo(0, 0);
+  }, []);
   useEffect(() => {
     fetchBoardDetail();
   }, [boardId]);
