@@ -18,5 +18,20 @@ public class MedicalRecordService {
         return medicalRecordMapper.getMedicalRecordList(doctorNo);
     }
 
-    public List<MedicalRecord> getAllPatientList() { return medicalRecordMapper.getAllPatientList(); }
+    public List<MedicalRecord> getAllPatientList() {
+        return medicalRecordMapper.getAllPatientList();
+    }
+
+    public void addMedicalRecord(MedicalRecord medicalRecord) {
+        medicalRecordMapper.insertPatient(medicalRecord);
+    }
+
+    // 환자 진료 정보 수정 메서드
+    public void updateMedicalRecord(MedicalRecord medicalRecord) {
+        medicalRecordMapper.updatePatient(medicalRecord);
+    }
+
+    public void updateMedicalRecord(int recordId, MedicalRecord updatedRecord) {
+        medicalRecordMapper.updateMedicalRecord(recordId, updatedRecord);
+    }
 }

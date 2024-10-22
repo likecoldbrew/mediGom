@@ -26,7 +26,7 @@ const UserManagement = () => {
         const recordData = await recordResponse.json();
 
         // console.log(userData);
-        // console.log(recordData);
+        console.log(recordData);
 
         setAllPatient({
           users: userData || {}, // userData.user가 배열이라고 가정

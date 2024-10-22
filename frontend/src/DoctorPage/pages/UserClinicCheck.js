@@ -2,12 +2,20 @@ import React, { useState, useEffect } from "react";
 import { Search } from "lucide-react";
 import Modal from "react-modal";
 import UserStateChange from "./UserStateChange";
-import ChangeDepartment from "./ChangeDepartment"; // ChangeDepartment 임포트
+import ChangeDepartment from "./ChangeDepartment";
+import { useParams } from "react-router-dom";
 
 Modal.setAppElement("#root");
 
 const UserClinicCheck = () => {
-  const [users, setUsers] = useState([]);
+  const { userNo, doctorNo } = useParams();
+  console.log("userNo:", userNo, "doctorNo:", doctorNo);
+  const useNo = userNo ? parseInt(userNo) : 0;
+  const docNo = doctorNo ? parseInt(doctorNo) : 0;
+  const [patients, setPatients] = useState([]);
+  const [medicalRecords, setMedicalRecords] = useState([]);
+  const [filteredMedicalRecords, setFilteredMedicalRecords] = useState([]);
+  const [diagnosisPending, setDiagnosisPending] = useState([]);
   const [isUserStateChangeOpen, setIsUserStateChangeOpen] = useState(false);
   const [isChangeDepartmentOpen, setIsChangeDepartmentOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
@@ -15,27 +23,86 @@ const UserClinicCheck = () => {
   const [filteredUsers, setFilteredUsers] = useState([]);
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await fetch("/api/users/all");
-        const data = await response.json();
-        setUsers(data);
-      } catch (error) {
-        console.error("Error fetching users:", error);
+    const fetchData = async () => {
+      if (!isNaN(useNo) && !isNaN(docNo)) {
+        try {
+          const [userReserveResponse, medicalRecordsResponse] = await Promise.all([
+            fetch(`/api/medical_record/${docNo}`), // doctorNo 사용
+            fetch(`/api/reserve/user/${useNo}`)
+          ]);
+
+          const userReserveData = await userReserveResponse.json();
+          const medicalRecordsData = await medicalRecordsResponse.json();
+
+          console.log("API Response(user):", userReserveData);
+          setPatients(userReserveData);
+          console.log("User Reserve Data:", JSON.stringify(userReserveData, null, 2));
+
+          const recordsWithTreatment = medicalRecordsData.filter(
+            record => record.diagnosis && record.diagnosis.trim() !== ""
+          );
+
+          const recordsWithoutTreatment = medicalRecordsData.filter(
+            record => !record.diagnosis || record.diagnosis.trim() === ""
+          ).map(record => {
+            const userData = userReserveData.find(user => user.id === record.userId);
+            return {
+              ...record,
+              symptom: userData ? userData.symptom : "증상 정보 없음"
+            };
+          });
+
+          setMedicalRecords(medicalRecordsData);
+          setFilteredMedicalRecords(recordsWithTreatment);
+          setDiagnosisPending(recordsWithoutTreatment);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      } else {
+        console.error("Invalid user_no:", useNo);
       }
     };
-    fetchUsers();
-  }, []);
+    fetchData();
+  }, [useNo, docNo]);
 
   useEffect(() => {
-    let result = [...users];
+    const approvedPatients = patients.filter(patient => patient.status === 1);
+    const recordsWithTreatment = medicalRecords.filter(record =>
+      approvedPatients.some(patient => patient.id === record.userId) &&
+      record.diagnosis && record.diagnosis.trim() !== ""
+    );
+
+    const recordsWithoutTreatment = medicalRecords.filter(record =>
+      approvedPatients.some(patient => patient.id === record.userId) &&
+      (!record.diagnosis || record.diagnosis.trim() === "")
+    ).map(record => {
+      const userData = approvedPatients.find(user => user.id === record.userId);
+      return {
+        ...record,
+        symptom: userData ? userData.symptom : "증상 정보 없음"
+      };
+    });
+
+    setFilteredMedicalRecords(recordsWithTreatment);
+    setDiagnosisPending(recordsWithoutTreatment);
+  }, [patients, medicalRecords]);
+
+  useEffect(() => {
+    let result = diagnosisPending;
     if (searchTerm) {
       result = result.filter((user) =>
-        Object.values(user).some((value) => value && value.toString().toLowerCase().includes(searchTerm.toLowerCase()))
+        Object.values(user).some((value) =>
+          typeof value === "string" && value.toLowerCase().includes(searchTerm.toLowerCase())
+        )
       );
     }
     setFilteredUsers(result);
-  }, [searchTerm, users]);
+  }, [searchTerm, diagnosisPending]);
+
+  const formatDate = (isoString) => {
+    const date = new Date(isoString);
+    return date.toISOString().split("T")[0];
+  };
 
   const openUserStateChangeModal = (user) => {
     setSelectedUser(user);
@@ -55,9 +122,7 @@ const UserClinicCheck = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-2xl font-bold">내 환자 확인</h1>
-      </div>
+      <div className="flex justify-between items-center mb-8"></div>
       <div className="flex flex-col md:flex-row justify-between items-center mb-6 space-y-4 md:space-y-0">
         <div className="relative w-full md:w-64">
           <input
@@ -71,26 +136,30 @@ const UserClinicCheck = () => {
         </div>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 rounded-lg overflow-hidden">
+      {/* 진단 등록: diagnosis가 없는 데이터만 표시 */}
+      <div className="bg-white dark:bg-gray-800 rounded-lg overflow-hidden mt-8">
+        <h2 className="text-lg font-bold px-6 py-4">진단 등록</h2>
         <table className="w-full">
           <thead>
           <tr className="bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600">
             <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">번호</th>
             <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">진료과</th>
             <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">환자이름</th>
-            <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">진료상태</th>
-            <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">진단 등록 및
-              변경
-            </th>
+            <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">환자증상</th>
+            <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">예약일자</th>
+            <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">진단 등록</th>
           </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
           {filteredUsers.map((user, index) => (
             <tr key={user.id}>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-500">{index + 1}</td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-500">{user.department}</td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-500">{user.name}</td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-500">{user.status}</td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-500">{user.departmentName}</td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-500">{user.userName}</td>
+              <td
+                className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-500">{user.symptom ? user.symptom : "증상 정보 없음"}</td>
+              <td
+                className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-500">{formatDate(user.createAt)}</td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-center">
                 <div className="flex-center items-center space-x-1">
                   <button
@@ -98,12 +167,6 @@ const UserClinicCheck = () => {
                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                   >
                     등록
-                  </button>
-                  <button
-                    onClick={() => openChangeDepartmentModal(user)}
-                    className="bg-yellow-400 hover:bg-yellow-500 text-white font-bold py-2 px-4 rounded"
-                  >
-                    변경
                   </button>
                 </div>
               </td>
@@ -113,30 +176,54 @@ const UserClinicCheck = () => {
         </table>
       </div>
 
-      {/* 모달 */}
-      {isUserStateChangeOpen && (
-        <Modal
-          isOpen={isUserStateChangeOpen}
-          onRequestClose={closeModal}
-          contentLabel="User State Change Modal"
-          className="fixed inset-0 flex items-center justify-center z-50"
-          overlayClassName="fixed inset-0 bg-black bg-opacity-50"
-        >
-          <UserStateChange user={selectedUser} closeModal={closeModal} />
-        </Modal>
-      )}
+      {/* 의료 기록: treatment가 있는 데이터만 표시 */}
+      <div className="bg-white dark:bg-gray-800 rounded-lg overflow-hidden mt-8">
+        <h2 className="text-lg font-bold px-6 py-4">의료 기록</h2>
+        <table className="w-full">
+          <thead>
+          <tr className="bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600">
+            <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">기록 ID</th>
+            <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">환자이름</th>
+            <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">진단일자</th>
+            <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">진단</th>
+            <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">처방전</th>
+            <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">진료과</th>
+          </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-200">
+          {filteredMedicalRecords.map((record, index) => (
+            <tr key={record.recordId}>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-500">{record.recordId}</td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-500">{record.userName}</td>
+              <td
+                className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-500">{formatDate(record.visitDate)}</td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-500">{record.diagnosis}</td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-500">{record.prescription}</td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-500">{record.departmentName}</td>
+            </tr>
+          ))}
+          </tbody>
+        </table>
+      </div>
 
-      {isChangeDepartmentOpen && (
-        <Modal
-          isOpen={isChangeDepartmentOpen}
-          onRequestClose={closeModal}
-          contentLabel="Change Department Modal"
-          className="fixed inset-0 flex items-center justify-center z-50"
-          overlayClassName="fixed inset-0 bg-black bg-opacity-50"
-        >
-          <ChangeDepartment closeModal={closeModal} />
-        </Modal>
-      )}
+      {/* Modal 컴포넌트 */}
+      <Modal
+        isOpen={isUserStateChangeOpen}
+        onRequestClose={closeModal}
+        className="modal"
+        overlayClassName="overlay"
+      >
+        <UserStateChange user={selectedUser} onClose={closeModal} />
+      </Modal>
+
+      <Modal
+        isOpen={isChangeDepartmentOpen}
+        onRequestClose={closeModal}
+        className="modal"
+        overlayClassName="overlay"
+      >
+        <ChangeDepartment user={selectedUser} onClose={closeModal} />
+      </Modal>
     </div>
   );
 };

@@ -36,7 +36,7 @@ const SidebarAndNavbar = () => {
     setActiveDropdown(activeDropdown === key ? null : key);  // 드롭다운 메뉴 토글
   };
   // 이제 userInfo를 직접 사용 가능
-  console.log(userInfo);
+  // console.log(userInfo);
   // 카테고리를 기반으로 동적 메뉴 생성
   // const menuItems = category.map((item, index) => ({
   //     key: String(index + 1),
@@ -139,7 +139,7 @@ const SidebarAndNavbar = () => {
     fetchUserInfo();
   }, []);
 
-  console.log(userInfo.userNo);
+  // console.log(userInfo.userNo);
 
   return (
     <div className="flex min-h-screen bg-gray-100">

@@ -24,7 +24,8 @@
         SELECT c1.name AS subCategoryName, c2.name AS parentCategoryName, c1.url_name
         FROM categories_main c1
                  LEFT JOIN categories_main c2 ON c1.parent_id = c2.category_id
-        WHERE c1.url_name = #{urlName} and c1.parent_id is not null
+        WHERE c1.url_name = #{urlName}
+          and c1.parent_id is not null
     </select>
     <!-- 결과 매핑 -->
     <resultMap id="CategoryWithParentMap" type="kr.or.nextit.backend.model.MainCategory">
@@ -34,4 +35,5 @@
         <result property="parentId" column="parent_id"/>
         <result property="urlName" column="url_name"/>
     </resultMap>
+
 </mapper>

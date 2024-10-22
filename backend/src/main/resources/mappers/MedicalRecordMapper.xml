@@ -29,4 +29,26 @@
                           AND u.admin = 1
         ORDER BY u.delete_yn, u.user_no;
     </select>
+
+    <!--  환자 진료 정보 추가  -->
+    <insert id="insertPatient" parameterType="kr.or.nextit.backend.model.MedicalRecord">
+        INSERT INTO medical_records (recordId, user_no, doctor_no, user_name, diagnosis, treatment,
+                                     department_Name, prescription, notes)
+        VALUES (#{recordId}, #{userNo} #{doctorNo}, #{userName}, #{diagnosis}, #{treatment},
+                #{departmentName}, #{prescription}, #{notes})
+    </insert>
+
+    <!--  환자 진료 정보 수정  -->
+    <update id="updatePatient" parameterType="kr.or.nextit.backend.model.MedicalRecord">
+        UPDATE medical_racords
+        SET user_name=#{userName},
+            diagnosis=#{diagnosis},
+            treatment=#{treatment},
+            department_Name=#{departmentName},
+            prescription=#{prescription},
+            notes=#{notes},
+            update_at=CURRENT_TIMESTAMP
+        WHERE record_id = #{recordId}
+    </update>
+
 </mapper>

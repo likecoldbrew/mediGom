@@ -32,9 +32,7 @@
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
-
-    "extends": [
-    ],
+    "extends": [],
     "plugins": [
       "react"
     ],

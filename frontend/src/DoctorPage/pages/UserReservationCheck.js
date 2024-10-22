@@ -2,55 +2,82 @@ import React, { useState, useEffect } from "react";
 import { Search } from "lucide-react";
 import Modal from "react-modal";
 import ChangeDepartment from "./ChangeDepartment";
+import { useParams } from "react-router-dom";
 
 Modal.setAppElement("#root");
 
 const UserReservationCheck = () => {
-  const [users, setUsers] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedUser, setSelectedUser] = useState(null);
+  const { doctorNo } = useParams();
+  const no = parseInt(doctorNo);
+  const [patients, setPatients] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredUsers, setFilteredUsers] = useState([]);
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await fetch("/api/users/all");
-        const data = await response.json();
-        setUsers(data);
-      } catch (error) {
-        console.error("Error fetching users:", error);
-      }
-    };
-    fetchUsers();
-  }, []);
-
+    if (!isNaN(no)) {
+      const fetchUserReserve = async () => {
+        try {
+          const response = await fetch(`/api/reserve/${no}`);
+          const data = await response.json();
+          setPatients(data);
+        } catch (error) {
+          console.error("Error fetching users:", error);
+        }
+      };
+      fetchUserReserve();
+    } else {
+      console.error("Invalid doctorNo:", doctorNo);
+    }
+  }, [no]);
 
   useEffect(() => {
-    let result = [...users];
+    let result = patients.filter((user) => user.status === 0);
     if (searchTerm) {
       result = result.filter((user) =>
-        Object.values(user).some((value) => value && value.toString().toLowerCase().includes(searchTerm.toLowerCase()))
+        Object.values(user).some((value) =>
+          value && value.toString().toLowerCase().includes(searchTerm.toLowerCase())
+        )
       );
     }
     setFilteredUsers(result);
-  }, [searchTerm, users]);
+  }, [searchTerm, patients]);
 
-  const openModal = (user) => {
-    setSelectedUser(user);
-    setIsModalOpen(true);
+  const handleApprove = async (reserveId) => {
+    if (!reserveId) {
+      console.error("Invalid reserveId:", reserveId);
+      return;
+    }
+
+    // 사용자에게 승인 여부 확인
+    const confirmApprove = window.confirm("승인하시겠습니까?");
+    if (!confirmApprove) {
+      return; // 사용자가 "아니오"를 선택한 경우 함수 종료
+    }
+
+    try {
+      const response = await fetch(`/api/reserve/${reserveId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ status: 1 }) // 필요한 경우 다른 데이터도 포함
+      });
+
+      if (response.ok) {
+        setPatients((prevPatients) =>
+          prevPatients.map((user) =>
+            user.reserveId === reserveId ? { ...user, status: 1 } : user
+          )
+        );
+      } else {
+        const errorMessage = await response.text(); // 에러 메시지를 텍스트로 가져오기
+        console.error("Error updating status:", errorMessage);
+      }
+    } catch (error) {
+      console.error("Error sending approval request:", error);
+    }
   };
 
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setSelectedUser(null);
-  };
-
-  const updateUserStatus = (userId, newStatus) => {
-    setUsers(users.map(user =>
-      user.id === userId ? { ...user, status: newStatus } : user
-    ));
-  };
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -74,31 +101,24 @@ const UserReservationCheck = () => {
         <table className="w-full">
           <thead>
           <tr className="bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600">
-            <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">번호
-            </th>
-            <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">진료과
-            </th>
-            <th
-              className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">환자이름
-            </th>
-            <th
-              className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">진료상태
-            </th>
-            <th
-              className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">요청상태
-            </th>
+            <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">번호</th>
+            <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">환자이름</th>
+            <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">승인상태</th>
+            <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">환자증상</th>
+            <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">요청상태</th>
           </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
           {filteredUsers.map((user, index) => (
-            <tr key={user.id}>
+            <tr key={user.reserveId}>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-500">{index + 1}</td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-500">{user.department}</td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-500">{user.name}</td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-500">{user.status}</td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-500">{user.userName}</td>
+              <td
+                className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-500">{user.status === 0 ? "대기중" : "승인완료"}</td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-500">{user.symptom}</td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-center">
                 <button
-                  onClick={() => openModal(user)}
+                  onClick={() => handleApprove(user.reserveId, user.userNo)} // user.userNo 전달
                   className="bg-violet-400 hover:bg-violet-500 text-white font-bold py-2 px-4 rounded"
                 >
                   승인
@@ -109,19 +129,6 @@ const UserReservationCheck = () => {
           </tbody>
         </table>
       </div>
-
-      {/* 모달 */}
-      {isModalOpen && (
-        <Modal
-          isOpen={isModalOpen}
-          onRequestClose={closeModal}
-          contentLabel="User State Change Modal"
-          className="fixed inset-0 flex items-center justify-center z-50"
-          overlayClassName="fixed inset-0 bg-black bg-opacity-50"
-        >
-          <ChangeDepartment user={selectedUser} closeModal={closeModal} updateUserStatus={updateUserStatus} />
-        </Modal>
-      )}
     </div>
   );
 };

@@ -19,4 +19,6 @@ public class Reserve {
     private Timestamp reserveTime; // 예약 시간 (assuming it's in String format, adjust if needed)
     private String symptom;     // 증상
     private int status;         // 대기중:0, 승인완료:1
+    private String userName; // 환자 이름
+    private String doctorName;  // 의사 이름
 }
