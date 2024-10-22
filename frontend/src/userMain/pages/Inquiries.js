@@ -3,6 +3,7 @@ import { useParams, useNavigate, useLocation, Link } from "react-router-dom";
 import QuickMenu from "../components/QuickMenu";
 import SubCategories from "../components/SubCategory";
 import ChatBot from "../components/ChatBot";
+import { useUser } from "../../utils/UserContext";
 
 const Inquiries = () => {
   const { page } = useParams(); // URL에서 page만 가져오기
@@ -12,16 +13,15 @@ const Inquiries = () => {
   const [loading, setLoading] = useState(true); // 로딩 메시지
   const [currentPage, setCurrentPage] = useState(Number(page) || 1); // URL에서 페이지 번호 설정
   const navigate = useNavigate(); // 페이지 이동을 위한 useNavigate
-
-  // API 호출
-  useEffect(() => {
-    fetchInquiries();
-  }, [currentPage]);
+  const {userInfo}=useUser() //유저 정보
 
   //페이지 이동시 화면 맨위로 이동
   useEffect(() => {
+    if (userInfo) {
+      fetchInquiries(); // userInfo가 있는 경우에만 호출
+    }
     window.scrollTo(0, 0);
-  }, []);
+  }, [userInfo, page]);
 
   // URL에서 page가 변경될 때 currentPage 업데이트
   useEffect(() => {
@@ -33,12 +33,16 @@ const Inquiries = () => {
     try {
       const response = await fetch("/api/inquiries/all");
       const data = await response.json();
-      console.log("1대1문의",data)
+      //로그인한 유저 정보만 가져오기
+      const filteredData = data.filter(inquiry => inquiry.userId === userInfo.userId);
       // 날짜 포맷 변환
-      const formattedData = data.map((inquiries) => ({
+      const formattedData = filteredData.map((inquiries) => ({
         ...inquiries,
-        createAt: formatDate(inquiries.createAt), // 날짜 포맷 변경
+        createAt: formatDate(inquiries.createAt) // 날짜 포맷 변경
       }));
+      // userInfo.userNo와 같은 userNo를 가진 게시글만 필터링
+      console.log("9번 아이디", userInfo.userId)
+      console.log("9번 글", formattedData)
       setInquiries(formattedData); // 변환된 데이터로 상태 업데이트
       setLoading(false); // 로딩 완료
     } catch (error) {
@@ -69,9 +73,8 @@ const Inquiries = () => {
 
   // 페이지 변경 핸들러
   const handlePageChange = (pageNumber) => {
-    // 페이지 번호와 함께 selectCategory와 selectSubCategory를 state로 전달
     navigate(`/inquiry/page/${pageNumber}`, {
-      state: { selectCategory, selectSubCategory },
+      state: { selectCategory, selectSubCategory }
     });
   };
 
@@ -144,9 +147,15 @@ const Inquiries = () => {
                       {inquiries.type}
                     </td>
                     <td className="px-4 py-2 text-center  h-12">
-                      <div className="bg-red-100 rounded-[10px] inline-block px-4 py-1" >
-                      {inquiries.status==="WAIT"? "대기중":"답변완료"}
-                      </div>
+                      {inquiries.answer ? (
+                          <div className="bg-green-100 rounded-[10px] inline-block px-4 py-1">
+                            답변완료
+                          </div>
+                        ) : (
+                          <div className="bg-red-100 rounded-[10px] inline-block px-4 py-1">
+                            대기중
+                          </div>
+                        )}
                     </td>
                     <td className="px-4 py-2 text-center h-12">
                       {inquiries.createAt}
@@ -162,7 +171,8 @@ const Inquiries = () => {
                 state={{ selectCategory, selectSubCategory }}
                 className="text-sky-600 hover:underline mr-4"
               >
-                <button className="px-4 hover:bg-sky-200 hover:font-bold py-2 border rounded-md bg-white  text-blue-500 disabled:text-gray-300">
+                <button
+                  className="px-4 hover:bg-sky-200 hover:font-bold py-2 border rounded-md bg-white  text-blue-500 disabled:text-gray-300">
                   1대1 문의 등록
                 </button>
               </Link>

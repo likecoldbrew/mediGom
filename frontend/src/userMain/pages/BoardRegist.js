@@ -4,6 +4,7 @@ import SubCategories from "../components/SubCategory";
 import QuickMenu from "../components/QuickMenu";
 import ChatBot from "../components/ChatBot";
 import { useUser } from "../../utils/UserContext";
+import AlertModal from "../components/AlertModal";
 
 const BoardRegist = () => {
   const { boardId } = useParams(); // URL에서 boardId 가져오기 (선택적)
@@ -16,15 +17,12 @@ const BoardRegist = () => {
   const [loading, setLoading] = useState(false);
   const [filePreviews, setFilePreviews] = useState([]); // 미리보기 상태 추가
   // AlertModal 상태 관리
-  const [isOpen, setModalOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
   const [modalButtonText, setModalButtonText] = useState("확인");
   const [modalRedirectPath, setRedirectPath] = useState("/");
   const [isSuccess, setIsSuccess] = useState(false);
   const {userInfo}=useUser() //유저 정보
-
-
-
 
   const handleFileChange = (event) => {
     const selectedFiles = Array.from(event.target.files);
@@ -42,7 +40,7 @@ const BoardRegist = () => {
     const formData = new FormData();
     formData.append("title", title);
     formData.append("content", content);
-    formData.append("userNo", 10); // 예시로 userNo 추가
+    formData.append("userNo", userInfo.userNo);
 
     //만약 로그인을 안했을 경우
     if(!userInfo.userId){
@@ -50,7 +48,8 @@ const BoardRegist = () => {
       setModalButtonText("로그인 하기");
       setModalOpen(true);
       setIsSuccess(false); // isSuccess 상태 업데이트
-      setRedirectPath("/login"); // redirectPath 상태 업데이
+      setRedirectPath("/login"); // 로그인페이지로 보내기
+      return;
     }
 
     // 파일이 존재할 경우에만 formData에 추가
@@ -68,13 +67,11 @@ const BoardRegist = () => {
       });
       if (response.ok) {
         // 게시글 등록 성공 시
-        alert("게시글이 등록되었습니다.");
-        navigate("/community", {
-          state: {
-            selectCategory,
-            selectSubCategory
-          }
-        }); // 목록 페이지로 이동
+        setModalMessage("게시글이 등록되었습니다.");
+        setModalButtonText("게시판으로 이동");
+        setModalOpen(true);
+        setIsSuccess(true); // isSuccess 상태 업데이트
+        setRedirectPath("/community");
       } else {
         // 에러 처리
         const errorText = await response.text(); // 에러 메시지 받아오기
@@ -86,6 +83,21 @@ const BoardRegist = () => {
       alert("게시글 등록 중 오류가 발생했습니다.");
     } finally {
       setLoading(false);
+    }
+  };
+
+
+  // 모달이 닫힐 때 navigate 실행
+  const handleModalClose = () => {
+    setModalOpen(false);
+    // isSuccess가 true일 경우에만 navigate 실행
+    if (isSuccess) {
+      navigate("/community", {
+        state: {
+          selectCategory,
+          selectSubCategory
+        }
+      });
     }
   };
 
@@ -189,6 +201,16 @@ const BoardRegist = () => {
           <ChatBot />
         </div>
       </div>
+      {/* AlertModal 추가 */}
+      <AlertModal
+        isOpen={modalOpen}
+        onClose={handleModalClose}
+        message={modalMessage}
+        buttonText={modalButtonText}
+        isSuccess={isSuccess}
+        redirectPath={modalRedirectPath}
+        state={{ selectCategory, selectSubCategory }}
+      />
     </div>
   );
 };

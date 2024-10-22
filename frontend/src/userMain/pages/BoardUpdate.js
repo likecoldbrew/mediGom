@@ -3,6 +3,8 @@ import { useParams, useNavigate, Link, useLocation } from "react-router-dom";
 import SubCategories from "../components/SubCategory";
 import QuickMenu from "../components/QuickMenu";
 import ChatBot from "../components/ChatBot";
+import { useUser } from "../../utils/UserContext";
+import AlertModal from "../components/AlertModal";
 
 const BoardUpdate = ({ boardId }) => {
   const navigate = useNavigate();
@@ -16,6 +18,13 @@ const BoardUpdate = ({ boardId }) => {
   const [newFiles, setNewFiles] = useState([]); // 새 파일 상태
   const [loading, setLoading] = useState(false);
   const [filePreviews, setFilePreviews] = useState([]);
+  // AlertModal 상태 관리
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+  const [modalButtonText, setModalButtonText] = useState("확인");
+  const [modalRedirectPath, setRedirectPath] = useState("/");
+  const [isSuccess, setIsSuccess] = useState(false);
+  const {userInfo}=useUser() //유저 정보
   useEffect(() => {
     fetchBoardDetail();
   }, [boardId]);
@@ -85,6 +94,16 @@ const BoardUpdate = ({ boardId }) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
+
+    //만약 로그인을 안했을 경우
+    if(userInfo.userId=!board.userId){
+      setModalMessage("로그인 후 이용가능합니다.");
+      setModalButtonText("로그인 하기");
+      setModalOpen(true);
+      setIsSuccess(false); // isSuccess 상태 업데이트
+      setRedirectPath("/login"); // 로그인페이지로 보내기
+      return;
+    }
 
     const formData = new FormData();
     formData.append("title", title);
@@ -240,6 +259,15 @@ const BoardUpdate = ({ boardId }) => {
           <ChatBot />
         </div>
       </div>
+      <AlertModal
+        isOpen={modalOpen}
+        onClose={handleModalClose}
+        message={modalMessage}
+        buttonText={modalButtonText}
+        isSuccess={isSuccess}
+        redirectPath={modalRedirectPath}
+        state={{ selectCategory, selectSubCategory }}
+      />
     </div>
   );
 };

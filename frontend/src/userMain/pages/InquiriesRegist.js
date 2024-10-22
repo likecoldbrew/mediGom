@@ -3,6 +3,8 @@ import { useParams, useNavigate, Link, useLocation } from "react-router-dom";
 import SubCategories from "../components/SubCategory";
 import QuickMenu from "../components/QuickMenu";
 import ChatBot from "../components/ChatBot";
+import { useUser } from "../../utils/UserContext";
+import AlertModal from "../components/AlertModal";
 
 const InquiriesRegist = () => {
   const { boardId } = useParams(); // URL에서 boardId 가져오기 (선택적)
@@ -11,52 +13,37 @@ const InquiriesRegist = () => {
   const { selectCategory, selectSubCategory } = location.state || {};
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isAccordionOpen, setIsAccordionOpen] = useState(false);
   const [selectedType, setSelectedType] = useState("");
+  const {userInfo}=useUser(); //유저정보
+  // AlertModal 상태 관리
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+  const [modalButtonText, setModalButtonText] = useState("확인");
+  const [modalRedirectPath, setRedirectPath] = useState("/");
+  const [isSuccess, setIsSuccess] = useState(false);
 
-  // 유저 정보를 저장할 state
-  const [username, setUsername] = useState("user10");
-
-  // 로그인한 유저의 정보를 가져오기 위한 useEffect
-  // useEffect(() => {
-  //   const storedUser = localStorage.getItem("username"); // 또는 API 호출
-  //   if (storedUser) {
-  //     setUsername(storedUser);
-  //   } else {
-  //     navigate("/login");
-  //   }
-  // }, [navigate]);
-
-  const handleFileChange = (event) => {
-    setFiles(Array.from(event.target.files));
-  };
-
-  // 날짜 포맷 변환 함수
-  const formatDate = (timestamp) => {
-    const date = new Date(timestamp); // timestamp를 Date 객체로 변환
-    const year = date.getFullYear(); // 연도
-    const month = String(date.getMonth() + 1).padStart(2, "0"); // 월 (0부터 시작하므로 1 추가)
-    const day = String(date.getDate()).padStart(2, "0"); // 일
-    return `${year}-${month}-${day}`; // 형식: YYYY-MM-DD
-  };
-
+  //질문 등록
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
+    //만약 로그인을 안했을 경우
+    if(!userInfo.userId){
+      setModalMessage("로그인 후 이용가능합니다.");
+      setModalButtonText("로그인 하기");
+      setModalOpen(true);
+      setIsSuccess(false); // isSuccess 상태 업데이트
+      setRedirectPath("/login"); // 로그인페이지로 보내기
+      return;
+    }
 
     const formData = new FormData();
     formData.append("title", title);
     formData.append("content", content);
-    formData.append("userNo", 10); // 예시로 userNo 추가
+    formData.append("userNo", userInfo.userNo); // 예시로 userNo 추가
+    formData.append("type", selectedType);
 
-    // 파일이 존재할 경우에만 formData에 추가
-    if (files.length > 0) {
-      files.forEach((file) => {
-        formData.append("file", file);
-      });
-    }
 
     try {
       const response = await fetch("/api/inquiries/register", {
@@ -65,13 +52,11 @@ const InquiriesRegist = () => {
       });
       if (response.ok) {
         // 게시글 등록 성공 시
-        alert("게시글이 등록되었습니다.");
-        navigate("/community",  {
-          state: {
-            selectCategory,
-            selectSubCategory
-          }
-        }); // 목록 페이지로 이동
+        setModalMessage("문의가 등록되었습니다.");
+        setModalButtonText("1대1 문의 페이지로 이동");
+        setModalOpen(true);
+        setIsSuccess(true); // isSuccess 상태 업데이트
+        setRedirectPath("/inquiry");
       } else {
         // 에러 처리
         const errorText = await response.text(); // 에러 메시지 받아오기
@@ -178,18 +163,9 @@ const InquiriesRegist = () => {
                 className="w-full border border-gray-300 p-2 rounded-md h-[400px]"
               />
             </div>
-            <div className="mb-4">
-              <label className="block mb-2 text-gray-600">파일 첨부</label>
-              <input
-                type="file"
-                multiple
-                onChange={handleFileChange}
-                className="border border-gray-300 p-2 rounded-md"
-              />
-            </div>
             <div className="flex justify-end items-center">
               <Link
-                to={`/community/1`} // 목록 페이지로 돌아가기
+                to={`/inquiry`} // 목록 페이지로 돌아가기
                 state={{ selectCategory, selectSubCategory }}
                 className="text-sky-600 hover:underline mr-4"
               >
@@ -210,6 +186,15 @@ const InquiriesRegist = () => {
           <ChatBot />
         </div>
       </div>
+      <AlertModal
+        isOpen={modalOpen}
+        onClose={()=>setModalOpen(false)}
+        message={modalMessage}
+        buttonText={modalButtonText}
+        isSuccess={isSuccess}
+        redirectPath={modalRedirectPath}
+        state={{ selectCategory, selectSubCategory }}
+      />
     </div>
   );
 };

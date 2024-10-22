@@ -12,13 +12,34 @@ import java.util.List;
 @RequiredArgsConstructor
 public class InquiriesService {
     private final InquiriesMapper inquiriesMapper;
-    //문의사항 전체 조회
+
+    // 문의사항 전체 조회
     public List<Inquiries> allInquiries() {
         return inquiriesMapper.allInquiries();
     }
-    //특정 문의글 조회
-    public List<Inquiries> selectInquiries(int inquirieId) {
-        return inquiriesMapper.selectInquiries(inquirieId);
+
+    // 특정 문의글 조회
+    public Inquiries selectInquiry(int inquirieId) {
+        return inquiriesMapper.selectInquiry(inquirieId);
     }
 
+    // 문의사항 등록
+    public void createInquiry(Inquiries inquiries) {
+        inquiriesMapper.createInquiry(inquiries);
+    }
+
+    // 관리자 - 문의사항 답변 등록 (수정)
+    public void updateAdminInquiry(Inquiries inquiries) {
+        inquiriesMapper.updateAdminInquiry(inquiries);
+    }
+
+    // 회원 - 문의사항 삭제
+    public void deleteUserInquiry(int inquirieId) {
+        inquiriesMapper.deleteUserInquiry(inquirieId);
+    }
+
+    // 관리자 - 문의사항 삭제 (답변 초기화)
+    public void deleteAdminInquiry(int inquirieId) {
+        inquiriesMapper.deleteAdminInquiry(inquirieId);
+    }
 }

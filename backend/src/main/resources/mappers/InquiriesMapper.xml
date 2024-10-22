@@ -2,21 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.or.nextit.backend.mapper.InquiriesMapper">
-    <!-- 결과 매핑 정의 -->
-    <resultMap id="InquiriesResultMap" type="kr.or.nextit.backend.model.Inquiries">
-        <id property="inquirieId" column="inquirie_id"/>
-        <result property="userNo" column="user_no"/>
-        <result property="type" column="type"/>
-        <result property="title" column="title"/>
-        <result property="content" column="content"/>
-        <result property="createAt" column="create_at"/>
-        <result property="status" column="status"/>
-        <result property="answer " column="answer"/>
-        <result property="userId" column="user_id"/>
-    </resultMap>
-    <!-- todo 나중에 로그인 기능 구현 하고 나서 Where에 로그인한 유저랑 user_id 일치하는 조건 넣기-->
     <!-- 전체 문의사항 조회  -->
-    <select id="allInquiries" resultMap="InquiriesResultMap">
+    <select id="allInquiries" resultType="kr.or.nextit.backend.model.Inquiries">
         SELECT
             i.inquirie_id,
             i.type,
@@ -25,6 +12,7 @@
             i.create_at,
             i.status,
             i.answer,
+            i.admin_create_at,
             u.user_id
         FROM
             inquiries i
@@ -32,9 +20,13 @@
             users u
             ON
                 i.user_no = u.user_no
+                    AND
+                i.status = 'Y'
+        ORDER BY i.create_at DESC
     </select>
+
     <!-- 특정 문의글 조회  -->
-    <select id="selectInquiries" parameterType="int" resultMap="InquiriesResultMap">
+    <select id="selectInquiry" parameterType="int" resultType="kr.or.nextit.backend.model.Inquiries">
         SELECT
             i.inquirie_id,
             i.type,
@@ -43,6 +35,7 @@
             i.create_at,
             i.status,
             i.answer,
+            i.admin_create_at,
             u.user_id
         FROM
             inquiries i
@@ -50,19 +43,37 @@
             users u
             ON
                 i.user_no = u.user_no
-        WHERE inquirie_id=#{inquirieId}
+        WHERE
+            inquirie_id = #{inquirieId}
+          AND
+            i.status = 'Y'
     </select>
-    <!-- 게시글 등록 -->
-    <insert id="insertBoard" parameterType="kr.or.nextit.backend.model.Community">
-        INSERT INTO inquiries (user_no, title, content, create_at, views, status)
-        VALUES (#{userNo}, #{title}, #{content}, NOW(), 0, 'Y');
-    </insert>
 
-    <!-- 첨부파일 삽입 -->
-    <insert id="insertBoardFiles" parameterType="kr.or.nextit.backend.model.Files">
-        INSERT INTO board_files (board_id, file_name, file_original_name, file_path, file_type, file_size, uploaded_at)
-        VALUES (#{boardId}, #{fileName}, #{fileOriginalName}, #{filePath}, #{fileType}, #{fileSize}, NOW());
-    </insert>
+    <!-- 문의사항 등록 -->
+    <select id="createInquiry" parameterType="kr.or.nextit.backend.model.Inquiries">
+        INSERT INTO inquiries (user_no, type, title, content)
+        VALUES (#{userNo}, #{type}, #{title}, #{content})
+    </select>
 
+    <!-- 관리자 - 문의사항 답변 등록 (수정) -->
+    <update id="updateAdminInquiry" parameterType="kr.or.nextit.backend.model.Inquiries">
+        UPDATE inquiries
+        SET answer = #{answer},
+            admin_create_at = NOW()
+        WHERE inquirie_id = #{inquirieId}
+    </update>
 
+    <!-- 회원 - 문의사항 삭제 -->
+    <delete id="deleteUserInquiry" parameterType="int">
+        UPDATE inquiries
+        SET status = 'N'
+        WHERE inquirie_id = #{inquirieId}
+    </delete>
+
+    <!-- 관리자 - 문의사항 삭제 -->
+    <delete id="deleteAdminInquiry" parameterType="int">
+        UPDATE inquiries
+        SET answer = ""
+        WHERE inquirie_id = #{inquirieId}
+    </delete>
 </mapper>

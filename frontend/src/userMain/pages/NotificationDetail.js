@@ -90,15 +90,6 @@ const NotificationDetail = ({ boardId }) => {
             >
               목록으로 돌아가기
             </Link>
-            <Link
-              to={`/notice/update/${boardId}`}
-              state={{ selectCategory, selectSubCategory }}
-              className="text-sky-600 hover:underline mr-4"
-            >
-              <button className="px-4 py-2  hover:bg-sky-200 hover:font-bold border rounded-md bg-white  text-blue-500 disabled:text-gray-300">
-                수정하기
-              </button>
-            </Link>
           </div>
         </main>
         <div className="flex flex-col space-y-4">

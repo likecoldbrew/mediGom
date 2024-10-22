@@ -6,6 +6,7 @@ const UserContext = createContext();
 // UserProvider 컴포넌트 생성
 export const UserProvider = ({ children }) => {
   const [userInfo, setUserInfo] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
 
   // 사용자 정보를 가져오는 함수
   useEffect(() => {
@@ -21,6 +22,7 @@ export const UserProvider = ({ children }) => {
           });
           if (response.ok) {
             const data = await response.json(); // 서버에서 반환하는 사용자 정보
+            setIsLoading(true); //로그인 상태 확인용
             setUserInfo(data); // 사용자 정보 상태 업데이트
           } else {
             console.error('사용자 정보를 가져오는 데 실패했습니다.');
@@ -34,7 +36,7 @@ export const UserProvider = ({ children }) => {
   }, []);
 
   return (
-    <UserContext.Provider value={{ userInfo, setUserInfo }}>
+    <UserContext.Provider value={{ userInfo, setUserInfo, isLoading }}>
       {children}
     </UserContext.Provider>
   );

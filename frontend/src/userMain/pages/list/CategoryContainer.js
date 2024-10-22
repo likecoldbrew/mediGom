@@ -18,6 +18,7 @@ import NotificationUpdate from "../NotificationUpdate";
 import Inquiries from "../Inquiries";
 import InquiriesDetail from "../InquiriesDetail";
 import InquiriesRegist from "../InquiriesRegist";
+import UserMyPage from "../UserMyPage";
 
 const CategoryContainer = () => {
   const { urlName, page, action } = useParams();
@@ -67,6 +68,8 @@ const CategoryContainer = () => {
         return <InquiriesRegist inquirieId={page} />;
       }
       return <Inquiries page={page} />;
+    case "mypage":
+      return <UserMyPage page={page} />;
     default:
       return <div>Category not found</div>;
   }

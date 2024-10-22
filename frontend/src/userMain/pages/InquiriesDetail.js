@@ -15,15 +15,23 @@ const InquiriesDetail = ({ inquirieId }) => {
     fetchBoardDetail();
   }, [inquirieId]);
 
+  const formatDate = (timestamp) => {
+    const date = new Date(timestamp);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
   const fetchBoardDetail = async () => {
     try {
       const response = await fetch(`/api/inquiries/detail?inquirieId=${inquirieId}`);
       const data = await response.json();
-      if (data.length > 0) {
+      if (!data.isEmpty) {
         const formattedData = {
-          ...data[0],
-          createAt: formatDate(data[0].createAt),
-          updateAt: data[0].updateAt ? formatDate(data[0].updateAt) : null,
+          ...data,
+          createAt: formatDate(data.createAt),
+          updateAt: data.updateAt ? formatDate(data.updateAt) : null,
         };
         setBoard(formattedData);
       } else {
@@ -34,14 +42,6 @@ const InquiriesDetail = ({ inquirieId }) => {
       console.error("Error fetching board detail:", error);
       setLoading(false);
     }
-  };
-
-  const formatDate = (timestamp) => {
-    const date = new Date(timestamp);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
   };
 
   if (loading) {
@@ -68,15 +68,23 @@ const InquiriesDetail = ({ inquirieId }) => {
           <div className="w-full rounded-[10px] bg-white p-6 shadow-blue-700 mb-4">
             <div className="flex justify-between items-center mb-4">
               <div className="text-xl">
-                <span className="font-bold">{board.title}</span> | <span className="text-[16px]">(유형 : {board.type})</span>
+                <span className="font-bold">{board.title}</span> | <span
+                className="text-[16px]">(유형 : {board.type})</span>
               </div>
               <div className="text-gray-600">작성일: {board.createAt}</div>
             </div>
 
             <hr className="border-t border-sky-200  mb-6" />
-            <div className="mt-4 h-[450px]">
+            <div className="mt-4 h-[400px]">
               <p>{board.content}</p>
             </div>
+            {board.answer?(
+              <>
+                <hr className="border-t border-2 border-dashed border-sky-200 mb-4 mt-4" />
+                <span className="font-bold">답변</span>
+                <p className="mt-3">{board.answer}</p>
+              </>
+            ):null}
           </div>
           <div className="flex justify-end items-center">
             <Link
@@ -85,15 +93,6 @@ const InquiriesDetail = ({ inquirieId }) => {
               className="text-sky-600 hover:underline mr-4"
             >
               목록으로 돌아가기
-            </Link>
-            <Link
-              to={`/inquiry/update/${inquirieId}`}
-              state={{ selectCategory, selectSubCategory }}
-              className="text-sky-600 hover:underline mr-4"
-            >
-              <button className="px-4 py-2  hover:bg-sky-200 hover:font-bold border rounded-md bg-white  text-blue-500 disabled:text-gray-300">
-                수정하기
-              </button>
             </Link>
           </div>
         </main>

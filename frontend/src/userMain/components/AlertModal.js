@@ -1,16 +1,15 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-const AlertModal = ({ isOpen, onClose, message, buttonText, isSuccess, redirectPath}) => {
+const AlertModal = ({ isOpen, onClose, message, buttonText, isSuccess, redirectPath, state}) => {
   if (!isOpen) return null;
     console.log("경로",redirectPath);
   const navigate = useNavigate(); // useNavigate 훅 사용
   //페이지 이동이 필요할 경우
   const handleClose = () => {
-
     onClose(); // 모달 닫기
     if (redirectPath) {
-      navigate(redirectPath); // 이동할 경로로 리다이렉트
+      navigate(redirectPath, { state: state }); // 이동할 경로로 리다이렉트
     }
   };
 
