@@ -1,5 +1,6 @@
 package kr.or.nextit.backend.model;
 
+import jakarta.persistence.Transient;
 import lombok.Data;
 
 import java.util.Date;
@@ -12,5 +13,11 @@ public class Chatting {
     private Date joinAt;                 // 방 들어간 시간
     private String leaveYn;              // 방 나감 여부 (y/n)
 
+    // 채팅방 인원 쉼표 기준 나열
+    @Transient
+    private String userNames;
+
+    @Transient
+    private String userName;
 
 }
