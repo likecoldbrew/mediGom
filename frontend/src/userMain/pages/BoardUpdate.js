@@ -61,7 +61,7 @@ const BoardUpdate = ({ boardId }) => {
       fileObject: file, // 파일 객체도 함께 저장
     }));
     // 파일 미리보기 URL 생성
-    const previews = selectedFiles.map(file => URL.createObjectURL(file));
+    const previews = selectedFiles.map(file => URL.createObjectURL(file.fileObject));
     setFilePreviews(previews);
     // 새 파일만 상태에 저장
     setNewFiles(selectedFiles);
@@ -201,6 +201,21 @@ const BoardUpdate = ({ boardId }) => {
                   className="border border-gray-300 p-2 rounded-md mt-2"
                 />
               </div>
+              {filePreviews.length > 0 && (
+                <div className="mb-4">
+                  <h3 className="text-gray-600">미리보기</h3>
+                  <div className="flex flex-wrap">
+                    {filePreviews.map((preview, index) => (
+                      <img
+                        key={index}
+                        src={preview}
+                        alt={`preview-${index}`}
+                        className="w-20 h-20 object-cover mr-2 mb-2"
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
               <div className="flex justify-end items-center">
                 <Link
                   to={`/community`} // 목록 페이지로 돌아가기

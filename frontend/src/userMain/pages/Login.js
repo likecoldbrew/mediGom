@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../style/tailwind.css";
 import Footer from "../components/Footer";
+import { useUser } from "../../utils/UserContext";
 
 export default function LoginPage() {
   const [formData, setFormData] = useState({
@@ -10,7 +11,7 @@ export default function LoginPage() {
   });
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
-
+  const { setUserInfo } = useUser(); // useUser를 통해 setUserInfo 가져오기
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevState) => ({
@@ -34,16 +35,28 @@ export default function LoginPage() {
           userPass: formData.password,
         }),
       });
-
       if (!response.ok) {
         const errorText = await response.text(); // 응답을 텍스트로 읽기
         setErrorMessage(errorText); // 텍스트를 직접 에러 메시지로 설정
         return;
       }
-
       const token = await response.text();
       // JWT 토큰을 로컬 스토리지에 저장
       localStorage.setItem("token", token);
+      //추가한 부분 //
+      // 사용자 정보 요청
+      const userInfoResponse = await fetch("/api/users/me", {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${token}`, // 토큰을 헤더에 포함
+        },
+      });
+      if (!userInfoResponse.ok) {
+        throw new Error("사용자 정보를 가져오는 데 실패했습니다.");
+      }
+      const userData = await userInfoResponse.json();
+      setUserInfo(userData); // 사용자 정보 업데이트
+      //추가한 부분 끝//
       // 로그인 성공 후 대시보드 또는 원하는 페이지로 이동
       navigate("/");
     } catch (error) {
@@ -171,7 +184,6 @@ export default function LoginPage() {
                 </button>
               </div>
             </form>
-
             <div className="mt-6">
               <div className="text-center text-sm text-gray-500 mb-2">
                 계정이 없으신가요?

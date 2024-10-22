@@ -2,19 +2,21 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../style/tailwind.css";
 import AlertModal from "./AlertModal";
+import { useUser } from "../../utils/UserContext";
 
 const Header = () => {
   const [hoveredCategory, setHoveredCategory] = useState(null);
   const [categories, setCategories] = useState([]);
   const [selectCategory, setSelectCategory] = useState(null);
   const [selectSubCategory, setSelectSubCategory] = useState(null);
-  const [userInfo, setUserInfo] = useState(null);
   const [modalOpen, setModalOpen] = useState(false); // 모달 상태
   const [modalMessage, setModalMessage] = useState(""); // 모달 메시지
   const [modalButtonText, setModalButtonText] = useState(""); // 버튼 텍스트
   const [isSuccess, setIsSuccess] = useState(false); // 모달 성공 여부 상태
   const [redirectPath, setRedirectPath] = useState("");
+  const {userInfo, setUserInfo}=useUser()
   const navigate = useNavigate(); // useNavigate 훅 사용
+ console.log("유저정보", userInfo)
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -30,35 +32,11 @@ const Header = () => {
     };
     fetchCategories();
   }, []);
-
+ //카테고리 선택
   const handleSubCategorySelect = (categoryName, subCategoryName) => {
     setSelectCategory(categoryName);
     setSelectSubCategory(subCategoryName);
   };
-
-  useEffect(() => {
-    // 페이지 로드 시 사용자 정보를 가져오는 함수
-    const fetchUserInfo = async () => {
-      const token = localStorage.getItem("token"); // JWT를 로컬 스토리지에서 가져옴
-      if (token) {
-        const response = await fetch("/api/users/me", {
-          method: "GET",
-          headers: {
-            "Authorization": `Bearer ${token}` // JWT 포함
-          }
-        });
-
-        if (response.ok) {
-          const data = await response.json(); // 서버에서 반환하는 사용자 정보
-          setUserInfo(data); // 사용자 정보 상태 업데이트
-        } else {
-          console.error("사용자 정보를 가져오는 데 실패했습니다.");
-        }
-      }
-    };
-    fetchUserInfo();
-  }, []);
-
   //모달창 내용
   const showAlertModal = (message, buttonText,  isSuccess = false, redirectPath) => {
     console.log('redirectPath:', redirectPath);
@@ -72,7 +50,7 @@ const Header = () => {
   // 로그아웃 함수
   const handleLogout = () => {
     localStorage.removeItem('token'); // 토큰 제거
-    setUserInfo(null); // 사용자 정보 초기화
+    setUserInfo({});
     navigate("/"); // 메인 페이지로 리다이렉트
   };
 
@@ -91,7 +69,7 @@ const Header = () => {
           </div>
           <div className="flex flex-col items-end w-4/5">
             <div className="flex space-x-4 mb-2">
-              {userInfo ? (
+              {userInfo.userId ? (
                 <>
                   <p className="text-[18px] content-center text-sky-700">{userInfo.userId}<span className="text-[14px]  content-center text-sky-700">({userInfo.userName})</span>님 반갑습니다!</p>
                     <button onClick={handleLogout} className="text-sky-600 hover:text-sky-800 hover:font-bold  hover:bg-sky-300 rounded-[10px]  border-2 border-sky-200 px-2 py-1 transition-colors">
