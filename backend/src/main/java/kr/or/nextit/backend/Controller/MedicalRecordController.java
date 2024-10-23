@@ -16,8 +16,17 @@ import java.util.List;
 public class MedicalRecordController {
     private final MedicalRecordService medicalRecordService;
 
+
+    // 의사 진단 목록 조회
     @GetMapping("/{doctorNo}")
     public List<MedicalRecord> getMedicalRecordList(@PathVariable("doctorNo") int doctorNo) {
         return medicalRecordService.getMedicalRecordList(doctorNo);
     }
+
+    // 환자 진단 목록 조회
+    @GetMapping("/user")
+    public List<MedicalRecord> getUserMedicalRecordList(int userNo) {
+        return medicalRecordService.getUserMedicalRecordList(userNo);
+    }
+
 }

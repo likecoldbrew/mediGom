@@ -5,20 +5,26 @@ import SubCategories from "../components/SubCategory";
 import ChatBot from "../components/ChatBot";
 import { useUser } from "../../utils/UserContext";
 
-const Inquiries = () => {
-  const { page } = useParams(); // URL에서 page만 가져오기
-  const location = useLocation(); // 현재 location 가져오기
-  const { selectCategory, selectSubCategory } = location.state || {}; // 헤더에서 전달받은 값
-  const [inquiries, setInquiries] = useState([]); // 게시글 가져오기
-  const [loading, setLoading] = useState(true); // 로딩 메시지
-  const [currentPage, setCurrentPage] = useState(Number(page) || 1); // URL에서 페이지 번호 설정
-  const navigate = useNavigate(); // 페이지 이동을 위한 useNavigate
-  const {userInfo}=useUser() //유저 정보
+const MedicalRecords = () => {
+  //페이징을 위한 값
+  const { page } = useParams();
+  // 현재 location에서 카테고리명 받기
+  const location = useLocation();
+  // 선택된 카테고리 값들
+  const { selectCategory, selectSubCategory } = location.state || {};
+  //진료 기록
+  const [records, setRecords] = useState([]); // 게시글 가져오기
+  //페이징 변수
+  const [currentPage, setCurrentPage] = useState(Number(page) || 1);
+  /// 페이지 이동을 위한 useNavigate
+  const navigate = useNavigate();
+  //유저 정보
+  const {userInfo}=useUser()
 
   //페이지 이동시 화면 맨위로 이동
   useEffect(() => {
     if (userInfo) {
-      fetchInquiries(); // userInfo가 있는 경우에만 호출
+      fetchRecords(); // userInfo가 있는 경우에만 호출
     }
     window.scrollTo(0, 0);
   }, [userInfo, page]);
@@ -28,24 +34,21 @@ const Inquiries = () => {
     setCurrentPage(Number(page) || 1);
   }, [page]);
 
+
   // 게시글 정보 가져오기
-  const fetchInquiries = async () => {
+  const fetchRecords = async () => {
     try {
-      const response = await fetch("/api/inquiries/all");
+      const response = await fetch(`/api/medical_record/user?userNo=${userInfo.userNo}`);
       const data = await response.json();
-      //로그인한 유저 정보만 가져오기
-      const filteredData = data.filter(inquiry => inquiry.userId === userInfo.userId);
+      console.log("들어오는 데이터",data);
       // 날짜 포맷 변환
-      const formattedData = filteredData.map((inquiries) => ({
-        ...inquiries,
-        createAt: formatDate(inquiries.createAt) // 날짜 포맷 변경
+      const formattedData = data.map((record) => ({
+        ...record,
+        visitAt: formatDate(record.visitAt) // 날짜 포맷 변경
       }));
-      // userInfo.userNo와 같은 userNo를 가진 게시글만 필터링
-      setInquiries(formattedData); // 변환된 데이터로 상태 업데이트
-      setLoading(false); // 로딩 완료
+      setRecords(formattedData); // 변환된 데이터로 상태 업데이트
     } catch (error) {
       console.error("Error fetching boards:", error);
-      setLoading(false); // 로딩 종료
     }
   };
 
@@ -60,25 +63,17 @@ const Inquiries = () => {
   // 현재 페이지에 해당하는 항목 계산
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = inquiries.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = records.slice(indexOfFirstItem, indexOfLastItem);
 
   // 총 페이지 수 계산
-  const totalPages = Math.ceil(inquiries.length / itemsPerPage);
+  const totalPages = Math.ceil(records.length / itemsPerPage);
 
   // 페이지 변경 핸들러
   const handlePageChange = (pageNumber) => {
-    navigate(`/inquiry/page/${pageNumber}`, {
+    navigate(`/medicalHistory/page/${pageNumber}`, {
       state: { selectCategory, selectSubCategory }
     });
   };
-
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        로딩 중...
-      </div>
-    );
-  }
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -94,65 +89,58 @@ const Inquiries = () => {
                     className="px-4 py-2 text-center h-12"
                     style={{ width: "80px" }}
                   >
-                    번호
+                    진료 번호
+                  </th>
+                  <th
+                    className="px-4 py-2 text-center h-12"
+                    style={{ width: "80px" }}
+                  >
+                    방문일
                   </th>
                   <th
                     className="px-4 py-2 text-center h-12"
                     style={{ width: "500px" }}
                   >
-                    제목
+                    진단
                   </th>
                   <th
                     className="px-4 py-2 text-center h-12"
                     style={{ width: "300px" }}
                   >
-                    유형
+                    진료과
                   </th>
                   <th
                     className="px-4 py-2 text-center h-12"
                     style={{ width: "150px" }}
                   >
-                    답변 상태
+                    담당의
                   </th>
-                  <th
-                    className="px-4 py-2 text-center h-12"
-                    style={{ width: "150px" }}
-                  >
-                    작성일
-                  </th>
+
                 </tr>
                 </thead>
                 <tbody>
-                {currentItems.map((inquiries, index) => (
-                  <tr key={inquiries.id} className="border-t border-blue-200">
-                    <td className="px-4 py-2 text-center h-12">
+                {currentItems.map((record, index) => (
+                  <tr key={record.recordId} className="border-t border-blue-200">
+                  <td className="px-4 py-2 text-center h-12">
                       {(currentPage - 1) * itemsPerPage + index + 1}
                     </td>
                     <td className="px-4 py-2 text-center h-12">
                       <Link
-                        to={`/inquiry/detail/${inquiries.inquirieId}`} // 제목 클릭 시 이동할 경로
+                        to={`/inquiry/detail/${record.recordId}`} // 제목 클릭 시 이동할 경로
                         state={{ selectCategory, selectSubCategory }} // 카테고리 값 넘겨주기
                         className="text-blue-500 hover:underline"
                       >
-                        {inquiries.title}
+                        {record.visitAt}
                       </Link>
                     </td>
                     <td className="px-4 py-2 text-center h-12">
-                      {inquiries.type}
+                      {record.diagnosis}
                     </td>
                     <td className="px-4 py-2 text-center  h-12">
-                      {inquiries.answer ? (
-                          <div className="bg-green-100 rounded-[10px] inline-block px-4 py-1">
-                            답변완료
-                          </div>
-                        ) : (
-                          <div className="bg-red-100 rounded-[10px] inline-block px-4 py-1">
-                            대기중
-                          </div>
-                        )}
+                      {record.departmentName}
                     </td>
                     <td className="px-4 py-2 text-center h-12">
-                      {inquiries.createAt}
+                      {record.doctorName}
                     </td>
                   </tr>
                 ))}
@@ -213,4 +201,4 @@ const Inquiries = () => {
   );
 };
 
-export default Inquiries;
+export default MedicalRecords;

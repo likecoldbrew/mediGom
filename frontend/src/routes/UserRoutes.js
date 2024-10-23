@@ -3,7 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import UserMain from "../userMain/index";
 import MainPage from "../userMain/pages/MainPage";
 import LoginPage from "../userMain/pages/Login";
-import EmployLogin from "../userMain/pages/employLogin";
+import EmployLogin from "../userMain/pages/EmployLogin";
 import SignUpPage from "../userMain/pages/signUp";
 import CategoryContainer from "../userMain/pages/list/CategoryContainer";
 

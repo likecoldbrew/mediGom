@@ -19,6 +19,7 @@ import Inquiries from "../Inquiries";
 import InquiriesDetail from "../InquiriesDetail";
 import InquiriesRegist from "../InquiriesRegist";
 import UserMyPage from "../UserMyPage";
+import MedicalRecords from "../MedicalRecords";
 
 const CategoryContainer = () => {
   const { urlName, page, action } = useParams();
@@ -70,6 +71,8 @@ const CategoryContainer = () => {
       return <Inquiries page={page} />;
     case "mypage":
       return <UserMyPage page={page} />;
+    case "medicalHistory":
+      return <MedicalRecords page={page} />;
     default:
       return <div>Category not found</div>;
   }

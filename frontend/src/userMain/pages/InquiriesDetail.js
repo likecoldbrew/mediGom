@@ -75,16 +75,19 @@ const InquiriesDetail = ({ inquirieId }) => {
             </div>
 
             <hr className="border-t border-sky-200  mb-6" />
-            <div className="mt-4 h-[400px]">
-              <p>{board.content}</p>
+            <div className="mt-4 h-[360px]">
+              <p >{board.content}</p>
             </div>
             {board.answer?(
               <>
-                <hr className="border-t border-2 border-dashed border-sky-200 mb-4 mt-4" />
-                <span className="font-bold">답변</span>
-                <p className="mt-3">{board.answer}</p>
+                <div className="mt-4 h-[300px]">
+                  <hr className="border-t border-2 border-dashed border-sky-200 mb-4 mt-4" />
+                  <span className="font-bold">답변</span>
+                  <hr className="border-t border-sky-200  mt-3" />
+                  <p className="mt-3 h-2/5">{board.answer}</p>
+                </div>
               </>
-            ):null}
+            ) : null}
           </div>
           <div className="flex justify-end items-center">
             <Link
