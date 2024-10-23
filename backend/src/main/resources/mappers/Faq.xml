@@ -6,6 +6,8 @@
     <select id="selectAllFaq" resultType="kr.or.nextit.backend.model.Faq">
         SELECT *
         FROM faq_board
+        where status='Y'
+
     </select>
 
     <!-- 특정 FAQ 조회 -->
@@ -13,6 +15,7 @@
         SELECT *
         FROM faq_board
         WHERE faq_id = #{faqId}
+
     </select>
 
     <!-- FAQ 등록 -->

@@ -52,6 +52,7 @@
             ON
                 b.user_no = u.user_no
         where u.admin=2 and b.status='Y'
+        order by  b.create_at  desc
     </select>
 
     <!-- 특정 게시글 조회 -->

@@ -4,6 +4,7 @@ import kr.or.nextit.backend.model.User;
 import kr.or.nextit.backend.service.UserService;
 import kr.or.nextit.backend.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -102,6 +103,30 @@ public class UserController {
         }
 
         return ResponseEntity.ok(user); // 사용자 정보 반환
+    }
+
+   /////////// //원래 쓰던거 /////////////////////////////
+    //    @PutMapping("/update/{userNo}")
+//    public ResponseEntity<Void> updateUser(@PathVariable int userNo, @RequestBody User user) {
+//        user.setUserNo(userNo);
+//        userService.updateUser(user);
+//        return ResponseEntity.noContent().build();
+//    }
+    ////////////////////////////////////////////////////////
+
+    @PutMapping("/update/{userNo}")
+    public ResponseEntity<Void> updateUser(
+            @PathVariable int userNo,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader,
+            @RequestBody User user) {
+
+        // JWT 토큰을 Authorization 헤더에서 추출 (Bearer 스킴이 붙어있다고 가정)
+        String jwt = authorizationHeader.substring(7); // "Bearer " 이후의 문자열
+
+        user.setUserNo(userNo);
+        userService.updateUser(user, jwt); // JWT를 함께 전달
+
+        return ResponseEntity.noContent().build();
     }
 
 }

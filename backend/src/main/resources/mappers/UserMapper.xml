@@ -59,15 +59,18 @@
     <update id="updateUser" parameterType="kr.or.nextit.backend.model.User">
         UPDATE users
         SET user_id = #{userId},
-            user_pass = #{userPass},
-            user_name = #{userName},
-            user_rrn = #{userRrn},
-            email = #{email},
-            phone = #{phone},
-            user_add = #{userAdd},
-            user_add2 = #{userAdd2},
-            admin = #{admin},
-            update_at = CURRENT_TIMESTAMP
+        user_name = #{userName},
+        user_rrn = #{userRrn},
+        email = #{email},
+        phone = #{phone},
+        user_add = #{userAdd},
+        user_add2 = #{userAdd2},
+        admin = #{admin},
+        delete_yn = 'N',
+        update_at = CURRENT_TIMESTAMP
+        <if test="userPass != null and userPass != ''">
+            , user_pass = #{userPass}
+        </if>
         WHERE user_no = #{userNo}
     </update>
 

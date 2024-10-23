@@ -39,6 +39,21 @@ public class JwtUtil {
         return builder.compact();
     }
 
+    /**선영 새로 만든거
+     *
+     *
+     *
+     * @param token
+     * @return
+     */
+    public String extractUsername(String token) {
+        Claims claims = Jwts.parser()
+                .setSigningKey(secretKey)
+                .parseClaimsJws(token)
+                .getBody();
+        return claims.getSubject(); // 사용자 이름 반환
+    }
+
     /**
      * JWT 토큰의 유효성을 검사합니다.
      * @param token JWT 토큰

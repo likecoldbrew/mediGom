@@ -18,7 +18,7 @@ public class User {
     @Column(unique = true, nullable = false) // 아이디는 유일해야 함
     private String userId;
 
-    @Column(nullable = false)
+
     private String userPass; // 비밀번호 (암호화 필요)
 
     @Column(nullable = false)
@@ -29,6 +29,9 @@ public class User {
     private String phone;
     private String userAdd;
     private String userAdd2;
+
+    @Transient
+    private String  newPassword;
 
     @Column(nullable = false, updatable = false)
     private Timestamp createAt; // 생성일자

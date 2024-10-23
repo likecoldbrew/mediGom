@@ -3,6 +3,8 @@ import DaumPostcode from "react-daum-postcode";
 import "../style/post.css";
 
 const Post = (props) => {
+  if(!props.isOpen) return null;
+// props가 변경될 때마다 콘솔에 찍히도록 설정
   const complete = (data) => {
     let fullAddress = data.address;
     let extraAddress = "";
