@@ -13,6 +13,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addMapping("/**") // 모든 경로에 대해 CORS 설정
                 .allowedOrigins("http://localhost:3000") // React 앱의 URL
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // 허용할 HTTP 메서드
+                .allowedHeaders("*") // 허용할 헤더
                 .allowCredentials(true) // 인증 정보를 허용할지 여부
                 .maxAge(3600); // CORS 응답 캐시 시간 (초 단위)
     }

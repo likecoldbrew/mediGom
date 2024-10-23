@@ -11,7 +11,7 @@ public class Chatting {
     private int chattingRoomId;      // 채팅방 ID
     private int userNo;              // 유저 번호
     private Date joinAt;                 // 방 들어간 시간
-    private String leaveYn;              // 방 나감 여부 (y/n)
+    private String useYn;              // 방 나감 여부 (y/n)
 
     // 채팅방 인원 쉼표 기준 나열
     @Transient

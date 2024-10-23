@@ -58,9 +58,7 @@ dependencies {
     // 데이터베이스 및 모듈
     runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
     implementation 'com.github.iamport:iamport-rest-client-java:0.2.21' // 결제 모듈
-    implementation 'io.socket:socket.io-server:4.0.1'
     implementation 'org.springframework.boot:spring-boot-starter-websocket' // 웹소켓
-    implementation 'org.springframework:spring-messaging'
 
 
 

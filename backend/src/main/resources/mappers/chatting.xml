@@ -5,8 +5,8 @@
 <mapper namespace="kr.or.nextit.backend.mapper.ChattingMapper">
 
     <insert id="insertChatting" parameterType="kr.or.nextit.backend.model.Chatting">
-        INSERT INTO chatting (chatting_room_id, user_no, join_at, leave_yn)
-        VALUES (#{chattingRoomId}, #{userNo}, #{joinAt}, #{leaveYn})
+        INSERT INTO chatting (chatting_room_id, user_no, join_at, use_yn)
+        VALUES (#{chattingRoomId}, #{userNo}, #{joinAt}, #{useYn})
     </insert>
 
     <select id="selectChattingByRoomId" parameterType="int" resultType="kr.or.nextit.backend.model.Chatting">

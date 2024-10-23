@@ -2,22 +2,25 @@ package kr.or.nextit.backend.service;
 
 import kr.or.nextit.backend.mapper.ChattingMessageMapper;
 import kr.or.nextit.backend.model.ChattingMessage;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class ChattingMessageService {
 
-    private final ChattingMessageMapper chattingMessageMapper;
+    @Autowired
+    private ChattingMessageMapper chattingMessageMapper;
 
-    public void insertChattingMessage(ChattingMessage chattingMessage) {
-        chattingMessageMapper.insertChattingMessage(chattingMessage);
-    }
-
-    public List<ChattingMessage> getMessagesByRoomId(int chattingRoomId) {
+    // 특정 채팅방의 메시지를 가져오는 메서드
+    public List<ChattingMessage> getMessagesByChatRoomId(int chattingRoomId) {
         return chattingMessageMapper.selectMessagesByRoomId(chattingRoomId);
     }
+
+    public ChattingMessage insertChattingMessage(ChattingMessage chattingMessage) {
+        chattingMessageMapper.insertChattingMessage(chattingMessage);
+        return chattingMessage;
+    }
+
 }
