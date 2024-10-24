@@ -19,7 +19,7 @@ function UserRoutes() {
           />
         </Route>
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/empLogin" element={<EmployLogin />} />
+        <Route path="/empSite" element={<EmployLogin />} />
         <Route path="/signUp" element={<SignUpPage />} />
       </Routes>
     </>

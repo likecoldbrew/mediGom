@@ -108,7 +108,7 @@ const SignInSignUp = () => {
 
             <input
               className="bg-[#eee] border-none py-[12px] px-[15px] my-2 w-full"
-              type="email"
+              type="text"
               placeholder="아이디"
             />
             <input
