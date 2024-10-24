@@ -46,12 +46,6 @@ public class CommunityController {
         return communityService.selectBoard(boardId);
     }
 
-    //특정 공지사항
-    @GetMapping("/detailNotice")
-    public List<Community> selectNotice(int boardId) {
-        return communityService.selectNotice(boardId);
-    }
-
     // 게시글 등록
     @PostMapping(value = "/register", consumes = "multipart/form-data")
     public ResponseEntity<String> registerBoard(@RequestParam("title") String title,
@@ -115,6 +109,12 @@ public class CommunityController {
         return ResponseEntity.ok("게시글이 업데이트되었습니다.");
     }
 
+    //조회수 증가
+    @PutMapping("/views/{boardId}")
+    public void updateViews(@PathVariable int boardId) {
+        communityService.updateViews(boardId);
+    }
+
     // 게시글 삭제
     @PutMapping("/delete/{boardId}")
     public ResponseEntity<String> deleteBoard(@PathVariable int boardId) {
@@ -154,5 +154,6 @@ public class CommunityController {
     public List<Community> getUserBoardList(@PathVariable("userNo") int userNo) {
         return communityService.getUserBoardList(userNo);
     }
+
 
 }

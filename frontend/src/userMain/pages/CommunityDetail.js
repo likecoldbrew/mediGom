@@ -19,11 +19,9 @@ const BoardDetail = ({ boardId }) => {
     window.scrollTo(0, 0);
   }, []);
 
-
   useEffect(() => {
     fetchBoardDetail();
   }, [boardId], [board]);
-
 
   const fetchBoardDetail = async () => {
     try {
@@ -48,31 +46,26 @@ const BoardDetail = ({ boardId }) => {
   };
 
   const formatDate = (timestamp) => {
-    const date = new Date(timestamp);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
+    return timestamp.split("T")[0];
   };
 
   const handleDelete = async () => {
     const token = localStorage.getItem("token");
     if (token) {
       const response = await fetch(`/api/board/delete/${boardId}`, {
-        method: "DELETE",
+        method: "PUT",
         headers: {
           "Authorization": `Bearer ${token}`
         }
       });
 
       if (response.ok) {
-        navigate(`/community/1`, { state: { selectCategory, selectSubCategory } }); // 목록 페이지로 리다이렉트
+        navigate(`/community`, { state: { selectCategory, selectSubCategory } }); // 목록 페이지로 리다이렉트
       } else {
         console.error("게시글 삭제에 실패했습니다.");
       }
     }
   };
-
 
   if (loading) {
     return (

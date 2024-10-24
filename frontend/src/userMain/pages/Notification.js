@@ -47,11 +47,7 @@ const Notification = () => {
 
   // 날짜 포맷 변환 함수
   const formatDate = (timestamp) => {
-    const date = new Date(timestamp); // timestamp를 Date 객체로 변환
-    const year = date.getFullYear(); // 연도
-    const month = String(date.getMonth() + 1).padStart(2, "0"); // 월 (0부터 시작하므로 1 추가)
-    const day = String(date.getDate()).padStart(2, "0"); // 일
-    return `${year}-${month}-${day}`; // 형식: YYYY-MM-DD
+    return timestamp.split("T")[0];
   };
 
   //한 페이지당 게시글 수

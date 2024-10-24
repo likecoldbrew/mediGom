@@ -20,14 +20,13 @@ const NotificationDetail = ({ boardId }) => {
 
   const fetchBoardDetail = async () => {
     try {
-      const response = await fetch(`/api/board/detailNotice?boardId=${boardId}`);
+      const response = await fetch(`/api/board/detail?boardId=${boardId}`);
       const data = await response.json();
-      console.log("가져와야되는거",data);
       if (!data.isEmpty) {
         const formattedData = {
-          ...data[0],
-          createAt: formatDate(data[0].createAt),
-          updateAt: data.updateAt ? formatDate(data[0].updateAt) : null,
+          ...data,
+          createAt: formatDate(data.createAt),
+          updateAt: data.updateAt ? formatDate(data.updateAt) : null,
         };
         setBoard(formattedData);
       } else {
@@ -41,11 +40,7 @@ const NotificationDetail = ({ boardId }) => {
   };
 
   const formatDate = (timestamp) => {
-    const date = new Date(timestamp);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
+    return timestamp.split("T")[0];
   };
 
   if (loading) {

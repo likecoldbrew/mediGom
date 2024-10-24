@@ -15,8 +15,6 @@ public interface CommunityMapper {
     List<Community> selectAllBoardsWithAdmin();
     //특정 게시글 조회
     List<Community> selectBoard(int boardId);
-    //특정 공지사항 조회
-    List<Community> selectNotice(int boardId);
     // 게시글 등록
     int insertBoard(Community boardDTO);
     // 게시글 수정

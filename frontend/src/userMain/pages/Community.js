@@ -22,7 +22,6 @@ const Community = () => {
     window.scrollTo(0, 0);
   }, []);
 
-
   // URL에서 page가 변경될 때 currentPage 업데이트
   useEffect(() => {
     setCurrentPage(Number(page) || 1);
@@ -79,6 +78,27 @@ const Community = () => {
     );
   }
 
+  const updateViews = (boardId, boardUserId) => {
+    console.log("클릭시 넘어오는 보드 아이디, 유저 아이디", boardId, boardUserId);
+    if (boardUserId !== userInfo.userId) {
+      fetch(`/api/board/views/${boardId}`, {
+        method: 'PUT',
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Failed to update views');
+          }
+          return response.json();
+        })
+        .then(data => {
+          console.log('Views updated successfully:', data);
+        })
+        .catch(error => {
+          console.error('Error updating views:', error);
+        });
+    }
+  };
+
   return (
     <div className="flex flex-col min-h-screen">
       <SubCategories />
@@ -131,6 +151,9 @@ const Community = () => {
                         <Link
                           to={`/board/detail/${board.boardId}`} // 제목 클릭 시 이동할 경로
                           state={{ selectCategory, selectSubCategory }} // 카테고리 값 넘겨주기
+                          onClick={() => {
+                            updateViews(board.boardId, board.userId); // 조회수 업데이트 API로 boardId, userId 넘겨줌
+                          }}
                           className="text-blue-500 hover:underline"
                         >
                           {board.title}

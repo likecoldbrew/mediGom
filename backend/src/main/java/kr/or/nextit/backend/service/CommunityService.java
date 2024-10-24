@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -37,12 +36,6 @@ public class CommunityService {
         List<Files> files = filesMapper.selectAllFiles(boardId); // 첨부파일 정보 가져오기
         board.setFiles(files); // 게시글에 첨부파일 추가
         return board; // 게시글과 첨부파일 정보를 포함한 Community 객체 반환
-    }
-
-
-    //공지사항 하나 선택
-    public List<Community> selectNotice(int boardId) {
-        return communityMapper.selectNotice(boardId);
     }
 
     // 게시글 등록
@@ -125,6 +118,12 @@ public class CommunityService {
     // 관리자 페이지 - 회원 작성 글 목록 조회
     public List<Community> getUserBoardList(int userNo) {
         return communityMapper.getUserBoardList(userNo);
+    }
+
+    // 조회수 증가
+    @Transactional
+    public void updateViews(int boardId){
+        communityMapper.updateViews(boardId);
     }
 
 }

@@ -60,6 +60,26 @@ const InquiriesDetail = ({ inquirieId }) => {
     );
   }
 
+  const handleDelete = async () => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const response = await fetch(`/api/inquiries/delete/user/${inquirieId}`, {
+        method: "PUT",
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        navigate(`/inquiry`, { state: { selectCategory, selectSubCategory } }); // 목록 페이지로 리다이렉트
+      } else {
+        console.error("게시글 삭제에 실패했습니다.");
+      }
+    }
+  };
+
+
+
   return (
     <div className="flex flex-col min-h-screen">
       <SubCategories />
@@ -97,6 +117,14 @@ const InquiriesDetail = ({ inquirieId }) => {
             >
               목록으로 돌아가기
             </Link>
+            {!board.answer? (
+              <>
+                <button onClick={handleDelete}
+                        className="px-4 py-2  hover:bg-sky-200 hover:font-bold border rounded-md bg-white mr-3 text-blue-500 disabled:text-gray-300">
+                  삭제하기
+                </button>
+              </>
+            ) : null}
           </div>
         </main>
         <div className="flex flex-col space-y-4">
