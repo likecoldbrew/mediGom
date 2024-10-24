@@ -1,8 +1,22 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../style/tailwind.css";
 import axios from "axios";
+import { Link } from "react-router-dom";
+import Footer from "../components/Footer";
+import Post from "../components/Post";
+import AlertModal from "../components/AlertModal";
 
 export default function SignUpPage() {
+  //병원 정보(회사명, 인사말)
+  const [hospital, setHospital] = useState([]);
+  // AlertModal 상태 관리
+  const [alertModalOpen, setAlertModalOpen] = useState(false);
+  const [postModalOpen, setPostModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+  const [modalButtonText, setModalButtonText] = useState("확인");
+  const [modalRedirectPath, setRedirectPath] = useState("/");
+  const [isSuccess, setIsSuccess] = useState(false);
+
   const [formData, setFormData] = useState({
     id: "",
     password: "",
@@ -13,7 +27,7 @@ export default function SignUpPage() {
     add: "",
     add2: "",
     phone: "",
-    email: "",
+    email: ""
   });
 
   const [errorMessages, setErrorMessages] = useState({
@@ -23,21 +37,56 @@ export default function SignUpPage() {
     name: "",
     rrn: "",
     phone: "",
-    email: "",
+    email: ""
   });
+
+  useEffect(() => {
+    fetchHospital();
+  }, []);
+
+  //병원 정보
+  const fetchHospital = async () => {
+    try {
+      const response = await fetch("/api/hospital/all");
+      const data = await response.json();
+      setHospital(data);
+    } catch (error) {
+      console.error("Error fetching doctor info:", error);
+    }
+  };
+
+  // 회사명 대문자로 구분
+  const splitHospitalName = (name) => {
+    return name.match(/([A-Z][a-z]+)/g) || [];
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevState) => ({
       ...prevState,
-      [name]: value,
+      [name]: value
     }));
     // Clear the error message for the corresponding field
     setErrorMessages((prevState) => ({
       ...prevState,
-      [name]: "",
+      [name]: ""
     }));
   };
+
+  // Post 컴포넌트에서 받은 주소를 처리하는 함수
+  const handleAddressComplete = (data) => {
+    const fullAddress = data.address;
+    console.log("주소가 잘 들어오나", fullAddress)
+    //상세주소가 괄호로 들어옴. -> 괄호 지우기
+    const userAddress = fullAddress.replace(/[()]/g, "").trim();
+    setFormData(prevFormData => ({
+      ...prevFormData,  // 기존 formData 유지
+      add: userAddress,  // 메인 주소 업데이트
+      add2: ""
+    }));
+    setPostModalOpen(false);  // 주소 선택 후 모달 닫기
+  };
+ console.log("주솨 들어왔나?", formData)
 
   const validateForm = () => {
     const newErrors = {};
@@ -55,9 +104,9 @@ export default function SignUpPage() {
       /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     if (!formData.password) {
       newErrors.password = "비밀번호는 필수 입력입니다.";
-    // } else if (!passwordRegex.test(formData.password)) {
-    //   newErrors.password =
-    //     "비밀번호는 최소 8자리 이상이며, 영문, 숫자, 특수문자를 포함해야 합니다.";
+      // } else if (!passwordRegex.test(formData.password)) {
+      //   newErrors.password =
+      //     "비밀번호는 최소 8자리 이상이며, 영문, 숫자, 특수문자를 포함해야 합니다.";
     } else if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = "비밀번호가 일치하지 않습니다.";
     }
@@ -129,7 +178,7 @@ export default function SignUpPage() {
       setIsIdAvailable(false);
       setErrorMessages((prev) => ({
         ...prev,
-        id: "중복 확인 중 오류가 발생했습니다.",
+        id: "중복 확인 중 오류가 발생했습니다."
       }));
     }
   };
@@ -149,19 +198,19 @@ export default function SignUpPage() {
         email: formData.email,
         phone: formData.phone,
         userAdd: formData.add,
-        userAdd2: formData.add2,
+        userAdd2: formData.add2
       };
 
       console.log("Form submitted:", userData);
 
       // JWT를 로컬 스토리지에서 가져오기
-      const token = localStorage.getItem('jwt');
+      const token = localStorage.getItem("jwt");
 
       try {
         // 사용자 등록 요청
         await axios.post("/api/users/register", userData, {
           headers: {
-            'Authorization': `Bearer ${token}`, // JWT 추가
+            "Authorization": `Bearer ${token}` // JWT 추가
           }
         });
         console.log("User registered successfully");
@@ -174,37 +223,53 @@ export default function SignUpPage() {
     <div className="min-h-screen bg-gray-100">
       <div className="w-full bg-sky-100 py-2 border-y border-sky-200">
         <div className="container mx-auto px-4 flex items-center">
-          <img
-            src="/images/userMain/logo.png"
-            className="h-16 mr-2"
-            alt="logo"
-          />
-          <p className="text-lg font-bold">
-            medi<span className="text-yellow-500">Gom</span>
-          </p>
+          <Link to="/" className="h-24 flex items-center">
+            <img
+              src="/images/mediGom_Logo.png"
+              className="h-16 mr-2"
+              alt="logo"
+            />
+          </Link>
+          <span
+            className="text-lg sm:text-xl md:text-2xl font-bold text-gray-800 flex items-center"> {/* 텍스트를 중앙 정렬하기 위해 flex 추가 */}
+            {hospital.length > 0 ? (
+              splitHospitalName(hospital[0].hospitalNameEn).map((part, index) => (
+                <span
+                  key={index}
+                  className={index === 0 ? "text-lg sm:text-xl md:text-2xl font-bold text-gray-800" : "text-lg sm:text-xl md:text-2xl font-bold text-yellow-500"}>
+            {part}
+          </span>
+              ))
+            ) : null}
+         </span>
         </div>
       </div>
 
       <div className="flex flex-col lg:flex-row justify-center items-center py-12 sm:px-6 lg:px-8">
         <div className="lg:w-1/4 mb-8 lg:mb-0 lg:pr-8">
           <div className="bg-green-100 rounded-full p-8 max-w-md mx-auto relative">
-            <img
-              src="/images/userMain/logo.png"
-              alt="logo"
-              className="w-full h-auto"
-            />
+            <Link to="/" className="h-24">
+              <img
+                src="/images/mediGom_Logo.png"
+                alt="logo"
+                className="w-full h-auto opacity-65"
+              />
+            </Link>
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="bg-sky-100 bg-opacity-75 px-4 py-2 rounded-lg">
-                <p className="text-xl font-bold text-blue-900 text-center">
-                  편리한 의료 서비스 <br />
-                  메디곰에 오신 걸 환영합니다.
-                </p>
+                {hospital.length > 0 ? (
+                  <>
+                    <p className="text-xl font-bold text-blue-900 text-center whitespace-pre-line">
+                      {hospital[0].greetings}
+                    </p>
+                  </>
+                ) : null}
               </div>
             </div>
           </div>
         </div>
 
-        <div className="lg:w-3/4 w-full max-w-md">
+        <div className="lg:w-2/6 w-full">
           <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
             <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900 mb-6">
               회원가입
@@ -435,12 +500,14 @@ export default function SignUpPage() {
                     id="add"
                     name="add"
                     type="text"
+                    value={formData.add}
                     required
                     className="appearance-none w-3/4 block px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                     onChange={handleChange}
                   />
                   <button
                     type="button"
+                    onClick={() => setPostModalOpen(true)}
                     className="ml-3 inline-flex items-center justify-center w-1/4 px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-sky-500 hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                   >
                     찾기
@@ -478,6 +545,20 @@ export default function SignUpPage() {
           </div>
         </div>
       </div>
+      <Post
+        isOpen={postModalOpen}  // 모달창 열기 상태
+        onClose={() => setPostModalOpen(false)}  // 닫기 동작
+        handleComplete={handleAddressComplete} />
+
+      <AlertModal
+        isOpen={alertModalOpen}
+        onClose={() => setAlertModalOpen(false)}
+        message={modalMessage}
+        buttonText={modalButtonText}
+        isSuccess={isSuccess}
+        redirectPath={modalRedirectPath}
+      />
+      <Footer />
     </div>
   );
 }
