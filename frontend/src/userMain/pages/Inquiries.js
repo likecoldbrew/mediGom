@@ -12,6 +12,7 @@ const Inquiries = () => {
   const [inquiries, setInquiries] = useState([]); // 게시글 가져오기
   const [loading, setLoading] = useState(true); // 로딩 메시지
   const [currentPage, setCurrentPage] = useState(Number(page) || 1); // URL에서 페이지 번호 설정
+  const [selectedType, setSelectedType] = useState("") // 선택된 유형 값
   const navigate = useNavigate(); // 페이지 이동을 위한 useNavigate
   const { userInfo } = useUser(); //유저 정보
 
@@ -60,16 +61,25 @@ const Inquiries = () => {
   // 현재 페이지에 해당하는 항목 계산
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = inquiries.slice(indexOfFirstItem, indexOfLastItem);
+
+  //선택한 유형으로 필터링
+  const filteredInquiries = selectedType ? inquiries.filter(inquiry => inquiry.type === selectedType) : inquiries;
+  const currentItems = filteredInquiries .slice(indexOfFirstItem, indexOfLastItem);
 
   // 총 페이지 수 계산
-  const totalPages = Math.ceil(inquiries.length / itemsPerPage);
+  const totalPages = Math.ceil(filteredInquiries.length / itemsPerPage);
 
   // 페이지 변경 핸들러
   const handlePageChange = (pageNumber) => {
     navigate(`/inquiry/page/${pageNumber}`, {
       state: { selectCategory, selectSubCategory }
     });
+  };
+
+  //선택된 유형
+  const handleTypeSelect = (type) => {
+    setSelectedType(type);
+    setCurrentPage(1); // Reset to the first page when a type is selected
   };
 
   if (loading) {
@@ -86,6 +96,29 @@ const Inquiries = () => {
       <div className="container mx-auto px-4 py-8 flex flex-grow">
         <main className="flex-grow flex-col pr-8">
           <div className="flex-col min-h-full space-y-4 items-center justify-center">
+            <div className="flex justify-start items-center space-x-4 mb-4">
+              <p className="text-xl font-bold">
+                문의 유형 선택
+              </p>
+              <button onClick={() => handleTypeSelect("건의 및 제안")} className="px-4 py-2 rounded-md bg-white text-sky-700 hover:bg-sky-100 hover:font-bold">
+                건의 및 제안
+              </button>
+              <button onClick={() => handleTypeSelect("불편")} className="px-4 py-2 rounded-md bg-white text-sky-700 hover:bg-sky-200 hover:font-bold">
+                불편
+              </button>
+              <button onClick={() => handleTypeSelect("예약")} className="px-4 py-2 rounded-md bg-white text-sky-700 hover:bg-sky-200 hover:font-bold">
+                예약
+              </button>
+              <button onClick={() => handleTypeSelect("진료")} className="px-4 py-2 rounded-md bg-white text-sky-700 hover:bg-sky-200 hover:font-bold">
+                진료
+              </button>
+              <button onClick={() => handleTypeSelect("수납")} className="px-4 py-2 rounded-md bg-white text-sky-700 hover:bg-sky-200 hover:font-bold">
+                수납
+              </button>
+              <button onClick={() => handleTypeSelect("기타")} className="px-4 py-2 rounded-md bg-white text-sky-700 hover:bg-sky-200 hover:font-bold">
+                기타
+              </button>
+            </div>
             <div className="overflow-x-auto">
               <table className="w-full h-3 rounded-[10px] bg-white p-4 shadow-blue-700 relative">
                 <thead>
@@ -123,7 +156,7 @@ const Inquiries = () => {
                 </tr>
                 </thead>
                 <tbody>
-                {inquiries.length > 0 ? (
+                {inquiries.length > 0 && currentItems.length>0? (
                   <>
                     {currentItems.map((inquiries, index) => (
                       <tr key={inquiries.id} className="border-t border-blue-200">
@@ -159,7 +192,7 @@ const Inquiries = () => {
                       </tr>
                     ))}
                   </>
-                ) : (<tr>
+                ) : (<tr className="border-t border-blue-200">
                   <td colSpan="5" className="px-4 py-2  h-12 text-center">
                     문의하신 내용이 없습니다.
                   </td>
