@@ -5,7 +5,7 @@ import SubCategories from "../components/SubCategory";
 import ChatBot from "../components/ChatBot";
 import { useUser } from "../../utils/UserContext";
 
-const MedicalRecords = () => {
+const Prescriptions = () => {
   //페이징을 위한 값
   const { page } = useParams();
   // 현재 location에서 카테고리명 받기
@@ -13,7 +13,7 @@ const MedicalRecords = () => {
   // 선택된 카테고리 값들
   const { selectCategory, selectSubCategory } = location.state || {};
   //진료 기록
-  const [records, setRecords] = useState([]); // 게시글 가져오기
+  const [prescriptions, setPrescriptions] = useState([]); // 게시글 가져오기
   //페이징 변수
   const [currentPage, setCurrentPage] = useState(Number(page) || 1);
   /// 페이지 이동을 위한 useNavigate
@@ -24,7 +24,7 @@ const MedicalRecords = () => {
   //페이지 이동시 화면 맨위로 이동
   useEffect(() => {
     if (userInfo) {
-      fetchRecords(); // userInfo가 있는 경우에만 호출
+      fetchPrescriptions(); // userInfo가 있는 경우에만 호출
     }
     window.scrollTo(0, 0);
   }, [userInfo, page]);
@@ -36,17 +36,17 @@ const MedicalRecords = () => {
 
 
   // 게시글 정보 가져오기
-  const fetchRecords = async () => {
+  const fetchPrescriptions= async () => {
     try {
-      const response = await fetch(`/api/medical_record/loginUser/${userInfo.userNo}`);
+      const response = await fetch(`/api/prescription/all/${userInfo.userNo}`);
       const data = await response.json();
-      console.log("들어오는 데이터", data);
+      console.log("e들어오는 처방 기록", data);
       // 날짜 포맷 변환
       const formattedData = data.map((record) => ({
         ...record,
         createAt: formatDate(record.createAt) // 날짜 포맷 변경
       }));
-      setRecords(formattedData); // 변환된 데이터로 상태 업데이트
+      setPrescriptions(formattedData); // 변환된 데이터로 상태 업데이트
     } catch (error) {
       console.error("Error fetching boards:", error);
     }
@@ -63,14 +63,14 @@ const MedicalRecords = () => {
   // 현재 페이지에 해당하는 항목 계산
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = records.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = prescriptions.slice(indexOfFirstItem, indexOfLastItem);
 
   // 총 페이지 수 계산
-  const totalPages = Math.ceil(records.length / itemsPerPage);
+  const totalPages = Math.ceil(prescriptions.length / itemsPerPage);
 
   // 페이지 변경 핸들러
   const handlePageChange = (pageNumber) => {
-    navigate(`/medicalHistory/page/${pageNumber}`, {
+    navigate(`/prescript/page/${pageNumber}`, {
       state: { selectCategory, selectSubCategory }
     });
   };
@@ -101,7 +101,7 @@ const MedicalRecords = () => {
                     className="px-4 py-2 text-center h-12"
                     style={{ width: "450px" }}
                   >
-                    진단
+                    처방약
                   </th>
                   <th
                     className="px-4 py-2 text-center h-12"
@@ -119,28 +119,28 @@ const MedicalRecords = () => {
                 </tr>
                 </thead>
                 <tbody>
-                {currentItems.map((record, index) => (
-                  <tr key={record.recordId} className="border-t border-blue-200">
+                {currentItems.map((pre, index) => (
+                  <tr key={pre.prescriptionId} className="border-t border-blue-200">
                     <td className="px-4 py-2 text-center h-12">
                       {(currentPage - 1) * itemsPerPage + index + 1}
                     </td>
                     <td className="px-4 py-2 text-center h-12">
-                      {record.createAt}
+                      {pre.createAt}
                     </td>
                     <td className="px-4 py-2 text-center h-12">
                       <Link
-                        to={`/medicalHistory/detail/${record.recordId}`} // 제목 클릭 시 이동할 경로
+                        to={`/prescript/detail/${pre.prescriptionId}`} // 제목 클릭 시 이동할 경로
                         state={{ selectCategory, selectSubCategory }} // 카테고리 값 넘겨주기
                         className="text-blue-500 hover:underline"
                       >
-                        {record.diagnosis}
+                        {pre.medicationName}
                       </Link>
                     </td>
                     <td className="px-4 py-2 text-center  h-12">
-                      {record.departmentName}
+                      {pre.departmentName}
                     </td>
                     <td className="px-4 py-2 text-center h-12">
-                      {record.doctorName}
+                      {pre.doctorName}
                     </td>
                   </tr>
                 ))}
@@ -189,4 +189,4 @@ const MedicalRecords = () => {
   );
 };
 
-export default MedicalRecords;
+export default Prescriptions;

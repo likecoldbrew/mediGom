@@ -63,7 +63,7 @@ public class FaqController {
     }
 
     // 삭제
-    @DeleteMapping("/delete/{faqId}")
+    @PutMapping("/delete/{faqId}")
     public ResponseEntity<Void> deleteFaq(@PathVariable("faqId") int faqId) {
         // ID로 FAQ 항목을 데이터베이스에서 조회
         Faq faq = faqService.selectFaq(faqId);
@@ -77,5 +77,28 @@ public class FaqController {
         faqService.deleteFaq(faqId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT); // 204 No Content 응답
+    }
+
+    // 관리자 페이지 - 살리기
+    @PutMapping("/show/{faqId}")
+    public ResponseEntity<Void> showFaq(@PathVariable("faqId") int faqId) {
+        // ID로 FAQ 항목을 데이터베이스에서 조회
+        Faq faq = faqService.selectFaq(faqId);
+
+        // 해당 ID로 FAQ 항목이 존재하지 않을 경우
+        if (faq == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND); // 404 Not Found 응답
+        }
+
+        // FAQ 항목 표시
+        faqService.showFaq(faqId);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT); // 204 No Content 응답
+    }
+
+    // 관리자 페이지 - 목록 조회
+    @GetMapping("/admin/all")
+    public List<Faq> selectAdminAllFaq() {
+        return faqService.selectAdminAllFaq();
     }
 }

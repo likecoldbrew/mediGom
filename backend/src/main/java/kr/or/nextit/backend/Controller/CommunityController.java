@@ -34,18 +34,18 @@ public class CommunityController {
         return communityService.getAllBoardsWithUser();
     }
 
-    // 특정 후기글
-    @GetMapping("/detail")
-    public ResponseEntity<Community> selectBoard(@RequestParam int boardId) {
-        Community community = communityService.selectBoard(boardId);
-        return ResponseEntity.ok(community);
-    }
-
     //전체 공지사항
     @GetMapping("/allNotice")
     public List<Community> getAllNotices() {
         return communityService.getAllBoardsWithAdmin();
     }
+
+    // 특정 후기글
+    @GetMapping("/detail")
+    public Community selectBoard(int boardId) {
+        return communityService.selectBoard(boardId);
+    }
+
     //특정 공지사항
     @GetMapping("/detailNotice")
     public List<Community> selectNotice(int boardId) {
@@ -75,7 +75,6 @@ public class CommunityController {
     }
 
     // 게시글 업데이트
-
     @PutMapping("/update/{boardId}")
     public ResponseEntity<String> updateBoard(
             @PathVariable int boardId,
@@ -116,9 +115,8 @@ public class CommunityController {
         return ResponseEntity.ok("게시글이 업데이트되었습니다.");
     }
 
-
     // 게시글 삭제
-    @DeleteMapping("/delete/{boardId}")
+    @PutMapping("/delete/{boardId}")
     public ResponseEntity<String> deleteBoard(@PathVariable int boardId) {
         int deletedRows = communityService.deleteBoard(boardId);
         if (deletedRows > 0) {
@@ -126,7 +124,35 @@ public class CommunityController {
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("게시글이 존재하지 않습니다.");
         }
+    }
 
+    // 관리자 페이지 - 게시판 전체 조회
+    @GetMapping("/admin/all")
+    public List<Community> getAdminAllBoards() {
+        return communityService.getAdminAllBoards();
+    }
+
+    // 관리자 페이지 - 공지사항 전체 조회
+    @GetMapping("/admin/notice")
+    public List<Community> getAdminAllNotices() {
+        return communityService.getAdminAllNotices();
+    }
+
+    // 관리자 페이지 - 게시글 살리기
+    @PutMapping("/show/{boardId}")
+    public ResponseEntity<String> showBoard(@PathVariable int boardId) {
+        int showRows = communityService.showBoard(boardId);
+        if (showRows > 0) {
+            return ResponseEntity.ok("게시글을 다시 살렸습니다.");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("게시글이 존재하지 않습니다.");
+        }
+    }
+
+    // 관리자 페이지 - 회원 작성 글 목록 조회
+    @GetMapping("/{userNo}")
+    public List<Community> getUserBoardList(@PathVariable("userNo") int userNo) {
+        return communityService.getUserBoardList(userNo);
     }
 
 }

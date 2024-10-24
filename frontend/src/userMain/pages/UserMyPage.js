@@ -65,7 +65,6 @@ const UserMyPage = () => {
         const response = await fetch(`/api/users/patients`);
         const data = await response.json();
         // 로그인한 유저의 ID와 일치하는 환자 정보 필터링
-        console.log("비밀번호", userInfo.userPass);
         const loginUser = data.find(patient => patient.userId === userInfo.userId);
         if (loginUser) {
           setFormData({

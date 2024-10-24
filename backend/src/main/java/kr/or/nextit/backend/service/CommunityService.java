@@ -45,7 +45,7 @@ public class CommunityService {
         return communityMapper.selectNotice(boardId);
     }
 
-
+    // 게시글 등록
     public int registerBoard(Community boardDTO) {
         int retValue = communityMapper.insertBoard(boardDTO);
         if (boardDTO.getFiles() != null && !boardDTO.getFiles().isEmpty()) {
@@ -102,9 +102,29 @@ public class CommunityService {
         return 0;
     }
 
-    //게시글 삭제
+    // 게시글 삭제
     public int deleteBoard(int boardId) {
         return communityMapper.deleteBoard(boardId);
+    }
+
+    // 관리자 페이지 - 게시판 전체 조회
+    public List<Community> getAdminAllBoards() {
+        return communityMapper.getAdminAllBoards();
+    }
+
+    // 관리자 페이지 - 공지사항 전체 조회
+    public List<Community> getAdminAllNotices() {
+        return communityMapper.getAdminAllNotices();
+    }
+
+    // 관리자 페이지 - 게시글 살리기
+    public int showBoard(int boardId) {
+        return communityMapper.showBoard(boardId);
+    }
+
+    // 관리자 페이지 - 회원 작성 글 목록 조회
+    public List<Community> getUserBoardList(int userNo) {
+        return communityMapper.getUserBoardList(userNo);
     }
 
 }

@@ -45,6 +45,9 @@ public class InquiriesController {
     // 관리자 - 문의사항 답변 등록 (수정)
     @PutMapping("/update/{inquirieId}")
     public ResponseEntity<Void> updateAdminInquiry(@PathVariable("inquirieId") int inquirieId,
+                                                   @RequestParam("type") String type,
+                                                   @RequestParam("title") String title,
+                                                   @RequestParam("content") String content,
                                                    @RequestParam("answer") String answer) {
         Inquiries inquiries = inquiriesService.selectInquiry(inquirieId);
 
@@ -52,15 +55,17 @@ public class InquiriesController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND); // 404 Not Found 응답
         }
 
+        inquiries.setType(type);
+        inquiries.setTitle(title);
+        inquiries.setContent(content);
         inquiries.setAnswer(answer);
-
         inquiriesService.updateAdminInquiry(inquiries);
 
         return new ResponseEntity<>(HttpStatus.OK); // 200 OK 응답
     }
 
     // 회원 - 문의사항 삭제
-    @DeleteMapping("/delete/user/{inquirieId}")
+    @PutMapping("/delete/user/{inquirieId}")
     public ResponseEntity<Void> deleteUserInquiry(@PathVariable int inquirieId) {
         // ID로 FAQ 항목을 데이터베이스에서 조회
         Inquiries inquiries = inquiriesService.selectInquiry(inquirieId);
@@ -77,7 +82,7 @@ public class InquiriesController {
     }
 
     // 관리자 - 문의사항 삭제 (답변 초기화)
-    @DeleteMapping("/delete/admin/{inquirieId}")
+    @PutMapping("/delete/admin/{inquirieId}")
     public ResponseEntity<Void> deleteAdminInquiry(@PathVariable int inquirieId) {
         Inquiries inquiries = inquiriesService.selectInquiry(inquirieId);
 
@@ -86,6 +91,27 @@ public class InquiriesController {
         }
 
         inquiriesService.deleteAdminInquiry(inquirieId);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT); // 204 No Content 응답
+    }
+
+    // 관리자 - 문의사항 전체 조회
+    @GetMapping("/admin/total")
+    public List<Inquiries> totalAdminInquiries() {
+        return inquiriesService.totalAdminInquiries();
+    }
+
+    // 관리자 - 회원 문의사항 표시
+    @PutMapping("/show/{inquirieId}")
+    public ResponseEntity<Void> showInquiry(@PathVariable int inquirieId) {
+        Inquiries inquiries = inquiriesService.selectInquiry(inquirieId);
+        System.out.println(inquiries);
+
+        if (inquiries == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND); // 404 Not Found 응답
+        }
+
+        inquiriesService.showInquiry(inquirieId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT); // 204 No Content 응답
     }

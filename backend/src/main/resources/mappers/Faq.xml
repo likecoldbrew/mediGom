@@ -7,7 +7,7 @@
         SELECT *
         FROM faq_board
         where status='Y'
-
+        ORDER BY faq_id DESC
     </select>
 
     <!-- 특정 FAQ 조회 -->
@@ -15,7 +15,6 @@
         SELECT *
         FROM faq_board
         WHERE faq_id = #{faqId}
-
     </select>
 
     <!-- FAQ 등록 -->
@@ -33,10 +32,25 @@
     </update>
 
     <!-- FAQ 삭제 -->
-    <delete id="deleteFaq" parameterType="int">
+    <update id="deleteFaq" parameterType="int">
         UPDATE faq_board
         SET status = 'N'
         WHERE faq_id = #{faqId}
-    </delete>
+    </update>
+
+    <!-- 관리자 - FAQ 표시 -->
+    <update id="showFaq" parameterType="int">
+        UPDATE faq_board
+        SET status = 'Y'
+        WHERE faq_id = #{faqId}
+    </update>
+
+    <!-- 관리자 - 전체 FAQ 조회 -->
+    <select id="selectAdminAllFaq" resultType="kr.or.nextit.backend.model.Faq">
+        SELECT *
+        FROM faq_board
+        ORDER BY status, faq_id DESC
+    </select>
+
 
 </mapper>

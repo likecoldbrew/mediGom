@@ -42,4 +42,13 @@ public class InquiriesService {
     public void deleteAdminInquiry(int inquirieId) {
         inquiriesMapper.deleteAdminInquiry(inquirieId);
     }
+    // 관리자 - 문의사항 전체 조회
+    public List<Inquiries> totalAdminInquiries() {
+        return inquiriesMapper.totalAdminInquiries();
+    }
+
+    // 관리자 - 회원 문의사항 표시
+    public void showInquiry(int inquirieId) {
+        inquiriesMapper.showInquiry(inquirieId);
+    }
 }

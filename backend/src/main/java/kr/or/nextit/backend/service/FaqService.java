@@ -22,7 +22,6 @@ public class FaqService {
     public Faq selectFaq(int faqId) {
         return faqMapper.selectFaq(faqId);
     }
-
     // 등록
     public void insertFaq(Faq faq) {
         faqMapper.insertFaq(faq); // 게시글 업데이트 호출
@@ -36,5 +35,15 @@ public class FaqService {
     // 삭제
     public void deleteFaq(int faqId) {
         faqMapper.deleteFaq(faqId);
+    }
+
+    // 관리자 - 표시
+    public void showFaq(int faqId) {
+        faqMapper.showFaq(faqId);
+    }
+
+    // 관리자 - 목록 조회
+    public List<Faq> selectAdminAllFaq() {
+        return faqMapper.selectAdminAllFaq();
     }
 }

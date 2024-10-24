@@ -27,8 +27,15 @@ public interface CommunityMapper {
     void updateViews(int boardId);
     // 첨부파일 삽입
     int insertBoardFiles(List<Files> files);
-    //게시글 삭제
+    // 게시글 삭제
     int deleteBoard(int boardId);
-
+    // 관리자 페이지 - 게시판 전체 조회
+    List<Community> getAdminAllBoards();
+    // 관리자 페이지 - 공지사항 전체 조회
+    List<Community> getAdminAllNotices();
+    // 관리자 페이지 - 게시글 살리기
+    int showBoard(int boardId);
+    // 관리자 페이지 - 회원 작성 글 목록 조회
+    List<Community> getUserBoardList(int userNo);
 }
 

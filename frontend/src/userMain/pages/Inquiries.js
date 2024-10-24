@@ -13,7 +13,7 @@ const Inquiries = () => {
   const [loading, setLoading] = useState(true); // 로딩 메시지
   const [currentPage, setCurrentPage] = useState(Number(page) || 1); // URL에서 페이지 번호 설정
   const navigate = useNavigate(); // 페이지 이동을 위한 useNavigate
-  const {userInfo}=useUser() //유저 정보
+  const { userInfo } = useUser(); //유저 정보
 
   //페이지 이동시 화면 맨위로 이동
   useEffect(() => {
@@ -123,39 +123,48 @@ const Inquiries = () => {
                 </tr>
                 </thead>
                 <tbody>
-                {currentItems.map((inquiries, index) => (
-                  <tr key={inquiries.id} className="border-t border-blue-200">
-                    <td className="px-4 py-2 text-center h-12">
-                      {(currentPage - 1) * itemsPerPage + index + 1}
-                    </td>
-                    <td className="px-4 py-2 text-center h-12">
-                      <Link
-                        to={`/inquiry/detail/${inquiries.inquirieId}`} // 제목 클릭 시 이동할 경로
-                        state={{ selectCategory, selectSubCategory }} // 카테고리 값 넘겨주기
-                        className="text-blue-500 hover:underline"
-                      >
-                        {inquiries.title}
-                      </Link>
-                    </td>
-                    <td className="px-4 py-2 text-center h-12">
-                      {inquiries.type}
-                    </td>
-                    <td className="px-4 py-2 text-center  h-12">
-                      {inquiries.answer ? (
-                          <div className="bg-green-100 rounded-[10px] inline-block px-4 py-1">
-                            답변완료
-                          </div>
-                        ) : (
-                          <div className="bg-red-100 rounded-[10px] inline-block px-4 py-1">
-                            대기중
-                          </div>
-                        )}
-                    </td>
-                    <td className="px-4 py-2 text-center h-12">
-                      {inquiries.createAt}
-                    </td>
-                  </tr>
-                ))}
+                {inquiries.length > 0 ? (
+                  <>
+                    {currentItems.map((inquiries, index) => (
+                      <tr key={inquiries.id} className="border-t border-blue-200">
+                        <td className="px-4 py-2 text-center h-12">
+                          {(currentPage - 1) * itemsPerPage + index + 1}
+                        </td>
+                        <td className="px-4 py-2 text-center h-12">
+                          <Link
+                            to={`/inquiry/detail/${inquiries.inquirieId}`} // 제목 클릭 시 이동할 경로
+                            state={{ selectCategory, selectSubCategory }} // 카테고리 값 넘겨주기
+                            className="text-blue-500 hover:underline"
+                          >
+                            {inquiries.title}
+                          </Link>
+                        </td>
+                        <td className="px-4 py-2 text-center h-12">
+                          {inquiries.type}
+                        </td>
+                        <td className="px-4 py-2 text-center  h-12">
+                          {inquiries.answer ? (
+                            <div className="bg-green-100 rounded-[10px] inline-block px-4 py-1">
+                              답변완료
+                            </div>
+                          ) : (
+                            <div className="bg-red-100 rounded-[10px] inline-block px-4 py-1">
+                              대기중
+                            </div>
+                          )}
+                        </td>
+                        <td className="px-4 py-2 text-center h-12">
+                          {inquiries.createAt}
+                        </td>
+                      </tr>
+                    ))}
+                  </>
+                ) : (<tr>
+                  <td colSpan="5" className="px-4 py-2  h-12 text-center">
+                    문의하신 내용이 없습니다.
+                  </td>
+                </tr>)
+                }
                 </tbody>
               </table>
             </div>

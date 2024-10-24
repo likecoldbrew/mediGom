@@ -22,7 +22,7 @@
                 i.user_no = u.user_no
                     AND
                 i.status = 'Y'
-        ORDER BY i.create_at DESC
+        ORDER BY i.inquirie_id DESC
     </select>
 
     <!-- 특정 문의글 조회  -->
@@ -50,30 +50,63 @@
     </select>
 
     <!-- 문의사항 등록 -->
-    <select id="createInquiry" parameterType="kr.or.nextit.backend.model.Inquiries">
+    <insert id="createInquiry" parameterType="kr.or.nextit.backend.model.Inquiries">
         INSERT INTO inquiries (user_no, type, title, content)
         VALUES (#{userNo}, #{type}, #{title}, #{content})
-    </select>
+    </insert>
 
     <!-- 관리자 - 문의사항 답변 등록 (수정) -->
     <update id="updateAdminInquiry" parameterType="kr.or.nextit.backend.model.Inquiries">
         UPDATE inquiries
         SET answer = #{answer},
+            type = #{type},
             admin_create_at = NOW()
         WHERE inquirie_id = #{inquirieId}
     </update>
 
     <!-- 회원 - 문의사항 삭제 -->
-    <delete id="deleteUserInquiry" parameterType="int">
+    <update id="deleteUserInquiry" parameterType="int">
         UPDATE inquiries
         SET status = 'N'
         WHERE inquirie_id = #{inquirieId}
-    </delete>
+          AND status = 'Y'
+    </update>
 
-    <!-- 관리자 - 문의사항 삭제 -->
-    <delete id="deleteAdminInquiry" parameterType="int">
+    <!-- 관리자 - 문의사항 삭제 (답변 초기화) -->
+    <update id="deleteAdminInquiry" parameterType="int">
         UPDATE inquiries
         SET answer = ""
         WHERE inquirie_id = #{inquirieId}
-    </delete>
+    </update>
+
+    <!-- 관리자 - 문의사항 전체 조회 -->
+    <select id="totalAdminInquiries" resultType="kr.or.nextit.backend.model.Inquiries">
+        SELECT
+            i.inquirie_id,
+            i.type,
+            i.title,
+            i.content,
+            i.create_at,
+            i.status,
+            i.answer,
+            i.admin_create_at,
+            u.user_id
+        FROM
+            inquiries i
+                INNER JOIN
+            users u
+            ON
+                i.user_no = u.user_no
+        ORDER BY
+            i.status,
+            i.inquirie_id DESC
+    </select>
+
+    <!-- 관리자 - 회원 문의사항 표시 -->
+    <update id="showInquiry" parameterType="int">
+        UPDATE inquiries
+        SET status = 'Y'
+        WHERE inquirie_id = #{inquirieId}
+          AND status = 'N'
+    </update>
 </mapper>

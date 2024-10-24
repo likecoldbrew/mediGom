@@ -20,6 +20,10 @@ import InquiriesDetail from "../InquiriesDetail";
 import InquiriesRegist from "../InquiriesRegist";
 import UserMyPage from "../UserMyPage";
 import MedicalRecords from "../MedicalRecords";
+import MedicalRecordDetail from "../MedicalRecordDetail";
+import Prescriptions from "../Prescriptions";
+import { Presentation } from "lucide-react";
+import PrescriptionsDetail from "../PrescriptionsDetail";
 
 const CategoryContainer = () => {
   const { urlName, page, action } = useParams();
@@ -72,7 +76,15 @@ const CategoryContainer = () => {
     case "mypage":
       return <UserMyPage page={page} />;
     case "medicalHistory":
+      if (action === "detail") {
+        return <MedicalRecordDetail recordId={page} />;
+      }
       return <MedicalRecords page={page} />;
+    case "prescript":
+      if (action === "detail") {
+        return <PrescriptionsDetail prescriptionId={page} />;
+      }
+      return <Prescriptions page={page} />;
     default:
       return <div>Category not found</div>;
   }

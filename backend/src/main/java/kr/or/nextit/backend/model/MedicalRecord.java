@@ -14,7 +14,7 @@ public class MedicalRecord {
     private int recordId;
     private int userNo;
     private int doctorNo;
-    private Timestamp visitAt;
+    private Timestamp outbreakAt;
     private String diagnosis;
     private String treatment;
     private String prescription;

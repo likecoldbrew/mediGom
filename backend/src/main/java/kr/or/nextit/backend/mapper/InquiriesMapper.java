@@ -19,5 +19,9 @@ public interface InquiriesMapper {
     void deleteUserInquiry(int inquirieId);
     // 관리자 - 문의사항 삭제 (답변 초기화)
     void deleteAdminInquiry(int inquirieId);
+    // 관리자 - 문의사항 전체 조회
+    List<Inquiries> totalAdminInquiries();
+    // 관리자 - 회원 문의사항 표시
+    void showInquiry(int inquirieId);
 }
 

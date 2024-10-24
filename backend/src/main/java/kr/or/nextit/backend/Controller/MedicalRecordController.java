@@ -3,10 +3,7 @@ package kr.or.nextit.backend.controller;
 import kr.or.nextit.backend.model.MedicalRecord;
 import kr.or.nextit.backend.service.MedicalRecordService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,6 +24,18 @@ public class MedicalRecordController {
     @GetMapping("/user")
     public List<MedicalRecord> getUserMedicalRecordList(int userNo) {
         return medicalRecordService.getUserMedicalRecordList(userNo);
+    }
+
+    // 로그인 유저 진단 목록 조회
+    @GetMapping("/loginUser/{userNo}")
+    public List<MedicalRecord> loginUserMedicalRecord(@PathVariable int userNo) {
+        return medicalRecordService.loginUserMedicalRecord(userNo);
+    }
+
+    // 특정 기록 목록 조회
+    @GetMapping("/detail")
+    public MedicalRecord getMedicalRecordDetail(int recordId) {
+        return medicalRecordService.selectMedicalRecord(recordId);
     }
 
 }
