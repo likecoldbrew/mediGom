@@ -11,10 +11,7 @@ import java.util.*;
 public class ChattingService {
     private final ChattingMapper chattingMapper;
 
-    public void insertChatting(Chatting chatting) {
 
-        chattingMapper.insertChatting(chatting);
-    }
 
     public List<Chatting> selectChattingByRoomId(int chattingRoomId) {
         return chattingMapper.selectChattingByRoomId(chattingRoomId);
@@ -23,4 +20,9 @@ public class ChattingService {
     public List<Chatting> selectAllChatting(int userNo) {
         return chattingMapper.selectAllChatting(userNo);
     }
+
+    public void insertChatting(Chatting chatting) {
+        chattingMapper.insertChatting(chatting);
+    }
+
 }

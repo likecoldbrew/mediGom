@@ -28,30 +28,15 @@ public class ChattingMessageController {
         return chattingMessageService.getMessagesByChatRoomId(chattingRoomId);
     }
 
-    // 새로운 메시지를 저장하는 API (REST API)
-    @PostMapping("/messages")
-    public ResponseEntity<ChattingMessage> saveMessage(@RequestBody ChattingMessage message) {
-        message.setSendAt(new Date()); // 메시지 전송 시각 설정
-        ChattingMessage savedMessage = chattingMessageService.insertChattingMessage(message);
-        return ResponseEntity.ok(savedMessage);
-    }
 
     // WebSocket을 통한 메시지 전송
     @MessageMapping("/chat.sendMessage")
     public void sendMessage(ChattingMessage message) {
         message.setSendAt(new Date()); // 메시지 전송 시각 설정
         ChattingMessage savedMessage = chattingMessageService.insertChattingMessage(message);
-
         // 채팅방 ID에 따라 메시지를 전송
         messagingTemplate.convertAndSend("/topic/room/" + message.getChattingRoomId(), savedMessage);
     }
 
-    // WebSocket을 통한 사용자 추가
-    @MessageMapping("/chat.addUser")
-    public ChattingMessage addUser(ChattingMessage message, SimpMessageHeaderAccessor headerAccessor) {
-        // WebSocket 세션에 사용자 이름 저장
-        headerAccessor.getSessionAttributes().put("username", message.getUserName());
-        message.setSendAt(new Date()); // 메시지 전송 시각 설정
-        return message;
-    }
+
 }
