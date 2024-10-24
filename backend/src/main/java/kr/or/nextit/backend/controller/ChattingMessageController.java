@@ -2,7 +2,6 @@ package kr.or.nextit.backend.controller;
 
 import kr.or.nextit.backend.model.ChattingMessage;
 import kr.or.nextit.backend.service.ChattingMessageService;
-import kr.or.nextit.backend.service.ChattingService;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -21,13 +20,7 @@ public class ChattingMessageController {
     private ChattingMessageService chattingMessageService;
 
     @Autowired
-    private ChattingService chattingService;
-
-    @Autowired
     private SimpMessagingTemplate messagingTemplate; // SimpMessagingTemplate 추가
-
-
-
 
     // 특정 채팅방의 메시지를 가져오는 API
     @GetMapping("/messages/{chattingRoomId}")
@@ -61,6 +54,4 @@ public class ChattingMessageController {
         message.setSendAt(new Date()); // 메시지 전송 시각 설정
         return message;
     }
-
-
 }

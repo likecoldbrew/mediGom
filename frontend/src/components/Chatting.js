@@ -17,9 +17,6 @@ const Chatting = () => {
   const [isAtBottom, setIsAtBottom] = useState(true); // Track if at the bottom of chat
   const [showScrollButton, setShowScrollButton] = useState(false); // Track if scroll button should be shown
 
-  const [availableUsers, setAvailableUsers] = useState([]); // 초대할 수 있는 사용자 리스트
-  const [isModalOpen, setIsModalOpen] = useState(false); // 모달 창 열림 여부
-
   useEffect(() => {
     fetchUserInfo();
     return () => {
@@ -218,8 +215,6 @@ const Chatting = () => {
     return userNames.split(",").filter((name) => name.trim() !== "").length;
   };
 
-
-
   return (
     <div className="flex w-full max-w-6xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
       <div className="flex-grow">
@@ -299,9 +294,9 @@ const Chatting = () => {
             >
               <div className="font-bold">
                 {showFullText === room.chattingRoomId
-                  ? room.userNames
+                  ? room.userNames  // Show full names when hovering
                   : room.userNames.length > 12
-                    ? `${room.userNames.slice(0, 12)}...`
+                    ? `${room.userNames.slice(0, 12)}...`  // Show truncated names otherwise
                     : room.userNames}
               </div>
               <div className="text-sm text-gray-500">
@@ -310,7 +305,6 @@ const Chatting = () => {
             </li>
           ))}
         </ul>
-
 
       </div>
     </div>
