@@ -12,6 +12,7 @@ public class ChattingService {
     private final ChattingMapper chattingMapper;
 
     public void insertChatting(Chatting chatting) {
+
         chattingMapper.insertChatting(chatting);
     }
 

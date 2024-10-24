@@ -22,7 +22,7 @@
             u.phone,
             r.diagnosis,
             r.outbreak_at,
-            r.visit_at,
+            r.creat_at,
             c.content,
             c.note,
             c.purpose,

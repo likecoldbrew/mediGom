@@ -17,6 +17,9 @@ const Chatting = () => {
   const [isAtBottom, setIsAtBottom] = useState(true); // Track if at the bottom of chat
   const [showScrollButton, setShowScrollButton] = useState(false); // Track if scroll button should be shown
 
+  const [availableUsers, setAvailableUsers] = useState([]); // 초대할 수 있는 사용자 리스트
+  const [isModalOpen, setIsModalOpen] = useState(false); // 모달 창 열림 여부
+
   useEffect(() => {
     fetchUserInfo();
     return () => {
@@ -122,19 +125,47 @@ const Chatting = () => {
         stompClientRef.current.subscription.unsubscribe();
       }
 
+      // Subscribe to the current room for receiving new messages
       const subscription = client.subscribe(`/topic/room/${currentChatRoomId}`, (message) => {
         const newMessage = JSON.parse(message.body);
         console.log("Received message:", newMessage);
 
+        // Update messages state for current chat room
         setMessages((prevMessages) => {
           const updatedMessages = [...prevMessages, newMessage];
           setShowScrollButton(newMessage);
           return updatedMessages;
         });
+
+        // Update the lastMessage for the corresponding chat room
+        setChatRooms((prevChatRooms) =>
+          prevChatRooms.map((room) =>
+            room.chattingRoomId === currentChatRoomId
+              ? { ...room, lastMessage: newMessage.message }
+              : room
+          )
+        );
       });
 
       stompClientRef.current.subscription = subscription;
     }
+
+    // Subscribe to all rooms for receiving last message updates
+    chatRooms.forEach((room) => {
+      const roomSubscription = client.subscribe(`/topic/room/${room.chattingRoomId}`, (message) => {
+        const newMessage = JSON.parse(message.body);
+        console.log(`New message in room ${room.chattingRoomId}:`, newMessage);
+
+        // Update the lastMessage for each room
+        setChatRooms((prevChatRooms) =>
+          prevChatRooms.map((r) =>
+            r.chattingRoomId === room.chattingRoomId
+              ? { ...r, lastMessage: newMessage.message }
+              : r
+          )
+        );
+      });
+    });
   };
 
   const handleSendMessage = async () => {
@@ -144,6 +175,7 @@ const Chatting = () => {
         message: inputMessage,
         chattingRoomId: currentChatRoomId,
         sender: userInfo.userNo,
+        userName: userInfo.userName,
       };
       if (client && client.connected) {
         try {
@@ -180,11 +212,21 @@ const Chatting = () => {
     setIsAtBottom(scrollTop + clientHeight >= scrollHeight - 1); // Check if at bottom
   };
 
+  // Utility function to count participants
+  const getParticipantCount = (userNames) => {
+    if (!userNames) return 0;
+    return userNames.split(",").filter((name) => name.trim() !== "").length;
+  };
+
+
+
   return (
     <div className="flex w-full max-w-6xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
       <div className="flex-grow">
         <div className="bg-gray-100 p-4 border-b">
-          <h2 className="text-lg font-semibold text-gray-800">참가자()</h2>
+          <h2 className="text-lg font-semibold text-gray-800">
+            참가자({getParticipantCount(chatRooms.find((room) => room.chattingRoomId === currentChatRoomId)?.userNames)})
+          </h2>
         </div>
         <div
           className="h-[calc(100vh-200px)] overflow-y-auto p-4 space-y-4"
@@ -198,9 +240,11 @@ const Chatting = () => {
             >
               <div className={`flex items-end ${message.sender === userInfo.userNo ? "flex-row-reverse" : ""}`}>
                 <span
-                  className={`text-sm ${message.sender === userInfo.userNo ? "bg-blue-500 text-white" : "bg-gray-200 text-black"} p-2 rounded-md`}
+                  className={`text-sm ${
+                    message.sender === userInfo.userNo ? "bg-blue-500 text-white" : "bg-gray-200 text-black"
+                  } p-2 rounded-md`}
                 >
-                  {message.message}
+                  {message.userName} : {message.message}
                 </span>
               </div>
             </div>
@@ -223,53 +267,51 @@ const Chatting = () => {
               e.preventDefault();
               handleSendMessage();
             }}
+            className="flex"
           >
-            <div className="flex">
-              <input
-                type="text"
-                value={inputMessage}
-                onChange={(e) => setInputMessage(e.target.value)}
-                className="flex-grow border border-gray-300 rounded-md p-2"
-                placeholder="메시지를 입력하세요..."
-              />
-              <button type="submit" className="ml-2 bg-blue-500 text-white p-2 rounded-md">
-                <Send />
-              </button>
-            </div>
+            <input
+              type="text"
+              className="flex-grow p-2 border rounded-l-md focus:outline-none focus:ring focus:border-blue-500"
+              value={inputMessage}
+              onChange={(e) => setInputMessage(e.target.value)}
+            />
+            <button
+              type="submit"
+              className="p-2 bg-blue-500 text-white rounded-r-md hover:bg-blue-600 focus:outline-none focus:ring"
+            >
+              <Send className="h-5 w-5" />
+            </button>
           </form>
         </div>
       </div>
-      <div className="w-1/3 border-l border-gray-300">
-        <div className="p-4 border-b">
-          <h2 className="text-lg font-semibold text-gray-800">채팅방</h2>
-        </div>
-        <div className="overflow-y-auto h-[calc(100vh-144px)]">
+      <div className="w-64 border-l p-4">
+        <h2 className="text-xl font-semibold mb-4">채팅방 목록</h2>
+        <ul className="space-y-4">
           {chatRooms.map((room) => (
-            <div
-              key={room.id}
-              className="p-4 border-b hover:bg-gray-50 cursor-pointer"
-              onMouseEnter={() => setShowFullText(room.id)}
+            <li
+              key={room.chattingRoomId}
+              className={`p-4 border rounded-md cursor-pointer hover:bg-gray-100 ${
+                currentChatRoomId === room.chattingRoomId ? "bg-blue-100" : ""
+              }`}
+              onMouseEnter={() => setShowFullText(room.chattingRoomId)}
               onMouseLeave={() => setShowFullText(null)}
               onClick={() => handleRoomClick(room.chattingRoomId)}
             >
-              <div className="flex items-center space-x-3">
-                <MessageCircle className="h-6 w-6 text-gray-500" />
-                <div>
-                  <h3 className="font-medium text-gray-800">
-                    {showFullText === room.id ? room.userNames : room.userNames.length > 12 ? `${room.userNames.slice(0, 12)}...` : room.userNames}
-                  </h3>
-                  <p className="text-sm text-gray-500 truncate">{room.lastMessage}</p>
-                </div>
+              <div className="font-bold">
+                {showFullText === room.chattingRoomId
+                  ? room.userNames
+                  : room.userNames.length > 12
+                    ? `${room.userNames.slice(0, 12)}...`
+                    : room.userNames}
               </div>
-              <div className="flex items-center space-x-3 mt-2">
-                {room.profileImage && (
-                  <img src={room.profileImage} alt={room.userName} className="w-8 h-8 rounded-full" />
-                )}
-                <span className="text-sm text-gray-600">{room.lastMessage}</span>
+              <div className="text-sm text-gray-500">
+                {room.lastMessage ? `${room.lastMessage.substring(0, 20)}` : "No messages yet"}
               </div>
-            </div>
+            </li>
           ))}
-        </div>
+        </ul>
+
+
       </div>
     </div>
   );

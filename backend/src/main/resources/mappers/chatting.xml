@@ -5,8 +5,8 @@
 <mapper namespace="kr.or.nextit.backend.mapper.ChattingMapper">
 
     <insert id="insertChatting" parameterType="kr.or.nextit.backend.model.Chatting">
-        INSERT INTO chatting (chatting_room_id, user_no, join_at, use_yn)
-        VALUES (#{chattingRoomId}, #{userNo}, #{joinAt}, #{useYn})
+        INSERT INTO chatting (chatting_room_id, invite_user_no, user_no, join_at, use_yn)
+        VALUES (#{chattingRoomId}, #{inviteUserNo}, #{userNo}, #{joinAt}, #{useYn})
     </insert>
 
     <select id="selectChattingByRoomId" parameterType="int" resultType="kr.or.nextit.backend.model.Chatting">
@@ -17,23 +17,32 @@
     </select>
 
     <select id="selectAllChatting" resultType="kr.or.nextit.backend.model.Chatting">
-        SELECT
-            c.chatting_room_id,
-            GROUP_CONCAT(u.user_name SEPARATOR ', ') AS userNames
+        SELECT c.chatting_room_id,
+               u.user_name,
+               GROUP_CONCAT(u.user_name SEPARATOR ', ') AS userNames,
+               (SELECT m.message
+                FROM chatting_message m
+                WHERE m.chatting_room_id = c.chatting_room_id
+                ORDER BY m.send_at DESC
+                LIMIT 1) AS lastMessage
         FROM
             chatting c
-                JOIN
-            users u ON c.user_no = u.user_no
+            JOIN
+            users u
+        ON c.user_no = u.user_no
         WHERE
             c.use_yn = 'Y'
           AND c.chatting_room_id IN (
             SELECT chatting_room_id
             FROM chatting
-            WHERE user_no = #{userNo} AND use_yn = 'Y'
-        )
+            WHERE user_no = #{userNo}
+          AND use_yn = 'Y'
+            )
         GROUP BY
             c.chatting_room_id;
-
     </select>
+
+
+
 
 </mapper>

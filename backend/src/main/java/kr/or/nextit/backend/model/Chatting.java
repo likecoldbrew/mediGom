@@ -9,6 +9,7 @@ import java.util.Date;
 public class Chatting {
     private int chattingNo;          // 채팅 번호
     private int chattingRoomId;      // 채팅방 ID
+    private int inviteUserNo;         //초대한 사람 번호
     private int userNo;              // 유저 번호
     private Date joinAt;                 // 방 들어간 시간
     private String useYn;              // 방 나감 여부 (y/n)
@@ -19,5 +20,9 @@ public class Chatting {
 
     @Transient
     private String userName;
+
+    @Transient
+    private String lastMessage;
+
 
 }

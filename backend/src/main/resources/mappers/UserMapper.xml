@@ -21,7 +21,7 @@
     <select id="getDoctorList" resultType="kr.or.nextit.backend.model.User">
         SELECT * FROM doctors d
         INNER JOIN users u
-        ON u.user_no = d.doctor_user_no
+        ON u.user_no = d.doctor_no
         INNER JOIN medical_department md
         ON d.department = md.department_no
         AND u.admin = 1

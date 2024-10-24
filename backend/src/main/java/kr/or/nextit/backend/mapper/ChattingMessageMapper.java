@@ -8,5 +8,5 @@ import java.util.List;
 public interface ChattingMessageMapper {
     void insertChattingMessage(ChattingMessage chattingMessage);
     List<ChattingMessage> selectMessagesByRoomId(int chattingRoomId);
-
+    void updateLastMessage(int chattingRoomId, String lastMessage);
 }
