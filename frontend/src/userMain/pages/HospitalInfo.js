@@ -30,16 +30,17 @@ const HospitalInfo = () => {
   return (
     <div className="flex flex-col min-h-screen">
       <SubCategories />
-      <div className=" container mx-auto px-4 py-8 flex flex-grow">
+      <div className=" container mx-auto px-4 py-5 flex flex-grow">
         <main className="flex-grow flex-col pr-8">
           <div className="flex-col min-h-full space-y-4 items-center justify-center">
+            <h2 className="text-xl flex-grow flex-col font-bold mt-0 mb-4">
+              병원 소개
+            </h2>
             <div
               className="flex-col flex-grow bg-white p-4 border border-blue-300 rounded shadow relative"
-              style={{ height: "30%", whiteSpace: 'pre-line' } }
+              style={{ height: "30%", whiteSpace: "pre-line" }}
             >
               {" "}
-              {/* 부모 div의 높이를 30%로 설정 */}
-              {/* 배경 이미지가 적용된 div */}
               <div
                 style={{
                   backgroundImage: `url('/images/userMain/logo.png')`,
@@ -53,61 +54,39 @@ const HospitalInfo = () => {
                   left: 0,
                   right: 0,
                   bottom: 0,
-                  zIndex: 0, // 배경 이미지가 다른 내용 아래에 위치하도록 설정
+                  zIndex: 0 // 배경 이미지가 다른 내용 아래에 위치하도록 설정
                 }}
               />
               {/* 텍스트 내용 */}
               <h2 className="text-xl flex-grow text-center font-bold m-8 relative ">
-                {hospital.length > 0 ? <>{hospital[0].intro}</>: null }
+                {hospital.length > 0 ? <>{hospital[0].intro}</> : null}
               </h2>
             </div>
-            <h2 className="text-xl flex-grow flex-col font-bold m-4">
-              예약 가능 시간
+            <h2 className="text-xl flex-grow flex-col font-bold my-12">
+              진료시간
             </h2>
             <div className="flex-col bg-white flex-grow p-4 border border-blue-300 rounded shadow relative text-lg ">
               {hospital.length > 0 ? (
                 <p>
-                  병원 전화번호 :{" "}
-                  <span className="font-bold">{hospital[0].reserveNumber}</span>
-                </p>
-              ) : (
-                <p>병원 정보가 없습니다.</p>
-              )}
-              <br />
-              {hospital.length > 0 ? (
-                <p>
-                  평일 예약 가능 시간 :{" "}
-                  <span className="font-bold">
-                    {hospital[0].reserveWeekTime}
-                  </span>
-                </p>
-              ) : (
-                <p>병원 정보가 없습니다.</p>
-              )}
-              <br />
-              {hospital.length > 0 ? (
-                <p>
-                  주말 예약 :{" "}
-                  <span className="font-bold">
-                    {hospital[0].reserveSatTime}
-                  </span>
-                </p>
-              ) : (
-                <p>병원 정보가 없습니다.</p>
-              )}
-              <br />{" "}
-              {hospital.length > 0 ? (
-                <p>
-                  공휴일 예약 :{" "}
-                  <span className="font-bold">
-                    {hospital[0].reserveHoliTime}
-                  </span>
+                  <span className="font-bold whitespace-pre-line leading-10">{hospital[0].clinicTime}</span>
                 </p>
               ) : (
                 <p>병원 정보가 없습니다.</p>
               )}
             </div>
-            <h2 className="text-xl flex-grow font-bold m-4">병원 위치</h2>
+            <h2 className="text-xl flex-grow flex-col font-bold my-12">
+              예약 전화 가능 시간
+            </h2>
+            <div className="flex-col bg-white flex-grow p-4 border border-blue-300 rounded shadow relative text-lg ">
+              {hospital.length > 0 ? (
+                <p>
+                  <span className="font-bold whitespace-pre-line leading-10">{hospital[0].reserveTime}</span>
+                </p>
+              ) : (
+                <p>병원 정보가 없습니다.</p>
+              )}
+            </div>
+            <h2 className="text-xl flex-grow font-bold my-12">병원 위치</h2>
             <div className=" bg-white flex-grow  p-4 border border-blue-300 rounded shadow relative ">
               {hospital.length > 0 ? (
                 <div>
@@ -123,7 +102,7 @@ const HospitalInfo = () => {
                 <Map />
               </div>
             </div>
-            <h2 className="text-xl flex-grow font-bold m-4">근처 약국위치</h2>
+            <h2 className="text-xl flex-grow font-bold my-12">근처 약국위치</h2>
             <div className=" bg-white flex-grow  p-4 border border-blue-300 rounded shadow relative ">
               <p className="text-center font-bold">
                 ※ 마커를 클릭하면 약국 이름이 뜹니다.
@@ -135,7 +114,7 @@ const HospitalInfo = () => {
             </div>
           </div>
         </main>
-        <div className="flex flex-col space-y-4">
+        <div className="flex flex-col space-y-4 mt-10">
           <QuickMenu />
           <ChatBot />
         </div>
