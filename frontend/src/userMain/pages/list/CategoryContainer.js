@@ -24,6 +24,7 @@ import MedicalRecordDetail from "../MedicalRecordDetail";
 import Prescriptions from "../Prescriptions";
 import { Presentation } from "lucide-react";
 import PrescriptionsDetail from "../PrescriptionsDetail";
+import MypageWrote from "../MypageWrote";
 
 const CategoryContainer = () => {
   const { urlName, page, action } = useParams();
@@ -85,6 +86,11 @@ const CategoryContainer = () => {
         return <PrescriptionsDetail prescriptionId={page} />;
       }
       return <Prescriptions page={page} />;
+    case "wrote":
+      if (action === "detail") {
+        return <PrescriptionsDetail prescriptionId={page} />;
+      }
+      return <MypageWrote page={page} />;
     default:
       return <div>Category not found</div>;
   }

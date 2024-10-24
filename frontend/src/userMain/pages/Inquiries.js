@@ -32,12 +32,10 @@ const Inquiries = () => {
   // 게시글 정보 가져오기
   const fetchInquiries = async () => {
     try {
-      const response = await fetch("/api/inquiries/all");
+      const response = await fetch(`/api/inquiries/${userInfo.userNo}`);
       const data = await response.json();
-      //로그인한 유저 정보만 가져오기
-      const filteredData = data.filter(inquiry => inquiry.userId === userInfo.userId);
       // 날짜 포맷 변환
-      const formattedData = filteredData.map((inquiries) => ({
+      const formattedData = data.map((inquiries) => ({
         ...inquiries,
         createAt: formatDate(inquiries.createAt) // 날짜 포맷 변경
       }));

@@ -51,4 +51,9 @@ public class InquiriesService {
     public void showInquiry(int inquirieId) {
         inquiriesMapper.showInquiry(inquirieId);
     }
+
+    // 회원이 작성한 문의글 목록 조회
+    public List<Inquiries> selectUserInquiries(int userNo) {
+        return inquiriesMapper.selectUserInquiries(userNo);
+    }
 }

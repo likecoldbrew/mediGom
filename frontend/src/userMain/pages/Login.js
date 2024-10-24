@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../style/tailwind.css";
 import Footer from "../components/Footer";
@@ -7,17 +7,38 @@ import { useUser } from "../../utils/UserContext";
 export default function LoginPage() {
   const [formData, setFormData] = useState({
     id: "",
-    password: "",
+    password: ""
   });
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
   const { setUserInfo } = useUser(); // useUser를 통해 setUserInfo 가져오기
+  // 병원정보
+  const [hospital, setHospital] = useState([]);//병원 정보
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevState) => ({
       ...prevState,
-      [name]: value,
+      [name]: value
     }));
+  };
+
+  useEffect(() => {
+    fetchHospital();
+  }, []);
+
+  //병원 정보
+  const fetchHospital = async () => {
+    try {
+      const response = await fetch("/api/hospital/all");
+      const data = await response.json();
+      setHospital(data);
+    } catch (error) {
+      console.error("Error fetching doctor info:", error);
+    }
+  };
+  // 회사명 대문자로 구분
+  const splitHospitalName = (name) => {
+    return name.match(/([A-Z][a-z]+)/g) || [];
   };
 
   const handleSubmit = async (e) => {
@@ -28,12 +49,12 @@ export default function LoginPage() {
       const response = await fetch("/api/users/login", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json"
         },
         body: JSON.stringify({
           userId: formData.id,
-          userPass: formData.password,
-        }),
+          userPass: formData.password
+        })
       });
       if (!response.ok) {
         const errorText = await response.text(); // 응답을 텍스트로 읽기
@@ -48,8 +69,8 @@ export default function LoginPage() {
       const userInfoResponse = await fetch("/api/users/me", {
         method: "GET",
         headers: {
-          "Authorization": `Bearer ${token}`, // 토큰을 헤더에 포함
-        },
+          "Authorization": `Bearer ${token}` // 토큰을 헤더에 포함
+        }
       });
       if (!userInfoResponse.ok) {
         throw new Error("사용자 정보를 가져오는 데 실패했습니다.");
@@ -69,34 +90,47 @@ export default function LoginPage() {
     <div className="flex flex-col min-h-screen bg-gray-100">
       <header className="w-full bg-sky-100 py-2 border-y border-sky-200">
         <div className="container mx-auto px-4 flex items-center">
-          <Link to="/" className="h-24">
-          <img
-            src="/images/userMain/logo.png"
-            className="h-16 mr-2"
-            alt="logo"
-          />
+          <Link to="/" className="h-24 flex items-center"> {/* 이미지와 텍스트를 중앙 정렬하기 위해 flex 추가 */}
+            <img
+              src="/images/mediGom_Logo.png"
+              className="h-16 mr-2"
+              alt="logo"
+            />
           </Link>
-          <p className="text-lg font-bold">
-            medi<span className="text-yellow-500">Gom</span>
-          </p>
+          <span
+            className="text-lg sm:text-xl md:text-2xl font-bold text-gray-800 flex items-center"> {/* 텍스트를 중앙 정렬하기 위해 flex 추가 */}
+            {hospital.length > 0 ? (
+              splitHospitalName(hospital[0].hospitalNameEn).map((part, index) => (
+                <span
+                  key={index}
+                  className={index === 0 ? "text-lg sm:text-xl md:text-2xl font-bold text-gray-800" : "text-lg sm:text-xl md:text-2xl font-bold text-yellow-500"}>
+            {part}
+          </span>
+              ))
+            ) : null}
+         </span>
         </div>
       </header>
       <div className="flex-grow flex flex-col lg:flex-row justify-center items-center py-12 sm:px-6 lg:px-8">
         <div className="lg:w-1/4 mb-8 lg:mb-0 lg:pr-8">
           <div className="bg-green-100 rounded-full p-8 max-w-md mx-auto relative">
             <Link to="/" className="h-24">
-            <img
-              src="/images/userMain/logo.png"
-              alt="logo"
-              className="w-full h-auto"
-            />
+              <img
+                src="/images/mediGom_Logo.png"
+                alt="logo"
+                className="w-full h-auto opacity-65"
+              />
             </Link>
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="bg-sky-100 bg-opacity-75 px-4 py-2 rounded-lg">
-                <p className="text-xl font-bold text-blue-900 text-center">
-                  편리한 의료 서비스 <br />
-                  메디곰에 오신 걸 환영합니다.
-                </p>
+                {hospital.length > 0 ? (
+                  <>
+                    <p className="text-xl font-bold text-blue-900 text-center whitespace-pre-line">
+                      {hospital[0].greetings}
+                    </p>
+                  </>
+                ) : null}
+
               </div>
             </div>
           </div>
@@ -150,22 +184,7 @@ export default function LoginPage() {
               </div>
 
               <div className="flex items-center justify-between">
-                <div className="flex items-center">
-                  <input
-                    id="remember-me"
-                    name="remember-me"
-                    type="checkbox"
-                    className="h-4 w-4 text-sky-600 focus:ring-sky-500 border-gray-300 rounded"
-                  />
-                  <label
-                    htmlFor="remember-me"
-                    className="ml-2 block text-sm text-gray-900"
-                  >
-                    로그인 상태 유지
-                  </label>
-                </div>
-
-                <div className="text-sm">
+                <div className="text-sm flex justify-end w-full">
                   <a
                     href="#"
                     className="font-medium text-sky-600 hover:text-sky-500"
@@ -198,7 +217,7 @@ export default function LoginPage() {
           </div>
         </div>
       </div>
-        <Footer/>
+      <Footer />
     </div>
   );
 }

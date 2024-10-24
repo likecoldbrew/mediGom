@@ -11,5 +11,4 @@
         FROM hospital_info;
     </select>
 
-
 </mapper>

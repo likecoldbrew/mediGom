@@ -48,7 +48,8 @@ const Footer = () => {
           ) : (
             <p>병원 정보가 없습니다.</p>
           )}
-          <p>&copy; 2024 mediGom. All rights reserved.</p>
+          {hospital.length > 0 ?(<p>{hospital[0].copyright}</p>):null}
+
         </div>
       </div>
     </footer>

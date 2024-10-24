@@ -31,7 +31,7 @@ const InquiriesDetail = ({ inquirieId }) => {
         const formattedData = {
           ...data,
           createAt: formatDate(data.createAt),
-          updateAt: data.updateAt ? formatDate(data.updateAt) : null,
+          adminCreateAt: formatDate(data.adminCreateAt),
         };
         setBoard(formattedData);
       } else {
@@ -102,7 +102,10 @@ const InquiriesDetail = ({ inquirieId }) => {
               <>
                 <div className="mt-4 h-[300px]">
                   <hr className="border-t border-2 border-dashed border-sky-200 mb-4 mt-4" />
-                  <span className="font-bold">답변</span>
+                  <div className="flex justify-between items-center">
+                    <span className="font-bold">답변</span>
+                    <p className="text-right">답변일: {board.adminCreateAt}</p>
+                  </div>
                   <hr className="border-t border-sky-200  mt-3" />
                   <p className="mt-3 h-2/5">{board.answer}</p>
                 </div>

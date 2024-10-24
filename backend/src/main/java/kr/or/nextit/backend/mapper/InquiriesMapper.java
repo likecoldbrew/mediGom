@@ -23,5 +23,7 @@ public interface InquiriesMapper {
     List<Inquiries> totalAdminInquiries();
     // 관리자 - 회원 문의사항 표시
     void showInquiry(int inquirieId);
+    // 회원이 작성한 문의글 목록 조회
+    List<Inquiries> selectUserInquiries(int userNo);
 }
 

@@ -115,4 +115,11 @@ public class InquiriesController {
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT); // 204 No Content 응답
     }
+
+    // 회원이 작성한 문의글 목록 조회
+    @GetMapping("/{userNo}")
+    public List<Inquiries> selectUserInquiries(@PathVariable int userNo) {
+        return inquiriesService.selectUserInquiries(userNo);
+    }
+
 }

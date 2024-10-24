@@ -5,17 +5,24 @@ import AlertModal from "./AlertModal";
 import { useUser } from "../../utils/UserContext";
 
 const Header = () => {
+  //카테고리 관련
   const [hoveredCategory, setHoveredCategory] = useState(null);
   const [categories, setCategories] = useState([]);
   const [selectCategory, setSelectCategory] = useState(null);
   const [selectSubCategory, setSelectSubCategory] = useState(null);
+  // 병원정보
+  const [hospital, setHospital] = useState([]);//병원 정보
+  //유저정보
+  const {userInfo, setUserInfo}=useUser()
+  //nav 이동
+  const navigate = useNavigate();
+  //모달관련
   const [modalOpen, setModalOpen] = useState(false); // 모달 상태
   const [modalMessage, setModalMessage] = useState(""); // 모달 메시지
   const [modalButtonText, setModalButtonText] = useState(""); // 버튼 텍스트
   const [isSuccess, setIsSuccess] = useState(false); // 모달 성공 여부 상태
   const [redirectPath, setRedirectPath] = useState("");
-  const {userInfo, setUserInfo}=useUser()
-  const navigate = useNavigate(); // useNavigate 훅 사용
+
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -30,7 +37,20 @@ const Header = () => {
       }
     };
     fetchCategories();
+    fetchHospital();
   }, []);
+
+  //병원 정보
+  const fetchHospital = async () => {
+    try {
+      const response = await fetch("/api/hospital/all");
+      const data = await response.json();
+      setHospital(data);
+    } catch (error) {
+      console.error("Error fetching doctor info:", error);
+    }
+  };
+
  //카테고리 선택
   const handleSubCategorySelect = (categoryName, subCategoryName) => {
     setSelectCategory(categoryName);
@@ -52,7 +72,10 @@ const Header = () => {
     navigate("/"); // 메인 페이지로 리다이렉트
   };
 
-
+  // 회사명 대문자로 구분
+  const splitHospitalName = (name) => {
+    return name.match(/([A-Z][a-z]+)/g) || [];
+  };
   return (
     <>
     <header className="bg-white shadow-sm">
@@ -62,17 +85,26 @@ const Header = () => {
             <Link to="/" className="h-24 mr-2">
               <img src="/images/mediGom_Logo.png" className="h-12 sm:h-16 md:h-20 lg:h-24" alt="logo" />
             </Link>
-            <span className="text-lg sm:text-xl md:text-2xl font-bold text-gray-800">Medi<span
-              className="text-lg sm:text-xl md:text-2xl font-bold text-yellow-500">Gom</span></span>
+            <span className="text-lg sm:text-xl md:text-2xl font-bold text-gray-800">
+                {hospital.length > 0 ? (
+                  splitHospitalName(hospital[0].hospitalNameEn).map((part, index) => (
+                    <span key={index} className={index === 0 ? "text-lg sm:text-xl md:text-2xl font-bold text-gray-800" : "text-lg sm:text-xl md:text-2xl font-bold text-yellow-500"}>
+                      {part}
+                    </span>
+                  ))
+                ) : null}
+              </span>
           </div>
           <div className="flex flex-col items-end w-4/5">
             <div className="flex space-x-4 mb-2">
               {userInfo.userId ? (
                 <>
-                  <p className="text-[18px] content-center text-sky-700">{userInfo.userId}<span className="text-[14px]  content-center text-sky-700">({userInfo.userName})</span>님 반갑습니다!</p>
-                    <button onClick={handleLogout} className="text-sky-600 hover:text-sky-800 hover:font-bold  hover:bg-sky-300 rounded-[10px]  border-2 border-sky-200 px-2 py-1 transition-colors">
-                      로그아웃
-                    </button>
+                  <p className="text-[18px] content-center text-sky-700">{userInfo.userId}<span
+                    className="text-[14px]  content-center text-sky-700">({userInfo.userName})</span>님 반갑습니다!</p>
+                  <button onClick={handleLogout}
+                          className="text-sky-600 hover:text-sky-800 hover:font-bold  hover:bg-sky-300 rounded-[10px]  border-2 border-sky-200 px-2 py-1 transition-colors">
+                    로그아웃
+                  </button>
                 </>
               ) : (
                 <>

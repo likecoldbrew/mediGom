@@ -20,4 +20,6 @@ public class Hospital {
     private String reserveTime;      // 예약 가능 시간
     private String clinicTime;      // 병원 시간
     private String intro;      //병원소개
+    private String copyright;      //저작권
+    private String greetings;      //인사말
 }
